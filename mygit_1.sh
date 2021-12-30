@@ -27,8 +27,8 @@ git rm --cached *.sh
 git rm -r --cached .idea
 git rm -r --cached otros
 
-git rm -r --cached composer.json
-git rm -r --cached composer.lock
+#git rm -r --cached composer.json
+#git rm -r --cached composer.lock
 
 git add .
 
