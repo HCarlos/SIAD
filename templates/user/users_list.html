@@ -1,0 +1,28 @@
+{% extends "home.html" %}
+
+{% block contenedor %}
+    <div>
+        <a href="{% url 'new-user' %}"> Agregar nuevo usuario</a>
+    </div>
+    <table>
+        <tr>
+            <th>ID</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Image</th>
+        </tr>
+        {% for file in files %}
+            {% if file %}
+            <tr>
+                <td>{{ file.id }}</td>
+                <td>{{ file.username }}</td>
+                <td>{{ file.email }}</td>
+                <td> <a href="/media/{{ file.uploadedFile}}" target="_blank">{{ file.uploadedFile}}</a></td>
+            </tr>
+        {% endif %}
+        {% endfor %}
+    </table>
+
+{% endblock %}
+
+

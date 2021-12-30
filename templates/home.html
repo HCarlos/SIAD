@@ -1,0 +1,17 @@
+{% extends "layouts/app.html" %}
+
+{% block content %}
+
+{% include 'layouts/partials/navbar.html' %}
+<div class="main-container bgc-white">
+    {% include 'layouts/partials/left_sidebar.html' %}
+    <div class="flex-fill bgc-grey-l4 p-2">
+        <div class="main-content bgc-white p-1">
+            {% block contenedor %}{% endblock %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+

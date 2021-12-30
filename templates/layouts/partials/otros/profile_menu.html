@@ -1,0 +1,52 @@
+                <li class="nav-item dropdown order-first order-lg-last">
+                  <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                    <img id="id-navbar-user-image" class="d-none d-lg-inline-block radius-round border-2 brc-white-tp1 mr-2 w-6" src="{{ User.Foto }}" alt="">
+                    <span class="d-inline-block d-lg-none d-xl-inline-block">
+                              <span class="text-90" id="id-user-welcome">Bienvenido,</span>
+                    <span class="nav-user-name">{{ User.username }} </span>
+                    </span>
+
+                    <i class="caret fa fa-angle-down d-none d-xl-block"></i>
+                    <i class="caret fa fa-angle-left d-block d-lg-none"></i>
+                  </a>
+
+                  <div class="dropdown-menu dropdown-caret dropdown-menu-right dropdown-animated brc-primary-m3 py-1">
+                    <div class="d-none d-lg-block d-xl-none">
+                      <div class="dropdown-header">
+                        Bienvenida, {{ User.username }}
+                      </div>
+                      <div class="dropdown-divider"></div>
+                    </div>
+
+{#                    <div class="dropdown-clickable px-3 py-25 bgc-h-secondary-l3 border-b-1 brc-secondary-l2">#}
+                      <!-- online/offline toggle -->
+{#                      <div class="d-flex justify-content-center align-items-center tex1t-600">#}
+{#                        <label for="id-user-online" class="text-grey-d1 pt-2 px-2">offline</label>#}
+{#                        <input type="checkbox" class="ace-switch ace-switch-sm text-grey-l1 brc-green-d1" id="id-user-online" />#}
+{#                        <label for="id-user-online" class="text-green-d1 text-600 pt-2 px-2">online</label>#}
+{#                      </div>#}
+{#                    </div>#}
+
+                    <a class="mt-1 dropdown-item btn btn-outline-grey bgc-h-primary-l3 btn-h-light-primary btn-a-light-primary" href="{% url 'perfil' %}">
+                      <i class="fa fa-user text-primary-m1 text-105 mr-1"></i>
+                      Perfil
+                    </a>
+
+                    <a class="dropdown-item btn btn-outline-grey bgc-h-warning-l3 btn-h-light-warning btn-a-light-warning" href="{% url 'password_change' %}" >
+                      <i class="fa fa-key text-warning-m1 text-105 mr-1"></i>
+                      Password
+                    </a>
+
+                    <a class="dropdown-item btn btn-outline-grey bgc-h-success-l3 btn-h-light-success btn-a-light-success" href="{% url 'foto' %}" >
+                      <i class="fa fa-image text-success-m1 text-105 mr-1"></i>
+                      Foto
+                    </a>
+
+                    <div class="dropdown-divider brc-primary-l2"></div>
+
+                    <a class="dropdown-item btn btn-outline-grey bgc-h-secondary-l3 btn-h-light-secondary btn-a-light-secondary" href="{% url 'logout' %}">
+                      <i class="fa fa-power-off text-warning-d1 text-105 mr-1"></i>
+                      Cerrar Sesión
+                    </a>
+                  </div>
+                </li><!-- /.nav-item:last -->

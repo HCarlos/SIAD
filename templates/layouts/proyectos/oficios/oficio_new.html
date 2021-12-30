@@ -1,0 +1,35 @@
+{% extends 'home.html' %}
+{% block contenedor %}
+
+<div class="row mt-1">
+                <div class="col-12 cards-container">
+                  <div class="card border-0 shadow-sm">
+                    <div class="card-header bgc-green-d3">
+                      <h5 class="card-title text-110 text-white">
+                       Nuevo Oficio
+                      </h5>
+
+                    </div><!-- /.card-header -->
+
+                    <div class="card-body p-0 border-1 border-t-0 brc-green-m2">
+
+                      <div class="p-3">
+                        <p class="mb-0 text-dark-m2">
+                          <form method="post" enctype="application/x-www-form-urlencoded" action="{% url 'oficio_new' %}" id="FormData0">
+                          {% csrf_token %}
+                        <table id="simple-table" class="mb-0 table table-borderless table-bordered-x brc-secondary-l3 text-dark-m2 radius-1 overflow-hidden">
+                            {{ frmSet }}
+                        </table>
+                          <input type="submit" class="btn btn-primary" value="Guardar">
+                          <a href="{% url 'oficios_list' %}" class="btn btn-secondary">Regresar</a>
+                          </form>
+                        </p>
+                      </div>
+                    </div><!-- /.card-body -->
+                  </div><!-- /.card -->
+                </div><!-- /.col -->
+
+
+<div class="col-md-2"></div>
+
+{% endblock %}

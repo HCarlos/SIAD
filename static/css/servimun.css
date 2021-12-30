@@ -1,0 +1,139 @@
+/*
+ * Copyright (c) 2021. Realizado por Carlos Hidalgo
+ */
+
+@namespace url(http://www.w3.org/1999/xhtml);
+
+#resultado {
+    background-color: darkred;
+    color: white;
+    font-weight: bold;
+}
+
+#resultado.ok {
+    background-color: green;
+}
+
+.sidebar-atemun-bg {
+    background: #9e742b !important;
+}
+
+.sidebar-left-bg {
+    background-color: lightgrey !important;
+}
+
+.sidebar-right-bg {
+    background-image: url( "../images/bg-auth.png" ) !important;
+}
+
+.sidebar-right-image {
+    display:flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.img-bg-home {
+    background-image: url("../images/bg-auth.png") !important;
+    background-repeat: no-repeat;
+    display:flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+    margin-top: 5em;
+    margin-left: 5em;
+    height: 80em;
+}
+
+.bg-ciudad
+{
+    background-color: darkgray ;
+}
+
+.text-blanco {
+    color: #ffffff !important;
+}
+
+.bg-registry {
+    background: url("../images/web/bg-registry.png") no-repeat center !important;
+}
+
+.bg-registro-bg {
+    background: url("../images/web/bg-registry.png") no-repeat center !important;
+}
+
+label{
+    color:#56585a;
+}
+
+a, .text-darkred{
+    color: darkred;
+}
+
+.bg-form{
+    background: darkslategray;
+}
+
+.bg-form-body > form{
+    background: #f0ddce;
+    margin: 0;
+}
+
+
+.bg-form-body label{
+    color: white;
+}
+
+.color-title{
+    color: whitesmoke !important;
+}
+.btn-danger-primary{
+    background-color: darkred;
+    border-color: red
+}
+.btn-danger-primary:hover {
+    color: #fff;
+    background-color: #f9375e;
+    border-color: #f82b54; }
+.btn-danger-primary:focus, .btn-danger-primary.focus {
+    -webkit-box-shadow: 0 0 0 0.2rem rgba(250, 92, 124, 0.5);
+    box-shadow: 0 0 0 0.2rem rgba(250, 92, 124, 0.5); }
+.btn-danger-primary.disabled, .btn-danger-primary:disabled {
+    color: #fff;
+    background-color: #fa5c7c;
+    border-color: #fa5c7c; }
+.btn-danger-primary:not(:disabled):not(.disabled):active, .btn-danger-primary:not(:disabled):not(.disabled).active,
+.show > .btn-danger-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #f82b54;
+    border-color: #f81e4a; }
+.btn-danger-primary:not(:disabled):not(.disabled):active:focus, .btn-danger-primary:not(:disabled):not(.disabled).active:focus,
+.show > .btn-danger-primary.dropdown-toggle:focus {
+    -webkit-box-shadow: 0 0 0 0.2rem rgba(250, 92, 124, 0.5);
+    box-shadow: 0 0 0 0.2rem rgba(250, 92, 124, 0.5); }
+
+
+.labelDenuncia{
+    color: darkred;
+    font-weight: bold;
+    font-size: large;
+}
+
+.help-box2 {
+    border-radius: 5px;
+    padding: 20px;
+    margin: 65px 25px 25px;
+    position: relative;
+    background-color: darkgrey !important;
+    opacity: 0.5;
+}
+
+div.help-box2  p  {
+    margin: 5%;
+    font-weight: bold;
+    color: #000000 !important;
+}
+
+.help-box2 .close-btn {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}

@@ -1,0 +1,37 @@
+{% load static %}
+
+<script type="text/javascript" src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- include common vendor scripts used in demo pages -->
+<script src="{% static './node_modules/jquery/dist/jquery.js' %}"></script>
+<script src="{% static './node_modules/popper.js/dist/umd/popper.js' %}"></script>
+<script src="{% static './node_modules/bootstrap/dist/js/bootstrap.js' %}"></script>
+
+
+<!-- include vendor scripts used in "Starter" page. see "/views//pages/partials/starter/@vendor-scripts.hbs" -->
+
+
+<!-- include ace.js -->
+<script src="{% static './dist/js/ace.js' %}"></script>
+
+
+
+<!-- demo.js is only for Ace's demo and you shouldn't use it -->
+<script src="{% static './app/browser/demo.js' %}"></script>
+
+
+
+<!-- "Starter" page script to enable its demo functionality -->
+
+<script src="{% static 'js/custom.js' %}"></script>
+<script src="{% static 'js/servimun.js' %}"></script>
+{#<script src="{% static 'js/all.min.js' %}"></script>#}
+
+{% block scripts %}{% endblock %}
+
+{% block script_autocomplete%}{% endblock %}
+
+{% block script_extra %}{% endblock %}
+{% block script_extra_modal %}{% endblock %}
+{% block script_interno %}{% endblock %}
+

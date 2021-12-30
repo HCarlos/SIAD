@@ -1,0 +1,54 @@
+{% extends "home.html" %}
+
+{% block contenedor %}
+
+    {% load static %}
+ <div class="table-container">
+        <div class="col-md-6 p-0">
+            <div class="small">
+                <p>{{ formUsuario.errors }}</p>
+            </div>
+            <form action="{% url 'new-user' %}" method="POST" enctype="multipart/form-data">
+                <div class="col-md-12 p-0">
+                    <div class="cs-field field">
+                        <label for="username" class="bold">Username</label>
+                        {{ formUsuario.username }}
+                    </div>
+                    <div class="cs-field field">
+                        <label for="password" class="bold">Password</label>
+                        {{ formUsuario.password }}
+                    </div>
+                    <div class="cs-field field">
+                        <label for="email" class="bold">Email</label>
+                        {{ formUsuario.email }}
+                    </div>
+                    <div class="cs-field field">
+                        <label for="nombre" class="bold">Nombre</label>
+                        {{ formUsuario.nombre }}
+                    </div>
+                    <div class="cs-field field">
+                        <label for="ap_paterno" class="bold">Apellido Paterno</label>
+                        {{ formUsuario.ap_paterno }}
+                    </div>
+                    <div class="cs-field field">
+                        <label for="ap_materno" class="bold">Apellido Materno</label>
+                        {{ formUsuario.ap_materno }}
+                    </div>
+                    <div class="cs-field field">
+                        <label for="curp" class="bold">CURP</label>
+                        {{ formUsuario.curp }}
+                    </div>
+{#                    <hr>#}
+{#                    <input type="file" name="uploadedFile">#}
+{#                    <hr>#}
+                    {% csrf_token %}
+                    <input type="submit" value="Upload">
+                </div>
+            </form>
+          </div>
+        </div>
+
+
+{% endblock %}
+
+

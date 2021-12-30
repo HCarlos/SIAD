@@ -1,0 +1,66 @@
+{%  load static  %}
+      <!-- Navbar -->
+      <nav class="navbar navbar-expand-lg navbar-fixed navbar-blue">
+        <div class="navbar-inner">
+
+          <div class="navbar-intro justify-content-xl-between">
+
+            <button type="button" class="btn btn-burger burger-arrowed static collapsed ml-2 d-flex d-xl-none" data-toggle-mobile="sidebar" data-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle sidebar">
+              <span class="bars"></span>
+            </button><!-- mobile sidebar toggler button -->
+
+            <a class="navbar-brand text-white" href="#">
+              <i class="fa fa-leaf"></i>
+              <span>SIAD</span>
+              <span>App</span>
+            </a><!-- /.navbar-brand -->
+
+            <button type="button" class="btn btn-burger mr-2 d-none d-xl-flex" data-toggle="sidebar" data-target="#sidebar" aria-controls="sidebar" aria-expanded="true" aria-label="Toggle sidebar">
+              <span class="bars"></span>
+            </button><!-- sidebar toggler button -->
+
+          </div><!-- /.navbar-intro -->
+
+
+          <div class="navbar-content">
+            <button class="navbar-toggler py-2" type="button" data-toggle="collapse" data-target="#navbarSearch" aria-controls="navbarSearch" aria-expanded="false" aria-label="Toggle navbar search">
+              <i class="fa fa-search text-white text-90 py-1"></i>
+            </button><!-- mobile #navbarSearch toggler -->
+
+              <!-- Aquí va el list Search Bar -->
+
+          </div><!-- .navbar-content -->
+
+
+          <!-- mobile #navbarMenu toggler button -->
+          <button class="navbar-toggler ml-1 mr-2 px-1" type="button" data-toggle="collapse" data-target="#navbarMenu" aria-controls="navbarMenu" aria-expanded="false" aria-label="Toggle navbar menu">
+            <span class="pos-rel">
+                  <img class="border-2 brc-white-tp1 radius-round" width="36" src="{{ User.Foto }}" alt="{{ User.username }}">
+                  <span class="bgc-warning radius-round border-2 brc-white p-1 position-tr mr-n1px mt-n1px"></span>
+            </span>
+          </button>
+
+
+          <div class="navbar-menu collapse navbar-collapse navbar-backdrop" id="navbarMenu">
+
+            <div class="navbar-nav">
+              <ul class="nav">
+
+                <!-- Aquí va el list Mega -->
+
+                <!-- Aquí va el list Notifications -->
+
+                <!-- Aquí va el list Tareas -->
+
+                <!-- Aquí va el list Menu Profile -->
+                  {% include 'layouts/partials/otros/profile_menu.html' %}
+
+              </ul><!-- /.navbar-nav menu -->
+
+            </div><!-- /.navbar-nav -->
+
+          </div><!-- /#navbarMenu -->
+
+        </div><!-- /.navbar-inner -->
+      </nav>
+

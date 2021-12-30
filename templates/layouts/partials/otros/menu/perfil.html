@@ -1,0 +1,133 @@
+{% extends 'home.html' %}
+{% block contenedor %}
+
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-2">
+        <div class="text-left mt-2">
+
+            <div class="pos-rel">
+
+                <div class="text-center">
+                    <div class="pos-rel">
+                        <img alt="Profile image" src="{{ User.Foto }}" class="radius-round bord1er-2 brc-warning-m1" />
+                    </div>
+
+                    <h5 class="text-130 text-dark-m3">
+                      {{ User.username }}
+                    </h5>
+
+                    <span class="text-80 text-primary text-600">
+                        {% for rol in Roles %}
+                            {{ rol.name }}
+                        {% endfor %}
+                    </span>
+
+                    <span class="d-none badge bgc-orange-l3 text-orange-d3 pt-2px pb-1 text-85 radius-round px-25 border-1 brc-orange-m3">
+                        pro
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+<div class="col-md-2">
+<div class="row mt-5">
+
+      <div class="col-12 px-4 mb-3">
+
+        <h4 class="text-dark-m3 text-140">
+          <i class="fa fa-info text-blue mr-1 w-2"></i>
+          Mas datos
+        </h4>
+
+        <hr class="w-100 mx-auto mb-0 brc-default-l2">
+
+        <div class="bgc-white radius-1">
+          <table class="table table table-striped-default table-borderless">
+            <tbody><tr>
+              <td>
+                <i class="far fa-user text-success"></i>
+              </td>
+
+              <td class="text-95 text-600 text-secondary-d2">
+                Username
+              </td>
+
+              <td class="text-dark-m3">
+                  {{ User.username }}
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <i class="far fa-envelope text-blue"></i>
+              </td>
+
+              <td class="text-95 text-600 text-secondary-d2">
+                Email
+              </td>
+
+              <td class="text-blue-d1 text-wrap">
+                  {{ user.email}}
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <i class="fa fa-phone text-purple"></i>
+              </td>
+
+              <td class="text-95 text-600 text-secondary-d2">
+                Teléfonos
+              </td>
+
+              <td class="text-dark-m3">
+                +52 {{ User.telefonos }}
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <i class="fa fa-map-marker text-orange-d1"></i>
+              </td>
+
+              <td class="text-95 text-600 text-secondary-d2">
+                Domicilio
+              </td>
+
+              <td class="text-dark-m3">
+                  Villahermosa, Tabasco, Mx
+              </td>
+            </tr>
+
+            <tr>
+              <td>
+                <i class="far fa-clock text-secondary"></i>
+              </td>
+
+              <td class="text-95 text-600 text-secondary-d2">
+                Última actividad
+              </td>
+
+              <td class="text-dark-m3">
+                  el {{ User.last_login }}
+              </td>
+            </tr>
+          </tbody></table>
+        </div>
+
+      </div>
+
+    </div><!-- /.row -->
+
+  </div>
+
+</div>
+    <div class="col-md-2"></div>
+
+{% endblock %}

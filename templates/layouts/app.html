@@ -1,0 +1,29 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1">
+
+    <title>SIAC</title>
+
+    {% include 'layouts/partials/script_header.html' %}
+
+    {% load bootstrap4 %}
+
+    {% bootstrap_css %}
+
+    {% block styles__ %}{% endblock %}
+
+  </head>
+
+<body>
+
+{% block content %} {% endblock %}
+
+{% include "layouts/partials/script_footer.html" %}
+
+</body>
+
+</html>

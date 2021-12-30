@@ -1,0 +1,78 @@
+{% extends 'home.html' %}
+{% block contenedor %}
+
+<div class="row">
+    <div class="col-md-2"></div>
+    <div class="col-md-2">
+        <div class="text-left mt-2">
+
+            <div class="pos-rel">
+
+                <div class="text-center">
+                    <div class="pos-rel">
+                        <img alt="Profile image" src="{{ User.Foto }}" class="radius-round bord1er-2 brc-warning-m1" />
+                    </div>
+
+                    <h5 class="text-130 text-dark-m3">
+                      {{ User.username }}
+                    </h5>
+
+                    <span class="text-80 text-primary text-600">
+                        {% for rol in Roles %}
+                            {{ rol.name }}
+                        {% endfor %}
+                    </span>
+
+                    <span class="d-none badge bgc-orange-l3 text-orange-d3 pt-2px pb-1 text-85 radius-round px-25 border-1 brc-orange-m3">
+                        pro
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+
+    <div class="col-md-2">
+        <div class="row mt-5">
+            <div class="col-12 px-4 mb-3">
+
+                <div class="card h-100">
+                    <div class="small">
+                        <p>{{ formUser.errors }}</p>
+                    </div>
+
+                    <form method="POST" action="{% url 'perfil_save_imagen' %}" enctype="multipart/form-data">
+{#                        <input type="hidden" name="id" id="id" value="{{ User.id }}">#}
+                        {% csrf_token %}
+                        <div class="card-header">
+                            <span class="card-title text-125">
+                                Cambiar Foto
+                            </span>
+                        </div>
+
+                        <div class="card-body">
+                            <div class="col-md-12 p-0">
+                                <table class="table table-condensed">
+                                    {{  formUser }}
+                                </table>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <input type="submit" value="Guardar">
+                        </div>
+                    </form>
+
+                 </div><!-- /.card -->
+
+            </div>
+        </div><!-- /.row -->
+    </div>
+
+</div>
+
+<div class="col-md-2"></div>
+
+{% endblock %}
