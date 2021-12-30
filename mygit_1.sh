@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 git remote set-url origin https://github.com/HCarlos/SIAD.git
+git remote add origin https://github.com/HCarlos/SIAD.git
 
 # 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
 
