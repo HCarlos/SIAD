@@ -21,8 +21,9 @@ $(document).ready(function() {
             data: Data
         });
         request.done(function(response) {
-                $("#id_remitente").value(response.titular);
-                $("#id_dir_remitente").trigger("change");
+            // alert(response.titular)
+                $("#id_remitente").val(response.titular);
+                // $("#id_dir_remitente").trigger("change");
         });
     }
 });

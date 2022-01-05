@@ -25,7 +25,7 @@ class Dependencia(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return '{0}, {1}, {2}'.format(self.id, self.dependencia, self.abreviatura)
+        return '{0}, {1}'.format(self.id, self.dependencia)
 
 
 ## -------------------------------------------------------------------------------
@@ -119,8 +119,8 @@ class UnidadMedida(models.Model):
 class Oficio(models.Model):
 
     TIPO_DOCUMENTO = [
-        (0, 'Firmado'),
-        (1, 'Remitente'),
+        (0, 'RECIBIDO'),
+        (1, 'FIRMADO POR EL(LA) DIRECTOR(A)'),
     ]
 
     Fecha = datetime.now()
@@ -128,7 +128,7 @@ class Oficio(models.Model):
     tipo_documento = models.SmallIntegerField(choices=TIPO_DOCUMENTO, default=1, blank=True, null=True)
     consecutivo = models.IntegerField(default=0, blank=True, null=True)
     oficio = models.CharField(max_length=250, default="", blank=True, null=True)
-    fecha_oficio = models.DateField(default=django.utils.timezone.now,  blank=True, null=True)
+    fecha_documento = models.DateField(default=django.utils.timezone.now,  blank=True, null=True)
 
     dir_remitente = models.ForeignKey(Dependencia, on_delete=models.SET_NULL, null=True, related_name='oficio_dir_remitente_dep')
 
@@ -139,6 +139,7 @@ class Oficio(models.Model):
     recibe = models.CharField(max_length=250, default="", blank=True, null=True)
     asunto = models.CharField(max_length=500, default="", blank=True, null=True)
     instrucciones = models.CharField(max_length=500, default="", blank=True, null=True)
+    fecha_captura = models.DateField(default=django.utils.timezone.now, blank=True, null=True)
     fecha_respuesta = models.DateField(default=django.utils.timezone.now, blank=True, null=True)
     archivo = models.FileField(upload_to="oficios/{0}/{1}/{2}/".format(Fecha.year,Fecha.month,Fecha.day), blank=True, null=True)
     archivo_datetime = models.DateTimeField(auto_now=True, blank=True, null=True)

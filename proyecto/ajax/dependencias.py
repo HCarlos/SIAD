@@ -18,10 +18,15 @@ def llenar_dependencias(request):
 
 def getDependencias(request):
     response = {}
-    response['dependencia']={}
     if request.method == 'POST':
-        Id = request.POST['dir_remitente']
+        Id = request.POST.get('dir_remitente')
+        print(Id)
         dependencia = Dependencia.objects.filter(pk=Id).get()
         if dependencia:
-            response['dependencia'] = serializers.serialize("json",dependencia)
+            response = {
+                'id': dependencia.pk,
+                'dependencia': dependencia.dependencia,
+                'titular':  '%s %s %s' % (dependencia.titular.ap_paterno, dependencia.titular.ap_materno, dependencia.titular.nombre),
+            }
+
     return JsonResponse(response)

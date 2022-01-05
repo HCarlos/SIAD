@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-git remote set-url origin https://github.com/HCarlos/SIAD.git
-git remote add origin https://github.com/HCarlos/SIAD.git
+git remote set-url origin https://github.com/HCarlos/siad.git
+git remote add origin https://github.com/HCarlos/siad.git
 
-# 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
+# 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
 
 git config --global user.email "r0@tecnointel.mx"
 git config --global user.name "HCarlos"
@@ -33,7 +33,7 @@ git rm -r --cached otros
 
 git add .
 
-git commit -m "SIAD - V-1-4 | PDJ4.0 Beta"
+git commit -m "SIAD - V-1-5 | PDJ4.0 Beta"
 
 git push -u origin master --force
 
