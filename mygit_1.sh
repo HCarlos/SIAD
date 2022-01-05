@@ -2,7 +2,7 @@
 git remote set-url origin https://github.com/HCarlos/siad.git
 git remote add origin https://github.com/HCarlos/siad.git
 
-# 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
+# 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
 
 git config --global user.email "r0@tecnointel.mx"
 git config --global user.name "HCarlos"
