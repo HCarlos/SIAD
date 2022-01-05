@@ -4,6 +4,8 @@ git remote add origin https://github.com/HCarlos/siad.git
 
 # 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
 
+#   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
+
 git config --global user.email "r0@tecnointel.mx"
 git config --global user.name "HCarlos"
 git config --global color.ui true
@@ -33,7 +35,7 @@ git rm -r --cached otros
 
 git add .
 
-git commit -m "SIAD - V-1-5 | PDJ4.0 Beta"
+git commit -m "SIAD - V-1-6 | PDJ4.0 Beta"
 
 git push -u origin master --force
 
