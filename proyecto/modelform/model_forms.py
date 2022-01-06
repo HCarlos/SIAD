@@ -9,6 +9,7 @@ class OficioForm(ModelForm):
 
     dir_remitente= ModelChoiceField(label='Dependencia', queryset=Dependencia.objects.all())
 
+
     class Meta:
         model = Oficio
         fields = '__all__'
