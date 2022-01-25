@@ -59,7 +59,10 @@ class Usuario(AbstractUser):
 
     class Meta:
         db_table = 'auth_user'
-        permissions = (("Puede Crear", "Puede Editar"),)
+        permissions = (
+            ("Crear Usuario", "Crear Usuario"),
+            ("Editar Usuario", "Editar Usuario"),
+        )
         ordering = ['pk']
 
     def get_absolute_url(self):

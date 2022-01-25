@@ -18,6 +18,7 @@ class OficioForm(ModelForm):
             'fecha_documento': TextInput(attrs={'type': 'date', 'class': 'form-input'}),
             'fecha_captura': TextInput(attrs={'type': 'date', 'class': 'form-input'}),
             'fecha_respuesta': TextInput(attrs={'type': 'date', 'class': 'form-input'}),
+            'instrucciones': Textarea(attrs={'class': 'form-input', 'rows': 5, 'cols': 80}),
             'asunto': Textarea(attrs={'class': 'form-input', 'rows': 5, 'cols': 80}),
         }
 

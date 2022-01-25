@@ -17,6 +17,8 @@ class Dependencia(models.Model):
     modi_el = models.DateField('died', null=True, blank=True)
 
     class Meta:
+        verbose_name = 'Dependencia'
+        verbose_name_plural = 'Dependencias'
         ordering = ['dependencia']
 
     def get_absolute_url(self):
@@ -25,7 +27,7 @@ class Dependencia(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return '{0}, {1}'.format(self.id, self.dependencia)
+        return '{0} - {1}.'.format(self.dependencia, self.abreviatura)
 
 
 ## -------------------------------------------------------------------------------
@@ -33,6 +35,7 @@ class Dependencia(models.Model):
 ## -------------------------------------------------------------------------------
 class Subdireccione(models.Model):
     subdireccion = models.CharField(max_length=250)
+    abreviatura = models.CharField(max_length=25)
     titutlar = models.CharField(max_length=250)
     cargo = models.CharField(max_length=250)
     dependencia = models.ForeignKey(Dependencia, on_delete=models.SET_NULL, null=True, related_name='subdir_dependencia')
@@ -40,6 +43,8 @@ class Subdireccione(models.Model):
     modi_el = models.DateField('died', null=True, blank=True)
 
     class Meta:
+        verbose_name = 'Subdirección'
+        verbose_name_plural = 'Subdirecciones'
         ordering = ['subdireccion']
 
     def get_absolute_url(self):
@@ -48,7 +53,7 @@ class Subdireccione(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return '{0}, {1}, {2}, {3}, {4}'.format(self.id, self.subdireccion, self.titutlar, self.cargo, self.dependencia)
+        return '{0} - {1}, {2}'.format(self.abreviatura, self.subdireccion, self.id)
 
 
 ## -------------------------------------------------------------------------------
@@ -62,6 +67,8 @@ class UnidadMedida(models.Model):
     modi_el = models.DateField('died', null=True, blank=True)
 
     class Meta:
+        verbose_name = 'Unidad de Medida'
+        verbose_name_plural = 'Unidades de medida'
         ordering = ['unidad']
 
     def get_absolute_url(self):
@@ -70,7 +77,7 @@ class UnidadMedida(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return '{0}, {1}, {2}'.format(self.id, self.unidad, self.abreviatura)
+        return '{0} - {1}, {2}'.format(self.unidad, self.abreviatura, self.id)
 
 
 ## -------------------------------------------------------------------------------
@@ -141,6 +148,7 @@ class Oficio(models.Model):
     instrucciones = models.CharField(max_length=500, default="", blank=True, null=True)
     fecha_captura = models.DateField(default=django.utils.timezone.now, blank=True, null=True)
     fecha_respuesta = models.DateField(default=django.utils.timezone.now, blank=True, null=True)
+    subdireccion = models.ManyToManyField(Subdireccione)
     archivo = models.FileField(upload_to="oficios/{0}/{1}/{2}/".format(Fecha.year,Fecha.month,Fecha.day), blank=True, null=True)
     archivo_datetime = models.DateTimeField(auto_now=True, blank=True, null=True)
     creado_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, blank=True, null=True, related_name='ofi_creado_por')
@@ -149,8 +157,9 @@ class Oficio(models.Model):
     modi_el = models.DateField('died', null=True, blank=True)
 
     class Meta:
-            permissions = (("Puede Crear", "Puede Editar"),)
-            ordering = ['pk']
+        verbose_name = 'Oficio'
+        verbose_name_plural = 'Oficios'
+        ordering = ['pk']
 
     def get_absolute_url(self):
         """Returns the url to access a particular author instance."""
@@ -160,7 +169,7 @@ class Oficio(models.Model):
         """String for representing the Model object."""
 
         return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}'.format(
-            self.id, self.anno, self.tipo_documento, self.consecutivo, self.oficio, self.fecha_oficio, self.dir_remitente, self.remitente, self.recibe, self.asunto, self.instrucciones, self.fecha_respuesta, self.archivo, self.archivo_datetime, self.creado_por, self.creado_el, self.modi_por, self.modi_el)
+            self.id, self.anno, self.tipo_documento, self.consecutivo, self.oficio, self.fecha_documento, self.dir_remitente, self.remitente, self.recibe, self.asunto, self.instrucciones, self.fecha_respuesta, self.archivo, self.archivo_datetime, self.creado_por, self.creado_el, self.modi_por, self.modi_el)
         # return self
 
     def get_oficio_edit(self):
@@ -192,8 +201,10 @@ class Evento(models.Model):
     modi_el = models.DateField('died', null=True, blank=True)
 
     class Meta:
-            permissions = (("Puede Crear", "Puede Editar"),)
-            ordering = ['pk']
+        verbose_name = 'Evento'
+        verbose_name_plural = 'Eventos'
+        permissions = (("Puede Crear", "Puede Editar"),)
+        ordering = ['pk']
 
     def get_absolute_url(self):
         """Returns the url to access a particular author instance."""
