@@ -52,7 +52,8 @@ class Usuario(AbstractUser):
     empresa = models.ForeignKey(Empresa,on_delete=models.SET_NULL, blank=True, null=True)
     avatar = models.ImageField(upload_to="profile/", blank=True, null=True)
     avatar_datetime = models.DateTimeField(auto_now=True, blank=True, null=True)
-    # uploadedFile = models.FileField("usuarios", upload_to=path_and_rename("profile", 'usuario'), max_length=500,
+
+# uploadedFile = models.FileField("usuarios", upload_to=path_and_rename("profile", 'usuario'), max_length=500,
     #                                 help_text="Ver archivo")
 
 
@@ -85,4 +86,5 @@ class Usuario(AbstractUser):
         """String for representing the Model object."""
         return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}'.format(self.id, self.ap_paterno, self.ap_materno, self.nombre, self.curp, self.email, self.fecha_nacimiento, self.genero, self.emails, self.telefonos, self.celulares, self.avatar, self.username)
         # return self
+
 

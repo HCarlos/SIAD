@@ -26,4 +26,18 @@ $(document).ready(function() {
                 // $("#id_dir_remitente").trigger("change");
         });
     }
+
+           $("#datepicker1").datepicker();
+
+
+            alert('hola');
+
+
+
+
+
+
+
+
+
 });

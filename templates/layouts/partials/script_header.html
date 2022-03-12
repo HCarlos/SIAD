@@ -1,27 +1,38 @@
 {% load static %}
 
     <!-- include common vendor stylesheets & fontawesome -->
-    <link rel="stylesheet" type="text/css" href="{% static './node_modules/bootstrap/dist/css/bootstrap.css' %}?timestamp">
+{#    <link rel="stylesheet" type="text/css" href="{% static './node_modules/bootstrap/dist/css/bootstrap.css' %}?timestamp">#}
 
     <link rel="stylesheet" type="text/css" href="{% static './node_modules/@fortawesome/fontawesome-free/css/fontawesome.css' %}?timestamp">
     <link rel="stylesheet" type="text/css" href="{% static './node_modules/@fortawesome/fontawesome-free/css/regular.css' %}?timestamp">
     <link rel="stylesheet" type="text/css" href="{% static './node_modules/@fortawesome/fontawesome-free/css/brands.css' %}?timestamp">
     <link rel="stylesheet" type="text/css" href="{% static './node_modules/@fortawesome/fontawesome-free/css/solid.css' %}?timestamp">
 
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 
 
-    <!-- include vendor stylesheets used in "Starter" page. see "/views//pages/partials/starter/@vendor-stylesheets.hbs" -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
 
+    <!-- Fengyuan Chen's Datepicker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.css" integrity="sha256-b88RdwbRJEzRx95nCuuva+hO5ExvXXnpX+78h8DjyOE=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/datepicker/0.6.5/datepicker.min.js" integrity="sha256-/7FLTdzP6CfC1VBAj/rsp3Rinuuu9leMRGd354hvk0k=" crossorigin="anonymous"></script>
+
+    <!-- XDSoft DateTimePicker -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.min.css" integrity="sha256-DOS9W6NR+NFe1fUhEE0PGKY/fubbUCnOfTje2JMDw3Y=" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-datetimepicker/2.5.20/jquery.datetimepicker.full.min.js" integrity="sha256-FEqEelWI3WouFOo2VWP/uJfs1y8KJ++FLh2Lbqc8SJk=" crossorigin="anonymous"></script>
+
+  <!-- include vendor stylesheets used in "Buttons" page. see "/views//pages/partials/buttons/@vendor-stylesheets.hbs" -->
+    <link rel="stylesheet" type="text/css" href="{% static './node_modules/node-waves/dist/waves.css' %}?timestamp">
 
     <!-- include fonts -->
     <link rel="stylesheet" type="text/css" href="{% static './dist/css/ace-font.css' %}?timestamp">
 
-
-
     <!-- ace.css -->
     <link rel="stylesheet" type="text/css" href="{% static './dist/css/ace.css' %}?timestamp">
 
+    <!-- "Buttons" page styles, specific to this page for demo only -->
+    <link rel="stylesheet" type="text/css" href="{% static './views/pages/buttons/@page-style.css' %}?timestamp">
 
     <!-- favicon -->
     <link rel="icon" type="image/png" href="{% static './assets/favicon.png' %}?timestamp" />
-

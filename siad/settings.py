@@ -26,9 +26,9 @@ SECRET_KEY = 'django-insecure-w0w=t@2(#-i*$z0%uid^wi=%e*an=#*qla3c%6!#iapoh+2@%9
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
-APPEND_SLASH=False
+APPEND_SLASH = False
 
 # Application definition
 
@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'home.apps.HomeConfig',
     'proyecto.apps.ProyectoConfig',
     'bootstrap4',
+    'bootstrap_datepicker_plus',
+    'crispy_forms',
+    'widget_tweaks'
 ]
 
 MIDDLEWARE = [
@@ -127,9 +130,12 @@ LANGUAGE_CODE = 'es-Mx'
 TIME_ZONE = 'America/Mexico_City'
 
 USE_I18N = True
-
+USE_L10N = True
 USE_TZ = True
 
+JQUERY_URL = True
+
+USE_DJANGO_JQUERY = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
@@ -145,9 +151,14 @@ LOGIN_REDIRECT_URL = '/home/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+DATE_FORMAT = '%Y-%m-%d'
+DATE_INPUT_FORMATS = ['%Y-%m-%d']
+
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [(os.path.join(BASE_DIR, 'static'))]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'

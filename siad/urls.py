@@ -28,7 +28,7 @@ from django.urls import path, include
 
 from home.views import welcome, home, myloginView, Usuario, nuevo_user, perfil_user, perfil_imagen, perfil_save_imagen
 from proyecto.ajax.dependencias import getDependencias
-from proyecto.views import oficios_list, oficio_new, oficios_edit, oficios_remove
+from proyecto.views import oficios_list, oficio_new, oficios_edit, oficios_remove, respuesta_new
 from siad import settings
 
 fecha = datetime.now()
@@ -57,10 +57,13 @@ urlpatterns = [
     path('foto/', perfil_imagen, name='foto'),
     path('perfil_save_imagen/', perfil_save_imagen, name='perfil_save_imagen'),
 
-    path('oficios_list/', oficios_list, name='oficios_list'),
-    path('oficio_new/', oficio_new, name='oficio_new'),
-    path('oficio_edit/<int:id>', oficios_edit, name='oficios_edit'),
-    path('oficio_remove/<int:id>', oficios_remove, name='oficios_remove'),
+    path('oficios_list/<int:tipo_documento>', oficios_list, name='oficios_list'),
+    path('oficio_new/<int:tipo_documento>', oficio_new, name='oficio_new'),
+    path('oficio_new/<int:tipo_documento>', oficio_new, name='oficio_new'),
+    path('oficio_edit/<int:id>/<int:tipo_documento>', oficios_edit, name='oficios_edit'),
+    path('oficio_remove/<int:id>/<int:tipo_documento>', oficios_remove, name='oficios_remove'),
+
+    path('respuesta_new/<int:oficio>', respuesta_new, name='respuesta_new'),
 
     path('getDependencias/', getDependencias, name='/getDependencias'),
 

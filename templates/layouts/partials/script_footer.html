@@ -5,10 +5,11 @@
 <!-- include common vendor scripts used in demo pages -->
 <script src="{% static './node_modules/jquery/dist/jquery.js' %}"></script>
 <script src="{% static './node_modules/popper.js/dist/umd/popper.js' %}"></script>
-<script src="{% static './node_modules/bootstrap/dist/js/bootstrap.js' %}"></script>
+{#<script src="{% static './node_modules/bootstrap/dist/js/bootstrap.js' %}"></script>#}
 
 
-<!-- include vendor scripts used in "Starter" page. see "/views//pages/partials/starter/@vendor-scripts.hbs" -->
+    <!-- include vendor scripts used in "Buttons" page. see "/views//pages/partials/buttons/@vendor-scripts.hbs" -->
+    <script src="{% static './node_modules/node-waves/dist/waves.js' %}"></script>
 
 
 <!-- include ace.js -->
@@ -27,6 +28,9 @@
 <script src="{% static 'js/servimun.js' %}"></script>
 {#<script src="{% static 'js/all.min.js' %}"></script>#}
 
+<!-- "Buttons" page script to enable its demo functionality -->
+<script src="{% static './views/pages/buttons/@page-script.js' %}"></script>
+
 {% block scripts %}{% endblock %}
 
 {% block script_autocomplete%}{% endblock %}
@@ -35,3 +39,15 @@
 {% block script_extra_modal %}{% endblock %}
 {% block script_interno %}{% endblock %}
 
+<script>
+    $(function(){
+        $(document).ready(function() {
+
+            {#$(".nav-item").on('click',function(event){#}
+            {#    $(".nav-item").removeClass('active');#}
+            {#    $("#"+event.currentTarget.id).addClass('active');#}
+            {#});#}
+
+        });
+    });
+</script>

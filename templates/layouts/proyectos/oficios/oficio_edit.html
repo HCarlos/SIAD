@@ -1,12 +1,18 @@
 {% extends 'home.html' %}
 {% block contenedor %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{{ frmSet.media }}
 
 <div class="row mt-1">
                 <div class="col-12 cards-container">
                   <div class="card border-0 shadow-sm">
                     <div class="card-header bgc-green-d3">
                       <h5 class="card-title text-110 text-white">
-                       Editando el Oficio: {{ Oficio.id }}
+                       Editando el Oficio: {{ Oficio.id }} {{ leyenda_form }}
                       </h5>
 
                     </div><!-- /.card-header -->
@@ -15,20 +21,20 @@
 
                       <div class="p-3">
                         <p class="mb-0 text-dark-m2">
-                          <form method="post" enctype="multipart/form-data" action="/oficio_edit/{{ Oficio.id }}" id="FormData0">
+                          <form method="post" enctype="multipart/form-data" action="/oficio_edit/{{ Oficio.id }}/{{ tipo_documento }}" id="FormData0">
                           {% csrf_token %}
-                        <table id="simple-table" class="mb-0 table table-borderless table-bordered-x brc-secondary-l3 text-dark-m2 radius-1 overflow-hidden">
-                            {{ frmSet }}
-                        </table>
-                          <input type="submit" class="btn btn-primary" value="Guardar">
-                          <a href="{% url 'oficios_list' %}" class="btn btn-secondary">Regresar</a>
+                            <fieldset class="form-group">
+                                {% bootstrap_form frmSet %}
+                            </fieldset>
+                           <input type="submit" class="btn btn-primary" value="Guardar">
+                          <a href="{% url 'oficios_list' tipo_documento=tipo_documento %}" class="btn btn-secondary">Regresar</a>
                           </form>
                         </p>
                       </div>
                     </div><!-- /.card-body -->
                   </div><!-- /.card -->
                 </div><!-- /.col -->
-
+        </div>
 
 <div class="col-md-2"></div>
 

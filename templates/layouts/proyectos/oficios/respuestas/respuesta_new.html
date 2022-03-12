@@ -12,7 +12,7 @@
                   <div class="card border-0 shadow-sm">
                     <div class="card-header bgc-green-d3">
                       <h5 class="card-title text-110 text-white">
-                       Nuevo Oficio {{ leyenda_form }}
+                       Nueva Respuesta
                       </h5>
 
                     </div><!-- /.card-header -->
@@ -21,7 +21,7 @@
 
                       <div class="p-3">
 {#{{ frmSet.name.errors }}#}
-                          <form method="post" enctype="application/x-www-form-urlencoded" action="{% url 'oficio_new' tipo_documento=tipo_documento %}" id="FormData0">
+                          <form method="post" enctype="application/x-www-form-urlencoded" action="{% url 'respuesta_new' oficio=oficio %}" id="FormData0">
                           {% csrf_token %}
                             <fieldset class="form-group">
                                 {% bootstrap_form frmSet %}
