@@ -105,3 +105,6 @@ class RespuestaForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(RespuestaForm, self).__init__(*args, **kwargs)
         self.initial['fecha_respuesta'] = self.instance.fecha_respuesta.isoformat()
+
+    def get_id(self):
+        return self.id

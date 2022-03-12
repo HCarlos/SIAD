@@ -204,6 +204,12 @@ class Oficio(models.Model):
     def get_consecutivo(self):
         return self.objects.latest('consecutivo').consecutivo + 1
 
+    def get_tipo_documento(self):
+        return self.tipo_documento
+
+    def get_id(self):
+        return self.id
+
     def __str__(self):
         """String for representing the Model object."""
 

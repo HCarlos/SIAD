@@ -100,12 +100,12 @@ def oficios_remove(request, id, tipo_documento):
 # ****************************************************************************************************************
 
 def respuesta_new(request, oficio):
-    Obj = Oficio.objects.filter(pk=oficio)
+    Obj = Oficio.objects.get(pk=oficio)
     if request.method == "POST":
         frmSet = RespuestaForm(request.POST)
         if frmSet.is_valid():
-            frmSet.save()
-            Obj.respuestas.add(frmSet)
+            Resp = frmSet.save()
+            Obj.respuestas.add(Resp)
             return redirect('/oficios_list/0')
     else:
         frmSet = RespuestaForm()
