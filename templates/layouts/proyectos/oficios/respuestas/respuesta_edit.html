@@ -1,0 +1,37 @@
+{% extends 'home.html' %}
+{% block contenedor %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{{ frmSet.media }}
+
+    <div class="row mt-1">
+        <div class="col-12 cards-container">
+          <div class="card border-0 shadow-sm">
+            <div class="card-header bgc-green-d3">
+              <h5 class="card-title text-110 text-white">
+               Editando la respuesta {{ Respuesta.id }} del Oficio {{ Oficio.id }}
+              </h5>
+            </div><!-- /.card-header -->
+            <div class="card-body p-0 border-1 border-t-0 brc-green-m2">
+              <div class="p-3">
+                {{ frmSet.name.errors }}
+{#                <form method="post" enctype="application/x-www-form-urlencoded" action="{% url 'respuesta_edit' id=Respuesta.id  %}" id="FormData0">#}
+                <form method="post" enctype="multipart/form-data" action="/respuesta_edit/{{ Respuesta.id }}" id="FormData0">
+                    {% csrf_token %}
+                    <fieldset class="form-group">
+                        {% bootstrap_form frmSet %}
+                    </fieldset>
+                    <input type="submit" class="btn btn-primary" value="Guardar">
+                    <a href="/oficio_respuestas_list/{{ Oficio.get_id }}/{{ tipo_documento }}" class="btn btn-secondary">Regresar</a>
+                </form>
+              </div>
+            </div><!-- /.card-body -->
+          </div><!-- /.card -->
+        </div><!-- /.col -->
+    </div>
+    <div class="col-md-2"></div>
+
+{% endblock %}

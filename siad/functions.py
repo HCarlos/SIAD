@@ -1,21 +1,14 @@
 import os
-from uuid import uuid4
-
-import required as required
-from django import forms
-from django.contrib.auth.models import UserManager
 from django.forms import ModelForm, EmailInput, PasswordInput, TextInput, FileInput, Select
-
 from home.models import Usuario
+from django.core.exceptions import ValidationError
+
 
 # ************************************************
 # MODEL FORM DE USUARIO (BASICO)
 # ************************************************
 
 class UserFormBasic(ModelForm):
-    # username = forms.CharField(required=True)
-    # email = forms.CharField(required=True)
-    # password = forms.CharField(required=True)
 
     class Meta:
         model = Usuario
@@ -42,21 +35,19 @@ class UserFormFoto(ModelForm):
 
     class Meta:
         model = Usuario
-        # fields = '__all__'
         fields = ['id', 'avatar']
-        # widgets = {
-        #     'id': TextInput(attrs={'type': 'text'}),
-        #     'avatar': FileInput(attrs={'type': 'file', 'required': 'true', 'placeholder': 'Selecciona una imagen'}),
-        # }
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(UserFormFoto, self).__init__(*args, **kwargs)
 
-    # def save(self, *args, **kwargs):
-    #     kwargs['commit'] = False
-    #     obj = super(UserFormFoto, self).save(*args, **kwargs)
-    #     if self.request:
-    #         obj.user = self.request.user
-    #     obj.save()
-    #     return obj
+def validate_file_extension(value):
+    ext = os.path.splitext(value.name)[1]  # [0] returns path+filename
+    valid_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.pdf', '.xlsx', '.xls', '.doc', '.docx', '.ppt', '.pptx']
+    if not ext.lower() in valid_extensions:
+        raise ValidationError('Déjame en paz!!! no soporto ese tipo de archivo!!!')
+
+def file_size(value):
+    limit = 10 * 1024 * 1024
+    if value.size > limit:
+        raise ValidationError('Archivo de masiado pesado. Pónte las pilas, solo puedes subir archivos de 1mb.')

@@ -4,7 +4,7 @@ from django.db.models import Q
 
 from home.models import Usuario
 from proyecto.modelform.model_forms import OficioForm, RespuestaForm
-from proyecto.models import Oficio, Subdireccione
+from proyecto.models import Oficio, Subdireccione, Respuestas
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect, render
 
@@ -13,18 +13,11 @@ def oficios_list(request, tipo_documento):
     TD = Oficio.TIPO_DOCUMENTO[0][1] if tipo_documento == 0 else Oficio.TIPO_DOCUMENTO[1][1]
     TipoDocto = tipo_documento
     Grupo = Group.objects.filter(user=request.user, name__in=['Administrador','CONTRAMUN'])
-    print("Num de Reg: %s = Registro: %s", Grupo.count(), Grupo)
     if Grupo.count() <= 0:
         subd = Subdireccione.objects.filter(titular=request.user)
         Oficios = Oficio.objects.filter(subdireccion__in=subd, tipo_documento=TipoDocto).order_by('-id').distinct()
     else:
         Oficios = Oficio.objects.filter(tipo_documento=TipoDocto).order_by('-id').distinct()
-        # user = Usuario.objects.filter(id=request.user.id).get()
-        # roles = Group.objects.filter(user=request.user)
-        # fecha = datetime.now()
-        # return render(request, 'home.html', {'User': user, 'Roles': roles, 'Fecha': fecha})
-
-        # Oficios = Oficio.objects.filter(subdireccion__in=subd).order_by('-id').distinct()
     if request.user.is_authenticated:
         user = Usuario.objects.filter(id=request.user.id).get()
         roles = Group.objects.filter(user=request.user)
@@ -65,6 +58,9 @@ def oficio_new(request, tipo_documento):
     leyenda_form = Oficio.TIPO_DOCUMENTO[0][1] if tipo_documento == 0 else Oficio.TIPO_DOCUMENTO[1][1]
     return render(request, 'layouts/proyectos/oficios/oficio_new.html', {'User': user, 'Roles': roles, 'frmSet': frmSet, 'tipo_documento': tipo_documento, 'leyenda_form': leyenda_form})
 
+
+
+
 def oficios_edit(request, id, tipo_documento):
     Id = id
     Doc = get_object_or_404(Oficio, pk=Id)
@@ -99,16 +95,91 @@ def oficios_remove(request, id, tipo_documento):
 #  R  E  S  P  U  E  S  T  A  S
 # ****************************************************************************************************************
 
+@login_required()
+def oficio_respuestas_list(request, oficio, tipo_documento):
+    TD = Oficio.TIPO_DOCUMENTO[0][1] if tipo_documento == 0 else Oficio.TIPO_DOCUMENTO[1][1]
+    Obj = get_object_or_404(Oficio, pk=oficio)
+
+    if request.user.is_authenticated:
+        user = Usuario.objects.filter(id=request.user.id).get()
+        roles = Group.objects.filter(user=request.user)
+        return render(request,'layouts/proyectos/oficios/respuestas/respuestas_list.html',
+                      {
+                          'User': user,
+                          'Roles': roles,
+                          'Oficio': Obj,
+                          'List': '/oficio_respuestas_list/%s/%s'.format(oficio, tipo_documento),
+                          'New': ('/respuesta_new/%s' % oficio),
+                          'TD': TD,
+                          'tipo_documento': tipo_documento
+                      })
+
+
+
+
+
+
+
+
 def respuesta_new(request, oficio):
     Obj = Oficio.objects.get(pk=oficio)
+    tipo_documento = Obj.get_tipo_documento()
+    TD = Oficio.TIPO_DOCUMENTO[0][1] if tipo_documento == 0 else Oficio.TIPO_DOCUMENTO[1][1]
     if request.method == "POST":
-        frmSet = RespuestaForm(request.POST)
+        frmSet = RespuestaForm(request.POST, request.FILES)
         if frmSet.is_valid():
             Resp = frmSet.save()
             Obj.respuestas.add(Resp)
-            return redirect('/oficios_list/0')
+            return redirect('/oficio_respuestas_list/{0}/{1}'.format(oficio, tipo_documento))
     else:
         frmSet = RespuestaForm()
     user = Usuario.objects.filter(id=request.user.id).get()
     roles = Group.objects.filter(user=request.user)
-    return render(request, 'layouts/proyectos/oficios/respuestas/respuesta_new.html', {'User': user, 'Roles': roles, 'frmSet': frmSet, 'Oficio': Obj})
+    return render(request, 'layouts/proyectos/oficios/respuestas/respuesta_new.html',
+                  {
+                      'User': user,
+                      'Roles': roles,
+                      'frmSet': frmSet,
+                      'Oficio': Obj,
+                      'TD': TD,
+                      'tipo_documento': tipo_documento,
+                  })
+
+
+
+
+def respuesta_edit(request, id):
+    Ofi = Oficio.objects.get(respuestas__id=id)
+    TD = Ofi.TIPO_DOCUMENTO[0][1] if Ofi.tipo_documento == 0 else Ofi.TIPO_DOCUMENTO[1][1]
+    Resp = get_object_or_404(Respuestas, pk=id)
+    if request.method == "POST":
+        frmSet = RespuestaForm(request.POST or None, request.FILES or None, instance=Resp)
+        if frmSet.is_valid():
+            frmSet.save()
+            return redirect('/oficio_respuestas_list/{0}/{1}'.format(Ofi.id, Ofi.tipo_documento))
+    else:
+        frmSet = RespuestaForm(instance=Resp)
+    user = Usuario.objects.filter(id=request.user.id).get()
+    roles = Group.objects.filter(user=request.user)
+    return render(request, 'layouts/proyectos/oficios/respuestas/respuesta_edit.html',
+                  {
+                      'User': user,
+                      'Roles': roles,
+                      'frmSet': frmSet,
+                      'Oficio': Ofi,
+                      'Respuesta': Resp,
+                      'TD': TD,
+                      'tipo_documento': Ofi.tipo_documento,
+                  })
+
+
+
+
+
+def respuesta_remove(request, id):
+    Obj = Oficio.objects.get(respuestas__id=id)
+    Respuesta = get_object_or_404(Respuestas, pk=id)
+    if Respuesta:
+        Respuesta.delete()
+        return redirect('/oficio_respuestas_list/{0}/{1}'.format(Obj.id, Obj.tipo_documento))
+

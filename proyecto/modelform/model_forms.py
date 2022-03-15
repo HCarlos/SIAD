@@ -21,6 +21,8 @@ class OficioForm(ModelForm):
     fecha_recibido = DateField(widget=forms.widgets.DateInput(format='%d/%m/%Y', attrs={'type': 'date'}),
                            input_formats=settings.DATE_INPUT_FORMATS)
 
+    instrucciones = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'cols': 5}))
+
     class DateInput(forms.DateInput):
         input_type = 'date'
 
@@ -30,10 +32,10 @@ class OficioForm(ModelForm):
         exclude = ['respuestas', 'archivo_datetime', 'creado_por', 'creado_el', 'modi_por', 'modi_el']
         widgets = {
             'consecutivo': TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
-            'remitente': TextInput(attrs={'class': 'form-control'}),
+            'remitente': TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
             'recibe': TextInput(attrs={'class': 'form-control'}),
-            'instrucciones': Textarea(attrs={'class': 'form-control', 'rows': 5, 'cols': 80}),
-            'asunto': Textarea(attrs={'class': 'form-control', 'rows': 5, 'cols': 80}),
+            'instrucciones': Textarea(attrs={'class': 'form-control', 'rows': 45, 'cols': 80}),
+            'asunto': Textarea(attrs={'class': 'form-control', 'rows': 45, 'cols': 80}),
         },
         labels = {
             "anno": "Año",
@@ -54,6 +56,7 @@ class OficioForm(ModelForm):
         self.fields['recibe'].queryset = Subdireccione.objects.all()
         self.fields['tipo_documento'].widget = forms.HiddenInput()
 
+        self.fields['remitente'].widget.attrs['readonly'] = True
 
     def set_consecutivo(self, consec):
         self.fields['consecutivo'].widget.attrs['readonly'] = False
@@ -63,14 +66,19 @@ class OficioForm(ModelForm):
     def get_consecutivo(self):
         return self.consecutivo
 
-
-
     def set_tipo_documento(self, td):
         self.initial['tipo_documento'] = td
 
     def get_tipo_documento(self):
         return self.tipo_documento
 
+    def set_remitente(self, remitente):
+        self.fields['remitente'].widget.attrs['readonly'] = False
+        self.initial['remitente'] = remitente
+        self.fields['remitente'].widget.attrs['readonly'] = True
+
+    def get_remitente(self):
+        return self.remitente
 
 
 
@@ -83,11 +91,16 @@ class OficioForm(ModelForm):
 ## -------------------------------------------------------------------------------
 
 class RespuestaForm(ModelForm):
-    fecha_respuesta = DateField(widget=forms.widgets.DateInput(format='%d/%m/%Y', attrs={'type': 'date'}),
-                           input_formats=settings.DATE_INPUT_FORMATS)
+    fecha_respuesta = DateField(
+        widget=forms.widgets.DateInput(format='%d/%m/%Y', attrs={'type': 'date', 'class': ' text-bold'}),
+        input_formats=settings.DATE_INPUT_FORMATS,
+        label="Fecha de esta respuesta"
+    )
 
-    class DateInput(forms.DateInput):
-        input_type = 'date'
+    respuesta = forms.CharField(
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'cols': 5}),
+        label="Mi Respuesta"
+    )
 
     class Meta:
         model = Respuestas
@@ -105,6 +118,7 @@ class RespuestaForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(RespuestaForm, self).__init__(*args, **kwargs)
         self.initial['fecha_respuesta'] = self.instance.fecha_respuesta.isoformat()
+        print("HA INICIADO BIEN")
 
     def get_id(self):
-        return self.id
+        return "{0}".format(self.id)

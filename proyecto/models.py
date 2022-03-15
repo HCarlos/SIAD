@@ -13,6 +13,7 @@ from django.urls import reverse
 import proyecto.models
 from home.models import Usuario
 from siad import settings
+from siad.functions import validate_file_extension, file_size
 from siad.settings import MEDIA_URL
 
 class Dependencia(models.Model):
@@ -99,11 +100,10 @@ class UnidadMedida(models.Model):
 ## -------------------------------------------------------------------------------
 class Respuestas(models.Model):
     Fecha = datetime.now()
-    respuesta = models.CharField(max_length=500, default="", blank=True, null=True)
+    respuesta = models.CharField(max_length=500, default="", blank=False, null=False)
     fecha_respuesta = models.DateField(default=django.utils.timezone.now, blank=True, null=True)
-    archivo = models.FileField(upload_to="respuesta_oficio/{0}/{1}/{2}/".format(Fecha.year,Fecha.month,Fecha.day), blank=True, null=True)
+    archivo = models.FileField(upload_to="oficios_respuestas/{0}/{1}/{2}/".format(Fecha.year, Fecha.month, Fecha.day), blank=True, null=True, validators=[validate_file_extension, file_size])
     archivo_datetime = models.DateTimeField(auto_now=True, blank=True, null=True)
-    # oficios = models.ManyToManyField(Oficio)
     creado_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, blank=True, null=True, related_name='respuesta_creado_por')
     creado_el = models.DateField('died', null=True, blank=True)
     modi_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, blank=True, null=True, related_name='respuesta_modi_por')
@@ -113,19 +113,31 @@ class Respuestas(models.Model):
         verbose_name = 'Respuesta'
         verbose_name_plural = 'Respuestas'
         permissions = (("Puede Crear", "Puede Editar"),)
-        ordering = ['pk']
+        ordering = ['-pk']
 
     def get_absolute_url(self):
         """Returns the url to access a particular author instance."""
         return reverse('respuesta-oficio-view', kwargs={'pk': self.pk})
 
+    def get_absolute_archivo_url(self):
+        return "{0}{1}".format(settings.MEDIA_URL, self.archivo) if self.archivo else "#"
+
     def __str__(self):
-        """String for representing the Model object."""
-        return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}'.format(
-            self.id, self.respuesta, self.fecha_respuesta, self.archivo, self.creado_por, self.creado_el, self.modi_por, self.modi_el)
-        # return self
+        return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}'.format(self.id, self.respuesta, self.fecha_respuesta, self.archivo, self.creado_por, self.creado_el, self.modi_por, self.modi_el)
 
+    def get_id(self):
+        return "{0}".format(self.id)
 
+    def get_respuesta_edit(self):
+        return "/respuesta_edit/{0}".format(self.id)
+
+    def get_respuesta_remove(self):
+        return "/respuesta_remove/{0}".format(self.id)
+
+    def get_respuesta(self):
+        Ofi = Oficio.objects.get(respuestas__id=self.id)
+        # return '%s' % self.archivo if self.archivo else ""
+        return "file_{0}_{1}".format(Ofi.id, self.id) if self.archivo else "#"
 
 
 
@@ -175,7 +187,7 @@ class Oficio(models.Model):
     fecha_respuesta = models.DateField(default=get_fecha_respuesta(), blank=True, null=True)
     subdireccion = models.ManyToManyField(Subdireccione)
     respuestas = models.ManyToManyField(Respuestas)
-    archivo = models.FileField(upload_to="oficios/{0}/{1}/{2}/".format(Fecha.year,Fecha.month,Fecha.day), blank=True, null=True)
+    archivo = models.FileField(upload_to="oficios/{0}/{1}/{2}/".format(Fecha.year,Fecha.month,Fecha.day), blank=True, null=True, validators=[validate_file_extension, file_size])
     archivo_datetime = models.DateTimeField(auto_now=True, blank=True, null=True)
     creado_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, blank=True, null=True, related_name='ofi_creado_por')
     creado_el = models.DateField(default=django.utils.timezone.now, null=True, blank=True)
@@ -197,7 +209,6 @@ class Oficio(models.Model):
     def get_absolute_archivo_url(self):
         return "{0}{1}".format(settings.MEDIA_URL, self.archivo) if self.archivo else "#"
 
-    @property
     def get_oficio(self):
         return '%s' % self.oficio if self.archivo else ""
 
@@ -217,15 +228,14 @@ class Oficio(models.Model):
             self.id, self.anno, self.tipo_documento, self.consecutivo, self.oficio, self.fecha_documento, self.dir_remitente, self.remitente, self.recibe, self.asunto, self.instrucciones, self.fecha_respuesta, self.archivo, self.archivo_datetime, self.creado_por, self.creado_el, self.modi_por, self.modi_el)
         # return self
 
-    def get_respuesta_new(self):
-        return '/respuesta_new/{0}'.format(self.id)
-
     def get_oficio_edit(self):
         return '/oficio_edit/{0}/{1}'.format(self.id, self.tipo_documento)
 
     def get_oficio_remove(self):
         return '/oficio_remove/{0}/{1}'.format(self.id, self.tipo_documento)
 
+    def get_respuesta_new(self):
+        return '/oficio_respuestas_list/{0}/{1}'.format(self.id, self.get_tipo_documento())
 
 
 
