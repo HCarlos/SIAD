@@ -21,79 +21,11 @@
 
                       <div class="p-3">
 {#{{ frmSet.name.errors }}#}
-                          <form method="post" enctype="application/x-www-form-urlencoded" action="{% url 'oficio_new' tipo_documento=tipo_documento %}" id="FormData0">
+                          <form method="post" enctype="multipart/form-data" action="{% url 'oficio_new' tipo_documento=tipo_documento %}" id="FormData0">
                           {% csrf_token %}
                             <fieldset class="form-group">
                                 {% bootstrap_form frmSet %}
                             </fieldset>
-
-
-{#    {% for field in frmSet %}#}
-{#        <div class="form-group">#}
-{#            {{ field }}#}
-{#        <label class="control-label" for="{{ field.id_for_label }}">{{ field.label }}</label>#}
-{#            {% if field.errors %}#}
-{#                <div class="border-bottom-danger">#}
-{#                    {{ field.errors }}#}
-{#                </div>#}
-{#            {% endif %}#}
-{#        </div>#}
-{#    {% endfor %}#}
-
-
-
-
-{##}
-{##}
-{#<div class="form-group row">#}
-{#    <div class="col-sm-2">#}
-{#        <label class="col-form-label" for="id_anno">Año</label>#}
-{#        {{ frmSet.anno }}#}
-{#    </div>#}
-{#    <div class="col-sm-4">#}
-{#        <label class="col-form-label" for="id_tipo_documento">Categoría</label>#}
-{#        {{ frmSet.tipo_documento}}#}
-{#    </div>#}
-{#    <div class="col-sm-3">#}
-{#        <label class="col-form-label" for="id_consecutivo">Consecutivo</label>#}
-{#        {{ frmSet.consecutivo }}#}
-{#    </div>#}
-{#    <div class="col-sm-3">#}
-{#        <label class="col-form-label" for="id_oficio">Num Oficio</label>#}
-{#        {{ frmSet.oficio }}#}
-{#    </div>#}
-{#</div>#}
-{##}
-{#<div class="form-group row">#}
-{#    <div class="col-sm-3">#}
-{#        <label class="col-form-label" for="id_dependencia">Dependencia</label>#}
-{#        {{ frmSet.dir_remitente }}#}
-{#    </div>#}
-{#    <div class="col-sm-3">#}
-{#        <label class="col-form-label" for="id_fecha_documento">Fecha Captura</label>#}
-{#        {{ frmSet.fecha_captura }}#}
-{#    </div>#}
-{#    <div class="col-sm-3">#}
-{#        <label class="col-form-label" for="id_fecha_documento">Fecha Documento</label>#}
-{#        {{ frmSet.fecha_documento}}#}
-{#    </div>#}
-{#    <div class="col-sm-3">#}
-{#        <label class="col-form-label" for="id_fecha_respuesta">Fecha Respuesta</label>#}
-{#        {{ frmSet.fecha_respuesta }}#}
-{#    </div>#}
-{#</div>#}
-{##}
-{#  <div class="form-group row">#}
-{#    <div class="col-sm-6">#}
-{#        <label class="col-form-label" for="id_remitente">Remitente</label>#}
-{#        {{ frmSet.remitente }}#}
-{#    </div>#}
-{#    <div class="col-sm-6">#}
-{#        <label class="col-form-label" for="id_recibe">Recibe</label>#}
-{#        {{ frmSet.recibe }}#}
-{#    </div>#}
-{#</div>#}
-{##}
 
                           <input type="submit" class="btn btn-primary" value="Guardar">
                           <a href="{% url 'oficios_list' tipo_documento=tipo_documento %}" class="btn btn-secondary">Regresar</a>

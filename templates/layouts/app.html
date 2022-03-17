@@ -20,6 +20,15 @@
 
 {% block content %} {% endblock %}
 
+
+<div class="modal fade " id="modalFull" data-backdrop-bg="bgc-grey-tp4" data-blur="true" tabindex="-1" role="dialog" aria-labelledby="modalFull" aria-hidden="true"  >
+    <div class="modal-dialog " role="document"  >
+        <div class="modal-content border-0 shadow radius-1"  >
+           {% block content_modal %} {% endblock %}
+        </div>
+    </div>
+</div>
+
 {% include "layouts/partials/script_footer.html" %}
 
 </body>

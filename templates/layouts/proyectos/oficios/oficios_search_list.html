@@ -1,0 +1,78 @@
+{% extends 'home.html' %}
+{% block contenedor %}
+{% load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% bootstrap_javascript jquery='full' %}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{{ frmSet.media }}
+
+
+<div class="row mt-1">
+                <div class="col-12 cards-container">
+                  <div class="card border-0 shadow-sm">
+                    <div class="card-header bgc-green-d3">
+                      <h5 class="card-title text-110 text-white">
+                       Lista de Oficios
+                      </h5>
+
+                    </div><!-- /.card-header -->
+
+                    <div class="card-body p-0 border-1 border-t-0 brc-green-m2">
+                      <div class="p-3">
+
+<div class="form-row mb-1">
+    <label for = "ciudadano" class="col-md-2 col-form-label">Nombre Completo</label>
+    <div class="col-md-10">
+        <input type="text" name="ciudadano" id="ciudadano"  class="form-control" />
+    </div>
+</div>
+
+                      </div>
+                      <div class="p-3">
+                        <table id="simple-table" class="mb-0 table table-borderless table-bordered-x brc-secondary-l3 text-dark-m2 radius-1 overflow-hidden">
+                            <thead class="text-dark-tp3 bgc-grey-l4 text-90 border-b-1 brc-transparent">
+                                <tr>
+                                    <th>Consec.</th>
+                                    <th>OFICIO</th>
+                                    <th>REMITENTE</th>
+                                    <th>ASUNTO</th>
+                                    <th>FECHA DOCTO</th>
+                                    <th>FECHA CAPTURA</th>
+                                    <th>ARCHIVO</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                          <tbody>
+{#                            {% for oficio in Oficios %}#}
+{#                                <tr>#}
+{#                                    <td>{{ oficio.consecutivo }}</td>#}
+{#                                    <td>{{ oficio.oficio }}</td>#}
+{#                                    <td>{{ oficio.remitente }}</td>#}
+{#                                    <td>{{ oficio.asunto }}</td>#}
+{#                                    <td>{{ oficio.fecha_documento }}</td>#}
+{#                                    <td>{{ oficio.fecha_captura }}</td>#}
+{#                                    <td><a href="{{ oficio.get_absolute_archivo_url }}" target="_blank">{{ oficio.get_oficio }}</a></td>#}
+{#                                    <td>#}
+{#                                      <div class="d-none d-lg-flex">#}
+{#                                        {% include "layouts/proyectos/components/respuesta_button.html" with RespuestaItem=oficio.get_respuesta_new %}#}
+{#                                        {% include "layouts/proyectos/components/edit_button.html" with EditItem=oficio.get_oficio_edit %}#}
+{#                                        {% include "layouts/proyectos/components/remove_button.html" with RemoveItem=oficio.get_oficio_remove %}#}
+{#                                      </div>#}
+{#                                    </td>#}
+{#                                </tr>#}
+{#                          {% endfor %}#}
+                          </tbody>
+                        </table>
+                      </div>
+
+                      </div>
+                    </div><!-- /.card-body -->
+                  </div><!-- /.card -->
+                </div><!-- /.col -->
+
+
+<div class="col-md-2"></div>
+
+{% endblock %}

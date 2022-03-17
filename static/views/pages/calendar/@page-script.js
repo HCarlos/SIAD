@@ -123,16 +123,16 @@ jQuery(function($) {
 
 
     eventClick: function(info) {
-			//display a modal
+			//display a modals
 			var modal = 
-			'<div class="modal fade">\
-			  <div class="modal-dialog">\
-         <div class="modal-content">\
-          <div class="modal-header">\
-            <h5 class="modal-title">Edit Event</h5>\
-            <button type="button" class="close" data-dismiss="modal">&times;</button>\
+			'<div class="modals fade">\
+			  <div class="modals-dialog">\
+         <div class="modals-content">\
+          <div class="modals-header">\
+            <h5 class="modals-title">Edit Event</h5>\
+            <button type="button" class="close" data-dismiss="modals">&times;</button>\
           </div>\
-          <div class="modal-body">\
+          <div class="modals-body">\
             <form class="m-0">\
               <div class="input-group">\
                   <div class="input-groupp-repend align-self-center mr-2">\
@@ -164,7 +164,7 @@ jQuery(function($) {
 				modal.modal("hide");
 			});
 			
-			modal.modal('show').on('hidden.bs.modal', function(){
+			modal.modal('show').on('hidden.bs.modals', function(){
 				modal.remove();
 			});
     }

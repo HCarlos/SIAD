@@ -14,7 +14,7 @@
                   <div class="card border-0 shadow-sm">
                     <div class="card-header bgc-green-d3">
                       <h5 class="card-title text-110 text-white">
-                       Respuesta del Oficio {{ TD }}
+                       Respuesta del Oficio {{ Oficio.consecutivo }} ({{ TD }})
                       </h5>
 
                     </div><!-- /.card-header -->
@@ -73,7 +73,7 @@
                             {% for respuesta in Oficio.respuestas.all %}
                                 <tr>
                                     <td>{{ respuesta.id }}</td>
-                                    <td>{{ Oficio.get_id }}</td>
+                                    <td>{{ Oficio.get_consecutivo }}</td>
                                     <td>{{ respuesta.respuesta }}</td>
                                     <td>{{ respuesta.fecha_respuesta }}</td>
                                     <td><a href="{{ respuesta.get_absolute_archivo_url }}" target="_blank">{{ respuesta.get_respuesta }}</a></td>

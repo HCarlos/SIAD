@@ -63,13 +63,16 @@ $('.profile-option').on('click', function(){
 })
 
 
-// modal function
+// modals function
 
-$('.modal-btn').on("click", function(){
+$('.modals-btn').on("click", function(){
   var modal = $(this).attr('data-buttonmodal');
-  $('[data-modal="'+ modal + '"]').addClass('show-modal')
+  $('[data-modals="'+ modal + '"]').addClass('show-modal')
 });
 
-$('.close-modal').on('click', function(){
+$('.close-modals').on('click', function(){
   $(this).parent().parent().parent().parent().removeClass('show-modal')
 })
+
+
+

@@ -1,5 +1,5 @@
 /* ================================================
- * Make use of Twitter Bootstrap's modal more monkey-friendly
+ * Make use of Twitter Bootstrap's modals more monkey-friendly
  * 
  * For Bootstrap 3.
  * 
@@ -81,7 +81,7 @@ var BootstrapDialog = null;
             return this;
         },
         createModal: function() {
-            return $('<div class="modal fade" tabindex="-1"></div>');
+            return $('<div class="modals fade" tabindex="-1"></div>');
         },
         getModal: function() {
             return this.$modal;
@@ -92,7 +92,7 @@ var BootstrapDialog = null;
             return this;
         },
         createModalDialog: function() {
-            return $('<div class="modal-dialog"></div>');
+            return $('<div class="modals-dialog"></div>');
         },
         getModalDialog: function() {
             return this.$modalDialog;
@@ -103,7 +103,7 @@ var BootstrapDialog = null;
             return this;
         },
         createModalContent: function() {
-            return $('<div class="modal-content"></div>');
+            return $('<div class="modals-content"></div>');
         },
         getModalContent: function() {
             return this.$modalContent;
@@ -114,7 +114,7 @@ var BootstrapDialog = null;
             return this;
         },
         createModalHeader: function() {
-            return $('<div class="modal-header"></div>');
+            return $('<div class="modals-header"></div>');
         },
         getModalHeader: function() {
             return this.$modalHeader;
@@ -125,7 +125,7 @@ var BootstrapDialog = null;
             return this;
         },
         createModalBody: function() {
-            return $('<div class="modal-body"></div>');
+            return $('<div class="modals-body"></div>');
         },
         getModalBody: function() {
             return this.$modalBody;
@@ -136,7 +136,7 @@ var BootstrapDialog = null;
             return this;
         },
         createModalFooter: function() {
-            return $('<div class="modal-footer"></div>');
+            return $('<div class="modals-footer"></div>');
         },
         getModalFooter: function() {
             return this.$modaFooter;
@@ -421,7 +421,7 @@ var BootstrapDialog = null;
             return this;
         },
         /**
-         * Set handler for modal event 'show'.
+         * Set handler for modals event 'show'.
          * This is a setter!
          * 
          * @param {type} onopen
@@ -433,7 +433,7 @@ var BootstrapDialog = null;
             return this;
         },
         /**
-         * Set handler for modal event 'hide'.
+         * Set handler for modals event 'hide'.
          * This is a setter!
          * 
          * @param {type} onclose
@@ -453,15 +453,15 @@ var BootstrapDialog = null;
             return this;
         },
         handleModalEvents: function() {
-            this.getModal().on('show.bs.modal', {dialog: this}, function(event) {
+            this.getModal().on('show.bs.modals', {dialog: this}, function(event) {
                 var dialog = event.data.dialog;
                 typeof dialog.options.onshow === 'function' && dialog.options.onshow(dialog);
             });
-            this.getModal().on('hide.bs.modal', {dialog: this}, function(event) {
+            this.getModal().on('hide.bs.modals', {dialog: this}, function(event) {
                 var dialog = event.data.dialog;
                 typeof dialog.options.onhide === 'function' && dialog.options.onhide(dialog);
             });
-            this.getModal().on('hidden.bs.modal', {dialog: this}, function(event) {
+            this.getModal().on('hidden.bs.modals', {dialog: this}, function(event) {
                 var dialog = event.data.dialog;
                 dialog.isAutodestroy() && $(this).remove();
             });

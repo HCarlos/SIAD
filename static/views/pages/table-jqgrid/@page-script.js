@@ -101,15 +101,15 @@ jQuery(function($) {
 
 
 		//dialogs
-		overlay: "modal-backdrop",
+		overlay: "modals-backdrop",
 		dialog: {
-			header: "modal-header bgc-default-l4 text-blue-m1 py-2 px-3",
-			window: "modal mw-100",
-			document: "modal-dialog mw-none",
+			header: "modals-header bgc-default-l4 text-blue-m1 py-2 px-3",
+			window: "modals mw-100",
+			document: "modals-dialog mw-none",
 
-			content: "modal-content p-0",
-			body: "modal-body px-2 py-25 text-130",
-			footer: "modal-footer",
+			content: "modals-content p-0",
+			body: "modals-body px-2 py-25 text-130",
+			footer: "modals-footer",
 
 			closeButton: "mr-1 mt-n25 px-2 py-1 w-auto h-auto border-1 brc-h-warning-m1 bgc-h-warning-l1 text-danger radius-round",
 			fmButton: "btn btn-sm btn-default",

@@ -1,7 +1,7 @@
 /**
  * --------------------------------------------------------------------------
  * Ace (v4.0.0): aside.js
-   Aside element based on Bootstrap's modal
+   Aside element based on Bootstrap's modals
 */
 
 import Util from './util'
@@ -103,7 +103,7 @@ class Aside {
     this.element.classList.add('ace-aside')
 
     if (!config.blocking) {
-      this.element.classList.add('modal-nb')
+      this.element.classList.add('modals-nb')
       this.element.setAttribute('data-backdrop', 'false')
       if ($) {
         $(this.element).data('backdrop', false)
@@ -118,7 +118,7 @@ class Aside {
       }
     }
 
-    if (config.dismiss) this.element.classList.add('modal-dismiss')
+    if (config.dismiss) this.element.classList.add('modals-dismiss')
 
     if (config.fade) {
       this.element.classList.add('aside-fade')
@@ -139,29 +139,29 @@ class Aside {
     }
 
     if (config.width) {
-      const dialog = this.element.querySelector('.modal-dialog')
+      const dialog = this.element.querySelector('.modals-dialog')
       if (dialog) {
         dialog.style.width = isNaN(config.width) ? config.width : this._config.width + 'px'
       }
     }
 
     if (config.height) {
-      const dialog = this.element.querySelector('.modal-dialog')
+      const dialog = this.element.querySelector('.modals-dialog')
       if (dialog) {
         dialog.style.height = isNaN(config.height) ? config.height : this._config.height + 'px'
       }
     }
 
     // if (/^(content|body)$/.test(config.scroll)) {
-    // let content = this.element.querySelector('.modal-content')
+    // let content = this.element.querySelector('.modals-content')
     // if (content) content.classList.add('scroll-' + config.scroll)
     // }
 
     if (!$) return
 
-    $(this.element).off('shown.bs.modal.autohide')
+    $(this.element).off('shown.bs.modals.autohide')
     if (config.autohide) {
-      $(this.element).on('shown.bs.modal.autohide', () => {
+      $(this.element).on('shown.bs.modals.autohide', () => {
         setTimeout(() => {
           this.hide()
         }, config.autohide)
@@ -290,36 +290,36 @@ class Aside {
     if (!_jQueryBS) return
     const $ = window.jQuery
 
-    const visibleModalSelector = '.modal.show:not(.modal-nb)'
+    const visibleModalSelector = '.modals.show:not(.modals-nb)'
 
-    document.querySelectorAll('.ace-aside.modal-nb').forEach((el) => el.setAttribute('data-backdrop', 'false'))
+    document.querySelectorAll('.ace-aside.modals-nb').forEach((el) => el.setAttribute('data-backdrop', 'false'))
 
-    $('.ace-aside.modal-nb').data('backdrop', false)
+    $('.ace-aside.modals-nb').data('backdrop', false)
 
     const onBeforeShow = (modal) => {
-      if (modal.classList.contains('modal-nb')) {
+      if (modal.classList.contains('modals-nb')) {
         if (document.querySelector(visibleModalSelector) === null) { // if there are no normal modals open
-          document.body.classList.add('modal-nb')// disable .modal-open effects for .modal-nb
+          document.body.classList.add('modals-nb')// disable .modals-open effects for .modals-nb
         }
       } else {
         if (!modal.classList.contains('ace-aside')) {
-          // check to see if we will have modal scrollbars
+          // check to see if we will have modals scrollbars
           modal.style.display = 'block'
-          if (modal.scrollHeight > modal.clientHeight) document.body.classList.add('modal-scroll')
+          if (modal.scrollHeight > modal.clientHeight) document.body.classList.add('modals-scroll')
           const scrollbars = Util.getScrollbarInfo()
           if (scrollbars.width === 0) document.body.classList.add('scrollbar-w0')
           modal.style.display = ''
         }
 
-        // set modal padding value (equal to scrollbar width)
-        document.body.style.setProperty('--modal-padding', (window.innerWidth - document.body.scrollWidth) + 'px')
+        // set modals padding value (equal to scrollbar width)
+        document.body.style.setProperty('--modals-padding', (window.innerWidth - document.body.scrollWidth) + 'px')
 
         const isModalOff = modal.className.match(/modal-off(?:(?:-([a-z]+))|\s|$)/i)
 
         const backdropBg = modal.getAttribute('data-backdrop-bg')
         if (backdropBg || isModalOff) {
           setTimeout(function () {
-            const backdrops = document.querySelectorAll('.modal-backdrop')
+            const backdrops = document.querySelectorAll('.modals-backdrop')
             if (backdrops.length > 0) {
               const backdrop = backdrops[backdrops.length - 1]
               if (backdropBg) backdrop.classList.add(backdropBg)
@@ -339,14 +339,14 @@ class Aside {
            // using `backdrop-filter` is less intrusive but doesn't have the same blur effect
             if (window.CSS.supports("backdrop-filter", "none")) {
             setTimeout(function () {
-              $('.modal-backdrop:last-child').addClass('modal-blur')
+              $('.modals-backdrop:last-child').addClass('modals-blur')
             }, 0)
           }
           else */
           if (window.CSS.supports('filter', 'none')) {
             const bodyContainer = document.querySelector('.body-container')
             if (bodyContainer !== null) {
-              document.body.classList.add('modal-blur')
+              document.body.classList.add('modals-blur')
               bodyContainer.style.filter = 'blur(' + blur + ')'
 
               const modalParent = modal.parentNode
@@ -354,9 +354,9 @@ class Aside {
 
               document.body.appendChild(modal)
 
-              $(modal).one('hidden.bs.modal.blur', () => {
+              $(modal).one('hidden.bs.modals.blur', () => {
                 modalParent.insertBefore(modal, modalSibling)
-                document.body.classList.remove('modal-blur')
+                document.body.classList.remove('modals-blur')
                 bodyContainer.style.filter = ''
               })
             }
@@ -367,19 +367,19 @@ class Aside {
 
     /// /////////////////////////////
     const onAfterShow = (modal) => {
-      if (modal.classList.contains('modal-nb')) {
-        document.body.classList.remove('modal-nb')
+      if (modal.classList.contains('modals-nb')) {
+        document.body.classList.remove('modals-nb')
 
         if (document.querySelector(visibleModalSelector) === null) { // if no blocking modals
-          document.body.classList.remove('modal-open')// disable .modal-open effects
+          document.body.classList.remove('modals-open')// disable .modals-open effects
           document.body.style.paddingRight = ''// and remove paddingRight
         }
 
-        if (modal.classList.contains('modal-dismiss') || modal.getAttribute('data-dismiss') === 'true') {
+        if (modal.classList.contains('modals-dismiss') || modal.getAttribute('data-dismiss') === 'true') {
           modal._dismissAsideEvent = ($event) => {
-            if (!modal.contains($event.target)) { // clicked outside modal
+            if (!modal.contains($event.target)) { // clicked outside modals
               // why timeout?
-              // because if we click on the same button that triggers this modal, its 'hide' function will be called and instantly followed by 'show' function
+              // because if we click on the same button that triggers this modals, its 'hide' function will be called and instantly followed by 'show' function
               // so we first let 'show' be called and then we call 'hide'
               document.removeEventListener('mouseup', modal._dismissAsideEvent)
               modal._dismissAsideEvent = null
@@ -397,10 +397,10 @@ class Aside {
 
     const onAfterHide = (modal) => {
       if (document.querySelector(visibleModalSelector) === null) document.body.style.paddingRight = ''// required for rare cases that body padding is still not cleared
-      else document.body.classList.add('modal-open') // sometimes an aside is closed (so .modal-open is removed) but a .modal is still open (so we add .modal-open again)
+      else document.body.classList.add('modals-open') // sometimes an aside is closed (so .modals-open is removed) but a .modals is still open (so we add .modals-open again)
 
-      if (!modal.classList.contains('modal-nb')) {
-        document.body.classList.remove('modal-scroll')
+      if (!modal.classList.contains('modals-nb')) {
+        document.body.classList.remove('modals-scroll')
         document.body.classList.remove('scrollbar-w0')
       }
 
@@ -411,19 +411,19 @@ class Aside {
 
     /// //////////////////////////////////////
     $(document)
-      .on('show.bs.modal', '.modal', (e) => {
+      .on('show.bs.modals', '.modals', (e) => {
         if (e.defaultPrevented || e.isDefaultPrevented()) return
         onBeforeShow(e.target)
       })
-      .on('shown.bs.modal', '.modal', function (e) {
+      .on('shown.bs.modals', '.modals', function (e) {
         onAfterShow(e.target)
       })
-      .on('hidden.bs.modal', '.modal', function (e) {
+      .on('hidden.bs.modals', '.modals', function (e) {
         onAfterHide(e.target)
       })
 
-    // enable modal functionality for modal boxes and asides that are shown (.show) by default
-    $('.modal.show').modal('show')
+    // enable modals functionality for modals boxes and asides that are shown (.show) by default
+    $('.modals.show').modal('show')
   }// _HandleAside
 }
 

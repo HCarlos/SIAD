@@ -18732,11 +18732,11 @@ a[data-toggle="collapse"]:not(.collapsed) .toggle-icon[class*="-right"], .accord
 
 .ace-aside {
   /**
-    .modal-content.scroll-body {
+    .modals-content.scroll-body {
         max-height: 100%;
         overflow: hidden;
 
-        .modal-body {
+        .modals-body {
             overflow: hidden auto;
             flex: 2 1 auto;
         }

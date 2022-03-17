@@ -41,7 +41,7 @@ jQuery(function($) {
     })
 
 
-    $('#aside-compose').on('show.bs.modal', function() {
+    $('#aside-compose').on('show.bs.modals', function() {
         $('#aside-menu').modal('hide')
     })
 

@@ -41,7 +41,7 @@ $(function () {
   QUnit.test('should set basic options', function (assert) {
     assert.expect(4)
 
-    var aside = $('<div id="aside-1" class="modal"><div class="modal-dialog"/></div>').appendTo('#qunit-fixture')
+    var aside = $('<div id="aside-1" class="modals"><div class="modals-dialog"/></div>').appendTo('#qunit-fixture')
     aside.aceAsideNC({
       placement: 'tr',
       blocking: true,
@@ -50,11 +50,11 @@ $(function () {
       height: 300
     })
 
-    assert.notOk(aside.hasClass('modal-nb'))
+    assert.notOk(aside.hasClass('modals-nb'))
     assert.ok(aside.hasClass('aside-top aside-r'))
 
-    assert.equal(aside.find('.modal-dialog').css('width'), '200px')
-    assert.equal(aside.find('.modal-dialog').css('height'), '300px')
+    assert.equal(aside.find('.modals-dialog').css('width'), '200px')
+    assert.equal(aside.find('.modals-dialog').css('height'), '300px')
   })
 
 
@@ -62,7 +62,7 @@ $(function () {
     assert.expect(2)
     var done = assert.async()
 
-    var aside = $('<div id="aside-123s" class="modal"><div class="modal-dialog"/></div>').appendTo('#qunit-fixture')
+    var aside = $('<div id="aside-123s" class="modals"><div class="modals-dialog"/></div>').appendTo('#qunit-fixture')
     aside.aceAsideNC({
       autohide: 500
     }).aceAsideNC('show')
@@ -72,8 +72,8 @@ $(function () {
     var d1 = new Date()
     var t1 = d1.getTime()
 
-    aside.on('hide.bs.modal', function (e) {
-      if (e.namespace != 'bs.modal') return
+    aside.on('hide.bs.modals', function (e) {
+      if (e.namespace != 'bs.modals') return
 
       var d2 = new Date()
       var t2 = d2.getTime()
@@ -88,12 +88,12 @@ $(function () {
   })
 
 
-  QUnit.test('should hide aside when clicking outside of its area if it has `.modal-dismiss`', function (assert) {
+  QUnit.test('should hide aside when clicking outside of its area if it has `.modals-dismiss`', function (assert) {
     assert.expect(3)
     var done = assert.async(2)
 
-    var aside = $('<div id="aside-1" class="modal ace-aside modal-nb modal-dismiss"><div class="modal-dialog"/></div>').appendTo('#qunit-fixture')
-    aside.on('shown.bs.modal', function () {
+    var aside = $('<div id="aside-1" class="modals ace-aside modals-nb modals-dismiss"><div class="modals-dialog"/></div>').appendTo('#qunit-fixture')
+    aside.on('shown.bs.modals', function () {
       assert.ok(aside.hasClass('show'), 'aside is shown')
 
       setTimeout(function () {
@@ -107,7 +107,7 @@ $(function () {
       }, 0)
     })
 
-      .on('hidden.bs.modal', function () {
+      .on('hidden.bs.modals', function () {
         assert.notOk(aside.hasClass('show'), 'aside is hidden -- event')
         done()
       })
@@ -115,15 +115,15 @@ $(function () {
       .aceAsideNC('show')
   })
 
-  QUnit.test('should not hide aside when clicking inside its area if it has `.modal-dismiss`', function (assert) {
+  QUnit.test('should not hide aside when clicking inside its area if it has `.modals-dismiss`', function (assert) {
     assert.expect(1)
     var done = assert.async()
 
-    var aside = $('<div id="aside-1" class="modal ace-aside modal-nb modal-dismiss"><div class="modal-dialog"/></div>').appendTo('#qunit-fixture')
-    aside.on('shown.bs.modal', function () {
+    var aside = $('<div id="aside-1" class="modals ace-aside modals-nb modals-dismiss"><div class="modals-dialog"/></div>').appendTo('#qunit-fixture')
+    aside.on('shown.bs.modals', function () {
       setTimeout(function () {
         // clicking inside aside won't hide it
-        aside.find('.modal-dialog').trigger('mouseup')
+        aside.find('.modals-dialog').trigger('mouseup')
 
         setTimeout(function () {
           assert.ok(aside.hasClass('show'), 'aside is not hidden')

@@ -66,7 +66,7 @@ class Subdireccione(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return '{0} - {1}, {2}'.format(self.abreviatura, self.titular, self.id)
+        return '{0} ({1}) => {2}'.format(self.subdireccion, self.abreviatura, self.titular)
 
 
 ## -------------------------------------------------------------------------------
@@ -90,7 +90,8 @@ class UnidadMedida(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return '{0} - {1}, {2}'.format(self.unidad, self.abreviatura, self.id)
+        # return '{0} - {1}, {2}'.format(self.unidad, self.abreviatura, self.id)
+        return '{0}'.format(self.unidad)
 
 
 
@@ -99,9 +100,20 @@ class UnidadMedida(models.Model):
 ## MODEL RESPUESTAS OFICIO
 ## -------------------------------------------------------------------------------
 class Respuestas(models.Model):
+
+    ESTATUS = [
+        (0, 'RECIBIDO'),
+        (1, 'EN PROCESO'),
+        (2, 'TURNADO A OTRA DEPENDENCIA'),
+        (3, 'NO PROCEDE'),
+        (4, 'RESUELTO FAVORABLE'),
+        (5, 'RESUELTO NO FAVORABLE'),
+    ]
+
     Fecha = datetime.now()
-    respuesta = models.CharField(max_length=500, default="", blank=False, null=False)
+    respuesta = models.CharField(max_length=2000, default="", blank=False, null=False)
     fecha_respuesta = models.DateField(default=django.utils.timezone.now, blank=True, null=True)
+    estatus = models.SmallIntegerField(choices=ESTATUS, default=0, blank=False, null=False)
     archivo = models.FileField(upload_to="oficios_respuestas/{0}/{1}/{2}/".format(Fecha.year, Fecha.month, Fecha.day), blank=True, null=True, validators=[validate_file_extension, file_size])
     archivo_datetime = models.DateTimeField(auto_now=True, blank=True, null=True)
     creado_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, blank=True, null=True, related_name='respuesta_creado_por')
@@ -220,6 +232,9 @@ class Oficio(models.Model):
 
     def get_id(self):
         return self.id
+
+    def get_consecutivo(self):
+        return self.consecutivo
 
     def __str__(self):
         """String for representing the Model object."""

@@ -26,14 +26,45 @@ $(document).ready(function() {
                 // $("#id_dir_remitente").trigger("change");
         });
     }
+           //
+           // $("#datepicker1").datepicker();
+           //
+           //
+           //  alert('hola');
+           //
 
-           $("#datepicker1").datepicker();
 
 
-            alert('hola');
+if ( $(".removeItem").length > 0  ) {
 
+    $(".removeItem").on('click', function (event) {
+        event.preventDefault();
+        var Url = event.currentTarget.id
+        var arr = Url.split('/');
+        var respuesta = confirm('Desea eliminar este registro: '+arr[2]);
+        if (!respuesta) return false;
 
+            $(function() {
+                $.ajax({
+                    url: Url,
+                    data: null,
+                    method: 'POST',
+                    contentType: 'application/json',
+                    dataType: 'json'
+                }).done(function( response ) {
+                    if (response["status"] == "OK"){
+                        alert(response["message"]);
+                        location.reload();
+                    }
+                }).fail(function(response) {
+                    alert("Falló: " + response["message"] );
+                });
 
+            });
+
+    });
+
+}
 
 
 

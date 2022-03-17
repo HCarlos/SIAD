@@ -179,9 +179,9 @@ window.currentLayout = 1;
 	//an animation for settings button icon when hovered
 	var styleEl = document.createElement('style');
 	styleEl.innerHTML = ".flex-equal-sm > * {flex: 0 1 1% !important;}\
-						 @media print {#id-ace-settings-modal {display: none !important;}}\
-						 @media (hover: hover) { #id-ace-settings-modal:not(.show) .aside-header > .btn:hover > .fa { animation: 0.6s fa-spin ease-in-out; }}\
-						 @media screen and (prefers-reduced-motion: reduce) { #id-ace-settings-modal:not(.show) .aside-header > .btn:hover > .fa { animation: none; } }";
+						 @media print {#id-ace-settings-modals {display: none !important;}}\
+						 @media (hover: hover) { #id-ace-settings-modals:not(.show) .aside-header > .btn:hover > .fa { animation: 0.6s fa-spin ease-in-out; }}\
+						 @media screen and (prefers-reduced-motion: reduce) { #id-ace-settings-modals:not(.show) .aside-header > .btn:hover > .fa { animation: none; } }";
 	document.head.appendChild(styleEl);
 
 	

@@ -61,8 +61,7 @@
                         <table id="simple-table" class="mb-0 table table-borderless table-bordered-x brc-secondary-l3 text-dark-m2 radius-1 overflow-hidden">
                             <thead class="text-dark-tp3 bgc-grey-l4 text-90 border-b-1 brc-transparent">
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Núm.</th>
+                                    <th>Consec.</th>
                                     <th>OFICIO</th>
                                     <th>REMITENTE</th>
                                     <th>ASUNTO</th>
@@ -75,7 +74,6 @@
                           <tbody>
                             {% for oficio in Oficios %}
                                 <tr>
-                                    <td>{{ oficio.id }}</td>
                                     <td>{{ oficio.consecutivo }}</td>
                                     <td>{{ oficio.oficio }}</td>
                                     <td>{{ oficio.remitente }}</td>

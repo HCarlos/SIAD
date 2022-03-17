@@ -12,13 +12,12 @@
           <div class="card border-0 shadow-sm">
             <div class="card-header bgc-green-d3">
               <h5 class="card-title text-110 text-white">
-               Nueva Respuesta del Oficio {{ Oficio.get_id }}
+               Nueva Respuesta del Oficio {{ Oficio.get_consecutivo }}
               </h5>
             </div><!-- /.card-header -->
             <div class="card-body p-0 border-1 border-t-0 brc-green-m2">
               <div class="p-3">
                 {{ frmSet.name.errors }}
-{#                <form method="post" enctype="application/x-www-form-urlencoded" action="{% url 'respuesta_new' oficio=Oficio.get_id  %}" id="FormData0">#}
                 <form method="post" enctype="multipart/form-data" action="/respuesta_new/{{ Oficio.get_id  }}" id="FormData0">
                     {% csrf_token %}
                     <fieldset class="form-group">

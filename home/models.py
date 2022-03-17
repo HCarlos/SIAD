@@ -18,7 +18,7 @@ class Empresa(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return '{0}, {1}, {2}, {3}, {4}'.format(self.id, self.empresa, self.rfc, self.domicilio_fiscal, self.representante_legal)
+        return '{0}'.format(self.empresa)
 
 
 
@@ -64,7 +64,7 @@ class Usuario(AbstractUser):
             ("Crear Usuario", "Crear Usuario"),
             ("Editar Usuario", "Editar Usuario"),
         )
-        ordering = ['pk']
+        ordering = ['ap_paterno', 'ap_materno', 'nombre']
 
     def get_absolute_url(self):
         """Returns the url to access a particular author instance."""
@@ -83,8 +83,8 @@ class Usuario(AbstractUser):
         return 'Masculino' if self.genero == 1 else 'Femenino'
 
     def __str__(self):
-        """String for representing the Model object."""
-        return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}'.format(self.id, self.ap_paterno, self.ap_materno, self.nombre, self.curp, self.email, self.fecha_nacimiento, self.genero, self.emails, self.telefonos, self.celulares, self.avatar, self.username)
+        # return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}'.format(self.id, self.ap_paterno, self.ap_materno, self.nombre, self.curp, self.email, self.fecha_nacimiento, self.genero, self.emails, self.telefonos, self.celulares, self.avatar, self.username)
+        return '{0} {1} {2} - ({4}) ({5})'.format(self.ap_paterno, self.ap_materno, self.nombre, self.curp, self.username, self.id)
         # return self
 
 

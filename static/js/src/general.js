@@ -92,7 +92,7 @@ class Basic {
         if (scrollbarInfo.width === 0) {
           document.body.classList.add('mob-dropdown-body')
         }
-        this.classList.add('backdrop-shown')// used later to add `.navbar-modal` class to .navbar
+        this.classList.add('backdrop-shown')// used later to add `.navbar-modals` class to .navbar
 
         $(this)
           .one('hidden.bs.dropdown', function () {
@@ -201,14 +201,14 @@ class Basic {
         // when a .dropdown is opened, add .navbar-open to increase z-index, so that dropdowns go above 'asides', etc
         const navbar = Util.closest(this, '.navbar')
         if (!navbar) return
-        if (this.classList.contains('backdrop-shown')) navbar.classList.add('navbar-modal')
+        if (this.classList.contains('backdrop-shown')) navbar.classList.add('navbar-modals')
         else navbar.classList.add('navbar-open')
       })
       .on('hidden.bs.dropdown', '.navbar .dropdown', function () {
         const navbar = Util.closest(this, '.navbar')
         if (!navbar) return
         navbar.classList.remove('navbar-open')
-        navbar.classList.remove('navbar-modal')
+        navbar.classList.remove('navbar-modals')
       })
   }
 }

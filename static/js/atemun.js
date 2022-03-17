@@ -73,8 +73,8 @@
             var Url = event.currentTarget.href;
 
             // Nombre del Modal Form
-            $("#modalFull .modal-content").empty();
-            $("#modalFull .modal-content").html('<div class="fa-2x m-2"><i class="fa fa-cog fa-spin"></i>Cargando datos...</div>');
+            $("#modalFull .modals-content").empty();
+            $("#modalFull .modals-content").html('<div class="fa-2x m-2"><i class="fa fa-cog fa-spin"></i>Cargando datos...</div>');
             $("#modalFull").modal('show');
 
             $(function () {
@@ -83,10 +83,10 @@
                     url: Url
                 })
                 .done(function (response) {
-                    $("#modalFull .modal-content").html(response);
+                    $("#modalFull .modals-content").html(response);
 
                     // Aplica para los Select2
-                    $form = $("#modalFull .modal-content");
+                    $form = $("#modalFull .modals-content");
                     $form.find('.select2').each(function() {
                         $(this).select2({
                             dropdownParent: $('#modalFull')

@@ -319,9 +319,9 @@ jQuery(function($) {
       
   })
 
-  // modal one
+  // modals one
   TinyDatePicker('#id-date-2', {
-    mode: 'dp-modal',
+    mode: 'dp-modals',
   }).on('statechange', function(ev) {
     // console.log(ev);
   })
@@ -334,7 +334,7 @@ jQuery(function($) {
   }
   else {
     TinyDatePicker('#id-date-3', {
-      mode: 'dp-modal',
+      mode: 'dp-modals',
    })
   }
 
@@ -343,7 +343,7 @@ jQuery(function($) {
   var daterange_container = document.querySelector('#id-daterange-container')
   // Inject DateRangePicker into our container
   DateRangePicker.DateRangePicker(daterange_container, {
-      mode: 'dp-modal'
+      mode: 'dp-modals'
   })
   .on('statechange', function (_, rp) {
       // Update the inputs when the state changes

@@ -21,7 +21,7 @@ class OficioForm(ModelForm):
     fecha_recibido = DateField(widget=forms.widgets.DateInput(format='%d/%m/%Y', attrs={'type': 'date'}),
                            input_formats=settings.DATE_INPUT_FORMATS)
 
-    instrucciones = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'cols': 5}))
+    instrucciones = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 8, 'cols': 5}))
 
     class DateInput(forms.DateInput):
         input_type = 'date'
@@ -98,7 +98,7 @@ class RespuestaForm(ModelForm):
     )
 
     respuesta = forms.CharField(
-        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 3, 'cols': 5}),
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 8, 'cols': 5}),
         label="Mi Respuesta"
     )
 
@@ -107,7 +107,7 @@ class RespuestaForm(ModelForm):
         fields = '__all__'
         exclude = ['archivo_datetime', 'creado_por', 'creado_el', 'modi_por', 'modi_el']
         widgets = {
-            'respuesta': Textarea(attrs={'class': 'form-control', 'rows': 5, 'cols': 80}),
+            'respuesta': Textarea(attrs={'class': 'form-control', 'rows': 5, 'cols': 5}),
         },
         labels = {
             "fecha_respuesta": "Fecha de Respuesta",

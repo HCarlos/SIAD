@@ -40,6 +40,19 @@
                     </a>
                   </li>
 
+
+                    {% if request.path == '/oficios_search_list/1' %}
+                          <li class="nav-item active">
+                    {% else %}
+                          <li class="nav-item">
+                    {% endif %}
+                    <a class="nav-link" href="{% url 'oficios_search_list'  %}">
+                      <i class="nav-icon fa fa-edit"></i>
+                      <span class="nav-text fadeable">Reporte de Oficios</span>
+                    </a>
+                  </li>
+
+
                 </ul>
               </nav>
 
