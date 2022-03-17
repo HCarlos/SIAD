@@ -27,7 +27,7 @@ with open('/etc/secret_key.txt') as f:
 # SECRET_KEY = 'django-insecure-w0w=t@2(#-i*$z0%uid^wi=%e*an=#*qla3c%6!#iapoh+2@%9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) )
+DEBUG = False  # bool( os.environ.get('DJANGO_DEBUG', True) )
 
 ALLOWED_HOSTS = ['*']
 
@@ -83,6 +83,16 @@ TEMPLATES = [
 AUTH_USER_MODEL = "home.Usuario"
 
 WSGI_APPLICATION = 'siad.wsgi.application'
+
+SECURE_HSTS_SECONDS = 31536000
+SECURE_CONTENT_TYPE_NOSNIFF = True
+
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_PRELOAD = True
+
 
 
 # Database
