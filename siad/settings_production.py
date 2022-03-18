@@ -27,9 +27,9 @@ with open('/etc/secret_key.txt') as f:
 # SECRET_KEY = 'django-insecure-w0w=t@2(#-i*$z0%uid^wi=%e*an=#*qla3c%6!#iapoh+2@%9'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False  # bool( os.environ.get('DJANGO_DEBUG', True) )
+DEBUG = bool( os.environ.get('DJANGO_DEBUG', True) )
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*', 'localhost', '0.0.0.0']
 
 APPEND_SLASH = False
 
@@ -110,7 +110,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'dboficios',
         'USER': 'postgres',
-        'PASSWORD': '123',
+        'PASSWORD': '4*b0SdwZ,MLBa[FNsL',
         'HOST': 'localhost',
         'PORT': '5432',
     }
