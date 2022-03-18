@@ -20,7 +20,7 @@ def getDependencias(request):
     response = {}
     if request.method == 'POST':
         Id = request.POST.get('dir_remitente')
-        print(Id)
+        # print(Id)
         dependencia = Dependencia.objects.filter(pk=Id).get()
         if dependencia:
             response = {

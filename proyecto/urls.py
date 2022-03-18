@@ -1,18 +1,8 @@
-from datetime import datetime
-
-from django.urls import path
-from . import views
-
-
 from django.conf.urls.static import static
-from django.contrib import admin
-from django.contrib.auth import views
-
 from proyecto.views import oficios_list, oficio_new, oficios_edit, oficios_remove, respuesta_new, \
     oficio_respuestas_list, respuesta_edit, respuesta_remove, oficios_search_list
 from siad import settings
-from django.urls import path, include
-
+from django.urls import path
 from .ajax.dependencias import getDependencias
 
 urlpatterns = [
@@ -27,7 +17,7 @@ urlpatterns = [
     path('respuesta_edit/<int:id>', respuesta_edit, name='respuesta_edit'),
     path('respuesta_remove/<int:id>', respuesta_remove, name='respuesta_remove'),
 
-  path('getDependencias/', getDependencias, name='/getDependencias'),
+    path('getDependencias/', getDependencias, name='/getDependencias'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

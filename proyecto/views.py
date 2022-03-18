@@ -1,8 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
-from django.db.models import Q
 from django.http import JsonResponse
-from django.template.response import TemplateResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from home.models import Usuario
@@ -10,7 +8,6 @@ from proyecto.modelform.model_forms import OficioForm, RespuestaForm
 from proyecto.models import Oficio, Subdireccione, Respuestas
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect, render
-from siad.settings import SECRET_KEY
 
 @login_required()
 def oficios_list(request, tipo_documento):
@@ -102,9 +99,18 @@ def oficios_remove(request, id, tipo_documento):
 
 @login_required()
 def oficios_search_list(request):
-        return render(request,'layouts/proyectos/oficios/oficios_search_list.html',
-                      {
-                      })
+    Objs = Oficio.objects.filter(oficio='ST/003/2022')
+    if request.method == 'POST':
+        Objs = Oficio.objects.filter(oficio='ST/003/2022')
+    # print(Objs)
+    user = Usuario.objects.filter(id=request.user.id).get()
+    roles = Group.objects.filter(user=request.user)
+    return render(request,'layouts/proyectos/oficios/oficios_search_list.html',
+                  {
+                      'Oficios': Objs,
+                      'User': user,
+                      'Roles': roles,
+                  })
 
 
 # ****************************************************************************************************************
