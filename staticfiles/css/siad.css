@@ -1,0 +1,29 @@
+.login-logo{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:30px;
+    position:relative;
+    z-index:1}
+.login-logo .logo{
+    align-items:center;
+    display:flex;
+    justify-content:center;
+    width:100px
+}
+@media(max-width: 768px){
+    .login-logo{
+        background:#fff;
+        border-radius:100px;
+        box-shadow:7px 7px 33px rgba(32,32,32,.21);
+        height:190px;
+        margin-bottom:20px;
+        margin-top:-75px;
+        width:190px
+    }
+    .login-logo .logo{
+        height:auto;
+        position:relative;
+        width:70%
+    }
+}

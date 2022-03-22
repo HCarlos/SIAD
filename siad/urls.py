@@ -17,19 +17,14 @@ Including another URLconf
 # from django.urls import path
 
 from datetime import datetime
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views
-# from django.urls import path
-# from django.contrib.auth import views as auth_views, login
-# from django.template.defaulttags import url
 from django.urls import path, include
 
 from home.views import welcome, home, myloginView, Usuario, nuevo_user, perfil_user, perfil_imagen, perfil_save_imagen
-# from proyecto.ajax.dependencias import getDependencias
-# from proyecto.views import oficios_list, oficio_new, oficios_edit, oficios_remove, respuesta_new, \
-#     oficio_respuestas_list, respuesta_edit, respuesta_remove, oficios_search_list
 from siad import settings
 
 fecha = datetime.now()
@@ -61,6 +56,7 @@ urlpatterns = [
 
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
+urlpatterns += staticfiles_urlpatterns()
 
 if settings.DEBUG:
     urlpatterns += static(
