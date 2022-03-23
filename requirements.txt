@@ -19,7 +19,7 @@ dnspython==2.2.0
 eventlet==0.33.0
 falcon==3.0.1
 greenlet==1.1.2
-gunicorn==20.1.0
+gunicorn==20.0.2
 idna==3.3
 lark-parser==0.12.0
 mongoengine==0.24.0
