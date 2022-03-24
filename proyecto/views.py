@@ -1,7 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
+from django.db.models.functions import Concat
+from django.db.models import Value
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Q
 
 from home.models import Usuario
 from proyecto.modelform.model_forms import OficioForm, RespuestaForm
@@ -97,21 +100,6 @@ def oficios_remove(request, id, tipo_documento):
 
 
 
-@login_required()
-def oficios_search_list(request):
-    Objs = Oficio.objects.filter(oficio='ST/003/2022')
-    if request.method == 'POST':
-        Objs = Oficio.objects.filter(oficio='ST/003/2022')
-    # print(Objs)
-    user = Usuario.objects.filter(id=request.user.id).get()
-    roles = Group.objects.filter(user=request.user)
-    return render(request,'layouts/proyectos/oficios/oficios_search_list.html',
-                  {
-                      'Oficios': Objs,
-                      'User': user,
-                      'Roles': roles,
-                  })
-
 
 # ****************************************************************************************************************
 #  R  E  S  P  U  E  S  T  A  S
@@ -204,4 +192,57 @@ def respuesta_remove(request, id):
     if Respuesta:
         Respuesta.delete()
         return redirect('/oficio_respuestas_list/{0}/{1}'.format(Obj.id, Obj.tipo_documento))
+
+
+
+
+
+
+
+
+# ****************************************************************************************************************
+# M  O  D  U  L  O   D  E   B  Ú  S  Q  U  E  D  A
+# ****************************************************************************************************************
+
+@login_required()
+def oficios_search_list(request):
+    Objs = None
+    if request.method == 'POST':
+        Objs = Oficio.objects.all()
+        if request.POST.get('ciudadano'):
+            ciudadano = request.POST.get('ciudadano')
+            Objs = Objs.filter(
+                Q(dir_remitente__titular__ap_paterno__contains=ciudadano) |
+                Q(dir_remitente__titular__ap_materno__contains=ciudadano) |
+                Q(dir_remitente__titular__nombre__contains=ciudadano)
+            )
+        if request.POST.get('oficio'):
+            Objs = Objs.filter(oficio=request.POST.get('oficio'))
+
+           # dir_remitente__titular__nombre_completo__contains
+
+    user = Usuario.objects.filter(id=request.user.id).get()
+    roles = Group.objects.filter(user=request.user)
+    return render(request,'layouts/proyectos/oficios/oficios_search_list.html',
+                  {
+                      'Oficios': Objs,
+                      'User': user,
+                      'Roles': roles,
+                  })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
