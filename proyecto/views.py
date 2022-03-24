@@ -221,6 +221,7 @@ def oficios_search_list(request):
 
            # dir_remitente__titular__nombre_completo__contains
 
+
     user = Usuario.objects.filter(id=request.user.id).get()
     roles = Group.objects.filter(user=request.user)
     return render(request,'layouts/proyectos/oficios/oficios_search_list.html',
