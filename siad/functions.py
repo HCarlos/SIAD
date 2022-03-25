@@ -50,4 +50,4 @@ def validate_file_extension(value):
 def file_size(value):
     limit = 10 * 1024 * 1024
     if value.size > limit:
-        raise ValidationError('Archivo de masiado pesado. Pónte las pilas, solo puedes subir archivos de 1mb.')
+        raise ValidationError('Archivo demasiado pesado. Pónte las pilas, solo puedes subir archivos de 1mb.')
