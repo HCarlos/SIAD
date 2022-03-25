@@ -207,27 +207,33 @@ def respuesta_remove(request, id):
 @login_required()
 def oficios_search_list(request):
     Objs = None
+    msg = ""
     if request.method == 'POST':
         Objs = Oficio.objects.all()
-        if request.POST.get('ciudadano'):
-            ciudadano = request.POST.get('ciudadano').strip()
+        if request.POST.get("ciudadano"):
+            ciudadano = request.POST.get("ciudadano").strip()
+            msg += ", " if msg!="" else ciudadano
             Objs = Objs.filter(
                 Q(dir_remitente__titular__ap_paterno__contains=ciudadano) |
                 Q(dir_remitente__titular__ap_materno__contains=ciudadano) |
                 Q(dir_remitente__titular__nombre__contains=ciudadano)
             )
-        if request.POST.get('oficio'):
-            Objs = Objs.filter(oficio__contains=request.POST.get('oficio').strip())
+        if request.POST.get("oficio"):
+            no_oficio = request.POST.get("oficio").strip()
+            msg += ", " if msg!="" else no_oficio
+            Objs = Objs.filter(oficio__contains=no_oficio)
 
            # dir_remitente__titular__nombre_completo__contains
-
+    else:
+        msg = 'NO HAY NADA QUE CONSULTAR'
     user = Usuario.objects.filter(id=request.user.id).get()
     roles = Group.objects.filter(user=request.user)
-    return render(request,'layouts/proyectos/oficios/oficios_search_list.html',
+    return render(request, 'layouts/proyectos/oficios/oficios_search_list.html',
                   {
                       'Oficios': Objs,
                       'User': user,
                       'Roles': roles,
+                      'Mensaje': msg
                   })
 
 
