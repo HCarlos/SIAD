@@ -210,14 +210,14 @@ def oficios_search_list(request):
     if request.method == 'POST':
         Objs = Oficio.objects.all()
         if request.POST.get('ciudadano'):
-            ciudadano = request.POST.get('ciudadano')
+            ciudadano = request.POST.get('ciudadano').strip()
             Objs = Objs.filter(
                 Q(dir_remitente__titular__ap_paterno__contains=ciudadano) |
                 Q(dir_remitente__titular__ap_materno__contains=ciudadano) |
                 Q(dir_remitente__titular__nombre__contains=ciudadano)
             )
         if request.POST.get('oficio'):
-            Objs = Objs.filter(oficio=request.POST.get('oficio'))
+            Objs = Objs.filter(oficio__contains=request.POST.get('oficio').strip())
 
            # dir_remitente__titular__nombre_completo__contains
 
