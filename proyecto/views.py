@@ -1,16 +1,16 @@
+import datetime
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
-from django.db.models.functions import Concat
-from django.db.models import Value
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Q
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
+from django.shortcuts import redirect, render
+from django.views.decorators.csrf import csrf_exempt
 
 from home.models import Usuario
 from proyecto.modelform.model_forms import OficioForm, RespuestaForm
 from proyecto.models import Oficio, Subdireccione, Respuestas
-from django.shortcuts import render, get_object_or_404
-from django.shortcuts import redirect, render
 
 @login_required()
 def oficios_list(request, tipo_documento):
@@ -211,8 +211,8 @@ def oficios_search_list(request):
     if request.method == 'POST':
         Objs = Oficio.objects.all()
         if request.POST.get("ciudadano"):
-            ciudadano = request.POST.get("ciudadano").strip()
-            msg += ", " if msg!="" else ciudadano
+            ciudadano = "Datos ciudadano => " + request.POST.get("ciudadano").strip()
+            msg += ciudadano
             Objs = Objs.filter(
                 Q(dir_remitente__titular__ap_paterno__contains=ciudadano) |
                 Q(dir_remitente__titular__ap_materno__contains=ciudadano) |
@@ -220,20 +220,30 @@ def oficios_search_list(request):
             )
         if request.POST.get("oficio"):
             no_oficio = request.POST.get("oficio").strip()
-            msg += ", " if msg!="" else no_oficio
+            msg += (", no_oficio => " if msg != "" else "") + (" %s " % no_oficio)
             Objs = Objs.filter(oficio__contains=no_oficio)
 
-           # dir_remitente__titular__nombre_completo__contains
+        if request.POST.get("is_fecha"):
+            fecha_inicial = request.POST.get("fecha_inicial").strip()
+            fecha_final = request.POST.get("fecha_final").strip()
+            msg += (", Rango de Fecha => " if msg != "" else "") + "{0} - {1}".format(fecha_inicial, fecha_final)
+            Objs = Objs.filter(fecha_documento__range=(fecha_inicial,fecha_final))
+
+        # dir_remitente__titular__nombre_completo__contains
     else:
         msg = 'NO HAY NADA QUE CONSULTAR'
     user = Usuario.objects.filter(id=request.user.id).get()
     roles = Group.objects.filter(user=request.user)
+    fecha = datetime.date.today().isoformat()
+    context = {}
     return render(request, 'layouts/proyectos/oficios/oficios_search_list.html',
                   {
                       'Oficios': Objs,
                       'User': user,
                       'Roles': roles,
-                      'Mensaje': msg
+                      'Mensaje': msg,
+                      'Fecha': fecha,
+
                   })
 
 

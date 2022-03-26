@@ -27,19 +27,34 @@
 
                         <div class="p-3">
                             <div class="form-row mb-1">
-                                <label for = "ciudadano" class="col-md-3 col-form-label">Nombre Completo</label>
-                                <div class="col-md-9">
+                                <label for = "ciudadano" class="col-md-4 col-form-label">Nombre Completo</label>
+                                <div class="col-md-8">
                                     <input type="text" name="ciudadano" id="ciudadano"  class="form-control" />
                                 </div>
                             </div>
                             <div class="form-row mb-1">
-                                <label for = "oficio" class="col-md-3 col-form-label">Oficio:</label>
-                                <div class="col-md-9">
+                                <label for = "oficio" class="col-md-4 col-form-label">Número de Oficio:</label>
+                                <div class="col-md-8">
                                     <input type="text" name="oficio" id="oficio"  class="form-control" />
                                 </div>
                             </div>
+                            <div class="form-row mb-1">
+                                <label for = "fecha_inicial" class="col-md-4 col-form-label">
+                                    <input type="checkbox" class="mr-1" id="is_fecha" name="is_fecha">
+                                    Desde => Hasta:
+                                </label>
+                                <div class="col-md-4">
+                                    <input type="date" name="fecha_inicial" id="fecha_inicial"  class="form-control" value="{{ Fecha }}" />
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="date" name="fecha_final" id="fecha_final"  class="form-control" value="{{ Fecha }}" />
+                                </div>
+                            </div>
                         </div>
-                        <button type="submit" class="btn btn-primary">Consultar</button>
+                        <button type="submit" class="btn btn-primary float-right mr-3 mb-3">
+                            <i class="fa fa-search"></i>
+                            Consultar
+                        </button>
                     </form>
 
                 </div>
@@ -52,12 +67,12 @@
             <div class="card border-0 shadow-sm m-4 ">
                 <div class="card-header bgc-purple-d3">
                     <h5 class="card-title text-110 text-white">
-                    Otros Datos
+                    Parámetros de Búsqueda
                     </h5>
                 </div>
                 <div class="card-body p-0 border-1 border-t-0 brc-purple-m2">
                     <div class="p-3">
-                        QuerySet: {{ Mensaje }}
+                        QuerySet: <code>{{ Mensaje }}</code>
                     </div>
                 </div>
             </div><!-- /.card-body -->
@@ -80,6 +95,13 @@
                        Lista de Oficios
                       </h5>
 
+                    <div class="card-toolbar">
+{#                        <a href="{% url 'reportespecial' mensaje=Mensaje%}" target="_blank" class="card-toolbar-btn text-white">#}
+                        <a href="/reportespecial/{{Mensaje}}/{{oficios}}" target="_blank" class="card-toolbar-btn text-white">
+                            <i class="fa fa-print"></i>
+                        </a>
+                    </div>
+
                     </div><!-- /.card-header -->
 
                     <div class="card-body p-0 border-1 border-t-0 brc-green-m2">
@@ -94,7 +116,6 @@
                                     <th>FECHA DOCTO</th>
                                     <th>FECHA CAPTURA</th>
                                     <th>ARCHIVO</th>
-                                    <th></th>
                                 </tr>
                             </thead>
                           <tbody>
@@ -107,13 +128,6 @@
                                     <td>{{ oficio.fecha_documento }}</td>
                                     <td>{{ oficio.fecha_captura }}</td>
                                     <td><a href="{{ oficio.get_absolute_archivo_url }}" target="_blank">{{ oficio.get_oficio }}</a></td>
-                                    <td>
-                                      <div class="d-none d-lg-flex">
-                                        {% include "layouts/proyectos/components/respuesta_button.html" with RespuestaItem=oficio.get_respuesta_new %}
-                                        {% include "layouts/proyectos/components/edit_button.html" with EditItem=oficio.get_oficio_edit %}
-                                        {% include "layouts/proyectos/components/remove_button.html" with RemoveItem=oficio.get_oficio_remove %}
-                                      </div>
-                                    </td>
                                 </tr>
                           {% endfor %}
                           </tbody>

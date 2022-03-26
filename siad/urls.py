@@ -35,7 +35,7 @@ urlpatterns = [
     path('home/', home, name='home'),
     path('login/', myloginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(
-        template_name='welcome.html',
+        template_name='registration/login.html',
         next_page=None), name='logout'),
 
     path('password_change/', views.PasswordChangeView.as_view(), name='password_change'),

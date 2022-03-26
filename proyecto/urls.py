@@ -1,9 +1,13 @@
 from django.conf.urls.static import static
+from django.template.defaulttags import url
+
+import proyecto.reportes.panel_reporte_1
 from proyecto.views import oficios_list, oficio_new, oficios_edit, oficios_remove, respuesta_new, \
     oficio_respuestas_list, respuesta_edit, respuesta_remove, oficios_search_list
 from siad import settings
 from django.urls import path
 from .ajax.dependencias import getDependencias
+from .reportes.panel_reporte_1 import PDF, reportespecial
 
 urlpatterns = [
     path('oficios_list/<int:tipo_documento>', oficios_list, name='oficios_list'),
@@ -19,7 +23,10 @@ urlpatterns = [
 
     path('getDependencias/', getDependencias, name='/getDependencias'),
 
-    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('reportespecial/<path:mensaje>/<path:oficios>', reportespecial, name='reportespecial'),
+    # url(r'^(?P<reportespecial>\w+)/$', reportespecial,),
+
+  ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 
 if settings.DEBUG:
