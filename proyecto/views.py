@@ -237,8 +237,6 @@ def oficios_search_list(request):
             msg += (", Rango de Fecha => " if msg != "" else "") + "{0} - {1}".format(fecha_inicial, fecha_final)
             Objs = Objs.filter(fecha_documento__range=(fecha_inicial,fecha_final))
 
-        # dir_remitente__titular__nombre_completo__contains
-
     else:
         msg = ''
     user = Usuario.objects.filter(id=request.user.id).get()
