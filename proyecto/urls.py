@@ -23,7 +23,9 @@ urlpatterns = [
 
     path('getDependencias/', getDependencias, name='/getDependencias'),
 
-    path('reportespecial/<path:mensaje>/<path:oficios>', reportespecial, name='reportespecial'),
+    # url("^reportespecial/(?P<mensaje>.*)$/(?P<oficios>.*)$"),
+    path('reportespecial/', reportespecial, name='reportespecial'),
+
     # url(r'^(?P<reportespecial>\w+)/$', reportespecial,),
 
   ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

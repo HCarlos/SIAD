@@ -1,9 +1,12 @@
 import datetime
+import encodings.utf_8
+from urllib.parse import urlencode
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
+from django.core import serializers
 from django.db.models import Q
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
@@ -206,7 +209,7 @@ def respuesta_remove(request, id):
 
 @login_required()
 def oficios_search_list(request):
-    Objs = None
+    Objs = []
     msg = ""
     if request.method == 'POST':
         Objs = Oficio.objects.all()
@@ -223,6 +226,11 @@ def oficios_search_list(request):
             msg += (", no_oficio => " if msg != "" else "") + (" %s " % no_oficio)
             Objs = Objs.filter(oficio__contains=no_oficio)
 
+        if request.POST.get("tipo_documento"):
+            tipo_documento = request.POST.get("tipo_documento").strip()
+            msg += (", tipo_documento => " if msg != "" else "") + (" %s " % tipo_documento)
+            Objs = Objs.filter(tipo_documento=tipo_documento)
+
         if request.POST.get("is_fecha"):
             fecha_inicial = request.POST.get("fecha_inicial").strip()
             fecha_final = request.POST.get("fecha_final").strip()
@@ -230,22 +238,26 @@ def oficios_search_list(request):
             Objs = Objs.filter(fecha_documento__range=(fecha_inicial,fecha_final))
 
         # dir_remitente__titular__nombre_completo__contains
+
     else:
-        msg = 'NO HAY NADA QUE CONSULTAR'
+        msg = ''
     user = Usuario.objects.filter(id=request.user.id).get()
     roles = Group.objects.filter(user=request.user)
     fecha = datetime.date.today().isoformat()
-    context = {}
+    # print( encodings.utf_8.decode(msg) )
+
     return render(request, 'layouts/proyectos/oficios/oficios_search_list.html',
                   {
                       'Oficios': Objs,
+                      'Items': serializers.serialize("json", Objs),
                       'User': user,
                       'Roles': roles,
-                      'Mensaje': msg,
+                      'Mensaje':  msg,
                       'Fecha': fecha,
 
                   })
 
+    # return HttpResponseRedirect(reverse('firstapp:create') + '?' + urlencode({'next': nextos }))
 
 
 

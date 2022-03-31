@@ -253,8 +253,6 @@ class Oficio(models.Model):
         return '/oficio_respuestas_list/{0}/{1}'.format(self.id, self.get_tipo_documento())
 
 
-
-
 ## -------------------------------------------------------------------------------
 ## MODEL OFICIOS CONSULTA
 ## -------------------------------------------------------------------------------
