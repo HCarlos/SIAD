@@ -236,6 +236,9 @@ class Oficio(models.Model):
     def get_consecutivo(self):
         return self.consecutivo
 
+    def get_respuestas_count(self):
+        return self.objects.filter(respuestas__oficio__oficio=self.id).count
+
     def __str__(self):
         """String for representing the Model object."""
 

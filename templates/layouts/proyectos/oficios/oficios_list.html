@@ -80,7 +80,7 @@
                                     <td>{{ oficio.asunto }}</td>
                                     <td>{{ oficio.fecha_documento }}</td>
                                     <td>{{ oficio.fecha_captura }}</td>
-                                    <td><a href="{{ oficio.get_absolute_archivo_url }}" target="_blank">{{ oficio.get_oficio }}</a></td>
+                                    <td><a href="{{ oficio.get_absolute_archivo_url }}" target="_blank">{{ oficio.get_oficio }}</a>   </td>
                                     <td>
                                       <div class="d-none d-lg-flex">
                                         {% include "layouts/proyectos/components/respuesta_button.html" with RespuestaItem=oficio.get_respuesta_new %}
