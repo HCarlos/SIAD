@@ -19,7 +19,7 @@ from proyecto.models import Oficio, Subdireccione, Respuestas
 def oficios_list(request, tipo_documento):
     TD = Oficio.TIPO_DOCUMENTO[0][1] if tipo_documento == 0 else Oficio.TIPO_DOCUMENTO[1][1]
     TipoDocto = tipo_documento
-    Grupo = Group.objects.filter(user=request.user, name__in=['Administrador','CONTRAMUN'])
+    Grupo = Group.objects.filter(user=request.user, name__in=['Administrador', 'SysOp', 'ContraMun'])
     if Grupo.count() <= 0:
         subd = Subdireccione.objects.filter(titular=request.user)
         Oficios = Oficio.objects.filter(subdireccion__in=subd, tipo_documento=TipoDocto).order_by('-id').distinct()
@@ -87,6 +87,8 @@ def oficios_edit(request, id, tipo_documento):
     return render(request, 'layouts/proyectos/oficios/oficio_edit.html', {'User': user, 'Roles': roles, 'Oficio': Doc, 'frmSet': frmSet, 'tipo_documento': tipo_documento, 'leyenda_form': leyenda_form})
 
 # nomeselacontraseña
+
+
 
 @csrf_exempt
 def oficios_remove(request, id, tipo_documento):
@@ -256,6 +258,11 @@ def oficios_search_list(request):
                       'Fecha': fecha,
 
                   })
+
+
+
+
+
 
 
 
