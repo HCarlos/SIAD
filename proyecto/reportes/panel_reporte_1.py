@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 from django.core.serializers.json import DjangoJSONEncoder
 
 from proyecto.models import Oficio
-from siad.settings import STATICFILES_DIRS, BASE_DIR
+from siad.settings import STATICFILES_DIRS, BASE_DIR, REPORTS_URL, REPORTS_ROOT
 
 class PDF(FPDF):
     Oficio = Oficio()
@@ -108,7 +108,8 @@ def reportespecial(request):
         pdf.set_font('Arial', '', 8)
         pdf.cell(190, 6, "NO SE ENCONTRARON REGISTRO", '', 1)
 
-    pdf.output('report.pdf', 'F')
+    pdf.output( os.path.join(REPORTS_ROOT, 'special_report_1.pdf') )
+
     return FileResponse(open('report.pdf', 'rb'), as_attachment=True, content_type='application/pdf')
 
 

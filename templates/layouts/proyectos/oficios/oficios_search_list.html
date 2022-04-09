@@ -106,7 +106,7 @@
                       </h5>
 
                     <div class="card-toolbar">
-                        <form method="post" enctype="multipart/form-data" action="{% url 'reportespecial' %}" id="FormData0">
+                        <form method="post" enctype="multipart/form-data" action="{% url 'reportespecial' %}" target="_blank" id="FormData0">
                         {% csrf_token %}
                             <input type="hidden" name="Mensaje" value="{{ Mensaje }}">
                             <input type="hidden" name="Oficios" value="{{ Items }}">
