@@ -231,6 +231,7 @@ def oficios_search_list(request):
             if int(tipo_documento) == 0 or int(tipo_documento) == 1:
                 msg += (", tipo_documento => " if msg != "" else "") + (" %s " % tipo_documento)
                 Objs = Objs.filter(tipo_documento=tipo_documento)
+            # print(tipo_documento)
 
         if request.POST.get("is_fecha"):
             fecha_inicial = request.POST.get("fecha_inicial").strip()

@@ -73,30 +73,39 @@ class PDF(FPDF):
 
 
 def reportespecial(request):
-    pdf = PDF()
-    pdf.criterio_de_consulta = request.POST.get('Mensaje')
-    pdf.Titulo = 'REPORTE ESPECIAL DE OFICIOS'
-    pdf.add_page()
-    pdf.set_font('Arial', '', 8)
+    print("EL REQUEST ES %s " % request)
+    if request.POST:
+        pdf = PDF()
+        pdf.criterio_de_consulta = request.POST.get('Mensaje')
+        pdf.Titulo = 'REPORTE ESPECIAL DE OFICIOS'
+        pdf.add_page()
+        pdf.set_font('Arial', '', 8)
 
-    items = json.loads(request.POST.get('Oficios'))
-    print("Total de Registros: %s" % len(items))
+        items = json.loads(request.POST.get('Oficios'))
+        print("Total de Registros: %s" % len(items))
 
-    if len(items) > 0:
-        pdf.set_font('Arial', 'B', 8)
-        pdf.cell(50, 6, "OFICIO", 'LTB', 0)
-        pdf.cell(10, 6, "No.", 'LTB', 0)
-        pdf.cell(130, 6, "ASUNTO", 'LTBR', 1)
+        if len(items) > 0:
+            pdf.set_font('Arial', 'B', 8)
+            pdf.cell(50, 6, "OFICIO", 'LTB', 0)
+            pdf.cell(10, 6, "No.", 'LTB', 0)
+            pdf.cell(130, 6, "ASUNTO", 'LTBR', 1)
 
-        for item in items:
-            Id = int(item['pk'])
-            pdf.set_font('Arial', '', 8)
-            pdf.Oficio = get_object_or_404(Oficio, pk=Id)
-            pdf.cell(50, 6, "%s" % pdf.Oficio.oficio, 'LB', 0)
-            pdf.cell(10, 6, "%s" % pdf.Oficio.consecutivo, 'LB', 0)
-            pdf.cell(130, 6, pdf.Oficio.asunto, 'LBR', 1)
+            for item in items:
+                Id = int(item['pk'])
+                pdf.set_font('Arial', '', 8)
+                pdf.Oficio = get_object_or_404(Oficio, pk=Id)
+                pdf.cell(50, 6, "%s" % pdf.Oficio.oficio, 'LB', 0)
+                pdf.cell(10, 6, "%s" % pdf.Oficio.consecutivo, 'LB', 0)
+                pdf.cell(130, 6, pdf.Oficio.asunto, 'LBR', 1)
+        else:
+            pdf.set_font('Arial', 'B', 12)
+            pdf.cell(190, 6, "NO SE ENCONTRARON REGISTRO", '', 1)
     else:
-        pdf.set_font('Arial', 'B', 12)
+        pdf = PDF()
+        pdf.criterio_de_consulta = ""
+        pdf.Titulo = 'REPORTE ESPECIAL DE OFICIOS'
+        pdf.add_page()
+        pdf.set_font('Arial', '', 8)
         pdf.cell(190, 6, "NO SE ENCONTRARON REGISTRO", '', 1)
 
     pdf.output('report.pdf', 'F')

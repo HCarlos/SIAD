@@ -54,9 +54,11 @@ urlpatterns = [
     path('foto/', perfil_imagen, name='foto'),
     path('perfil_save_imagen/', perfil_save_imagen, name='perfil_save_imagen'),
 
-    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    ]
 
-urlpatterns += staticfiles_urlpatterns()
+# + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# urlpatterns += staticfiles_urlpatterns()
 
 if settings.DEBUG:
     urlpatterns += static(
