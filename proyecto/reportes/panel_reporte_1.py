@@ -106,10 +106,11 @@ def reportespecial(request):
         pdf.Titulo = 'REPORTE ESPECIAL DE OFICIOS'
         pdf.add_page()
         pdf.set_font('Arial', '', 8)
-        pdf.cell(190, 6, "NO SE ENCONTRARON REGISTRO", '', 1)
+        pdf.cell(190, 6, "NO SE ENCONTRARON Datos", '', 1)
 
-    pdf.output( os.path.join(REPORTS_ROOT, 'special_report_1.pdf') )
+    nombre_report = os.path.join(REPORTS_ROOT, 'special_report_1.pdf')
+    pdf.output( nombre_report )
 
-    return FileResponse(open('report.pdf', 'rb'), as_attachment=True, content_type='application/pdf')
+    return FileResponse(open(nombre_report, 'rb'), as_attachment=True, content_type='application/pdf')
 
 
