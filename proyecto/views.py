@@ -257,6 +257,8 @@ def oficios_search_list(request):
 
                   })
 
+
+
     # return HttpResponseRedirect(reverse('firstapp:create') + '?' + urlencode({'next': nextos }))
 
 
