@@ -24,20 +24,22 @@ from django.contrib import admin
 from django.contrib.auth import views
 from django.urls import path, include
 
-from home.views import welcome, home, myloginView, Usuario, nuevo_user, perfil_user, perfil_imagen, perfil_save_imagen
+from home.views import welcome, home, myloginView, Usuario, nuevo_user, perfil_user, perfil_imagen, perfil_save_imagen, \
+    logout
 from siad import settings
 
 fecha = datetime.now()
+path('logout/', views.LogoutView.as_view(
+    template_name='registration/login.html',
+    next_page=None), name='logout'),
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('proyecto.urls')),
     path('', welcome, name='welcome'),
     path('home/', home, name='home'),
     path('login/', myloginView.as_view(), name='login'),
-    path('logout/', views.LogoutView.as_view(
-        template_name='registration/login.html',
-        next_page=None), name='logout'),
-
+    path('logout', logout, name='logout'),
     path('password_change/', views.PasswordChangeView.as_view(), name='password_change'),
     path('password_change/done/', views.PasswordChangeDoneView.as_view(), name='password_change_done'),
 

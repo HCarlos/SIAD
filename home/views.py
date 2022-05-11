@@ -3,9 +3,11 @@ from datetime import datetime
 from django.contrib.auth import views
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect, render
 from django.template import RequestContext
+from django.contrib.auth import logout as auth_logout
 
 from home.models import Usuario
 from siad.functions import UserFormBasic, UserFormFoto
@@ -22,10 +24,17 @@ def home(request):
         fecha = datetime.now()
         return render(request, 'home.html', {'User': user, 'Roles': roles, 'Fecha': fecha})
 
+def logout(request):
+    auth_logout(request)
+    return HttpResponseRedirect("/login/")
+
 class myloginView(views.LoginView):
     fecha = datetime.now()
     template_name='registration/login.html'
     extra_context = {'Fecha': fecha}
+
+
+
 
 # ************************************************************************
 # Profile CONTROLLER
@@ -66,6 +75,9 @@ def perfil_save_imagen(request):
                 return redirect('foto')
         else:
             return redirect('foto')
+
+
+
 
 # ************************************************************************
 # UserS CONTROLLER
