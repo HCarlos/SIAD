@@ -19,12 +19,19 @@ from proyecto.models import Oficio, Subdireccione, Respuestas
 def oficios_list(request, tipo_documento):
     TD = Oficio.TIPO_DOCUMENTO[0][1] if tipo_documento == 0 else Oficio.TIPO_DOCUMENTO[1][1]
     TipoDocto = tipo_documento
-    Grupo = Group.objects.filter(user=request.user, name__in=['Administrador', 'SysOp', 'ContraMun'])
-    if Grupo.count() <= 0:
+    Grupo = Group.objects.filter(user=request.user, name__in=['ContraMun', 'Subdirector'])
+    if Grupo.count() > 0:
         subd = Subdireccione.objects.filter(titular=request.user)
         Oficios = Oficio.objects.filter(subdireccion__in=subd, tipo_documento=TipoDocto).order_by('-id').distinct()
     else:
-        Oficios = Oficio.objects.filter(tipo_documento=TipoDocto).order_by('-id').distinct()
+        Grupo = Group.objects.filter(user=request.user, name__in=['Administrador', 'SysOp', 'Capturista'])
+        if Grupo.count() > 0:
+            # subd = Subdireccione.objects.filter(titular=request.user)
+            # print(subd)
+            Oficios = Oficio.objects.filter(tipo_documento=TipoDocto).order_by('-id').distinct()
+            print("DOS")
+        else:
+            Oficios = []
     if request.user.is_authenticated:
         user = Usuario.objects.filter(id=request.user.id).get()
         roles = Group.objects.filter(user=request.user)
@@ -37,7 +44,7 @@ def oficios_list(request, tipo_documento):
                           'TD': TD,
                           'tipo_documento': tipo_documento
                       })
-
+@login_required()
 def oficio_new(request, tipo_documento):
     TD = tipo_documento
     cant = Oficio.objects.filter(tipo_documento=TD).count()
@@ -67,7 +74,7 @@ def oficio_new(request, tipo_documento):
 
 
 
-
+@login_required()
 def oficios_edit(request, id, tipo_documento):
     Id = id
     Doc = get_object_or_404(Oficio, pk=Id)
@@ -89,7 +96,7 @@ def oficios_edit(request, id, tipo_documento):
 # nomeselacontraseña
 
 
-
+@login_required()
 @csrf_exempt
 def oficios_remove(request, id, tipo_documento):
     Id = id
@@ -135,7 +142,7 @@ def oficio_respuestas_list(request, oficio, tipo_documento):
 
 
 
-
+@login_required()
 def respuesta_new(request, oficio):
     Obj = Oficio.objects.get(pk=oficio)
     tipo_documento = Obj.get_tipo_documento()
@@ -162,7 +169,7 @@ def respuesta_new(request, oficio):
 
 
 
-
+@login_required()
 def respuesta_edit(request, id):
     Ofi = Oficio.objects.get(respuestas__id=id)
     TD = Ofi.TIPO_DOCUMENTO[0][1] if Ofi.tipo_documento == 0 else Ofi.TIPO_DOCUMENTO[1][1]
@@ -190,7 +197,7 @@ def respuesta_edit(request, id):
 
 
 
-
+@login_required()
 def respuesta_remove(request, id):
     Obj = Oficio.objects.get(respuestas__id=id)
     Respuesta = get_object_or_404(Respuestas, pk=id)
@@ -240,6 +247,13 @@ def oficios_search_list(request):
             fecha_final = request.POST.get("fecha_final").strip()
             msg += (", Rango de Fecha => " if msg != "" else "") + "{0} - {1}".format(fecha_inicial, fecha_final)
             Objs = Objs.filter(fecha_documento__range=(fecha_inicial,fecha_final))
+
+        Grupo = Group.objects.filter(user=request.user, name__in=['Subdirector'])
+        if Grupo.count() > 0:
+            subd = Subdireccione.objects.filter(titular=request.user)
+            Objs = Objs.filter(subdireccion__in=subd)
+            # Oficios = Oficio.objects.filter(subdireccion__in=subd).order_by('-id').distinct()
+
 
     else:
         msg = ''

@@ -3,6 +3,7 @@ import os.path
 from datetime import datetime
 from types import SimpleNamespace
 
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404
 from fpdf import FPDF
 from django.http import FileResponse
@@ -72,6 +73,7 @@ class PDF(FPDF):
 
 
 
+@login_required()
 def reportespecial(request):
     print("EL REQUEST ES %s " % request)
     if request.POST:

@@ -14,6 +14,7 @@ from siad.functions import UserFormBasic, UserFormFoto
 def welcome(request):
     return render(request,'welcome.html')
 
+@login_required()
 def home(request):
     if request.user.is_authenticated:
         user = Usuario.objects.filter(id=request.user.id).get()
@@ -30,6 +31,7 @@ class myloginView(views.LoginView):
 # Profile CONTROLLER
 # ************************************************************************
 
+@login_required()
 def perfil_user(request):
     if request.user.is_authenticated:
         user = Usuario.objects.filter(id=request.user.id).get()
@@ -70,6 +72,7 @@ def perfil_save_imagen(request):
 # ************************************************************************
 
 # Listado de Users
+@login_required()
 def user(request):
     Users = Usuario.objects.all()
     return render(request, "User/Users_list.html", context={
@@ -79,6 +82,7 @@ def user(request):
 
 # Agregando nuevo usurio
 
+# @login_required()
 def nuevo_user(request):
     if request.method == "POST":
         frmNewUser = UserFormBasic(request.POST)
