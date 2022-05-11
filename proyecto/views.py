@@ -32,6 +32,7 @@ def oficios_list(request, tipo_documento):
             print("DOS")
         else:
             Oficios = []
+
     if request.user.is_authenticated:
         user = Usuario.objects.filter(id=request.user.id).get()
         roles = Group.objects.filter(user=request.user)
