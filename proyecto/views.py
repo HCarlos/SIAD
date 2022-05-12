@@ -48,16 +48,22 @@ def oficios_list(request, tipo_documento):
 @login_required()
 def oficio_new(request, tipo_documento):
     TD = tipo_documento
-    cant = Oficio.objects.filter(tipo_documento=TD).count()
+    # cant = Oficio.objects.filter(tipo_documento=TD).count()
+    Ofix = Oficio.objects.filter(tipo_documento=TD).latest('consecutivo')
+    cant = Ofix.consecutivo
+    print(cant)
     if request.method == "POST":
         frmSet = OficioForm(request.POST)
         if cant > 0:
-            Obj = Oficio.objects.filter(tipo_documento=TD).latest('consecutivo').consecutivo + 1
+            # Obj = Oficio.objects.filter(tipo_documento=TD).latest('consecutivo').consecutivo + 1
+            Obj = cant + 1
         else:
             Obj = 1
         frmSet.set_consecutivo(Obj)
         frmSet.set_tipo_documento(TD)
         if frmSet.is_valid():
+            Obj = frmSet.get_consecutivo(TD)
+            frmSet.set_consecutivo(Obj)
             frmSet.save()
             return redirect('/oficios_list/%s' % TD)
     else:
@@ -265,7 +271,7 @@ def oficios_search_list(request):
             fecha_final = request.POST.get("fecha_final").strip()
             # msg += (", Rango de Fecha => " if msg != "" else "") + "{0} - {1}".format(fecha_inicial, fecha_final)
             msg += (", " if msg != "" else "") + "RANGO DE FECHA => {0} - {1}".format(fecha_inicial, fecha_final)
-            Objs = Objs.filter(fecha_documento__range=(fecha_inicial,fecha_final))
+            Objs = Objs.filter(fecha_captura__range=(fecha_inicial,fecha_final))
 
         Grupo = Group.objects.filter(user=request.user, name__in=['Subdirector'])
         if Grupo.count() > 0:

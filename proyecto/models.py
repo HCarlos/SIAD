@@ -178,6 +178,14 @@ class Oficio(models.Model):
 
     # Consecut =
 
+    def get_consec(self):
+        consec = self.objects.filter(tipo_documento=self.tipo_documento).reverse()[0]
+        if consec > 0:
+            # Obj = Oficio.objects.filter(tipo_documento=TD).latest('consecutivo').consecutivo + 1
+            return consec + 1
+        else:
+            return 1
+
     def get_fecha_respuesta():
         Fecha = datetime.now()
         return Fecha + timedelta(days=3)
@@ -200,7 +208,7 @@ class Oficio(models.Model):
     fecha_respuesta = models.DateField(default=get_fecha_respuesta(), blank=True, null=True)
     subdireccion = models.ManyToManyField(Subdireccione)
     respuestas = models.ManyToManyField(Respuestas)
-    archivo = models.FileField(upload_to="oficios/{0}/{1}/{2}/".format(Fecha.year,Fecha.month,Fecha.day), blank=True, null=True, validators=[validate_file_extension, file_size])
+    archivo = models.FileField(upload_to="oficios/{0}/{1}/{2}/".format(Fecha.year, Fecha.month, Fecha.day), blank=True, null=True, validators=[validate_file_extension, file_size])
     archivo_datetime = models.DateTimeField(auto_now=True, blank=True, null=True)
     creado_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, blank=True, null=True, related_name='ofi_creado_por')
     creado_el = models.DateField(default=django.utils.timezone.now, null=True, blank=True)

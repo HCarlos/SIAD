@@ -31,12 +31,12 @@ class OficioForm(ModelForm):
         fields = '__all__'
         exclude = ['respuestas', 'archivo_datetime', 'creado_por', 'creado_el', 'modi_por', 'modi_el']
         widgets = {
-            'consecutivo': TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
             'remitente': TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
             'recibe': TextInput(attrs={'class': 'form-control'}),
             'instrucciones': Textarea(attrs={'class': 'form-control', 'rows': 45, 'cols': 80}),
             'asunto': Textarea(attrs={'class': 'form-control', 'rows': 45, 'cols': 80}),
         },
+        # 'consecutivo': TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
         labels = {
             "anno": "Año",
             "tipo_documento": "Tipo de Oficio",
@@ -59,12 +59,19 @@ class OficioForm(ModelForm):
         self.fields['remitente'].widget.attrs['readonly'] = True
 
     def set_consecutivo(self, consec):
+        # self.fields['consecutivo'].widget.attrs['readonly'] = False
+        # self.initial['consecutivo'] = consec
+        # self.fields['consecutivo'].widget.attrs['readonly'] = True
+
         self.fields['consecutivo'].widget.attrs['readonly'] = False
         self.initial['consecutivo'] = consec
+        # self.fields['consecutivo'] = "%s" % consec
         self.fields['consecutivo'].widget.attrs['readonly'] = True
 
-    def get_consecutivo(self):
-        return self.consecutivo
+    def get_consecutivo(self, TD):
+        return Oficio.objects.filter(tipo_documento=TD).latest('consecutivo').consecutivo + 1
+        # self.consecutivo
+        # return self.fields['consecutivo']
 
     def set_tipo_documento(self, td):
         self.initial['tipo_documento'] = td
