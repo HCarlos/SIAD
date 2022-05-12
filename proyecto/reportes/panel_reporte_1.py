@@ -4,6 +4,7 @@ from datetime import datetime
 from types import SimpleNamespace
 
 from django.contrib.auth.decorators import login_required
+from django.db.models.functions import Substr
 from django.shortcuts import render, get_object_or_404
 from fpdf import FPDF
 from django.http import FileResponse
@@ -12,7 +13,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 from django.core.serializers.json import DjangoJSONEncoder
 
-from proyecto.models import Oficio
+from proyecto.models import Oficio, Subdireccione
 from siad.settings import STATICFILES_DIRS, BASE_DIR, REPORTS_URL, REPORTS_ROOT
 
 class PDF(FPDF):
@@ -78,6 +79,7 @@ def reportespecial(request):
     print("EL REQUEST ES %s " % request)
     if request.POST:
         pdf = PDF()
+        pdf.def_orientation='l'
         pdf.criterio_de_consulta = request.POST.get('Mensaje')
         pdf.Titulo = 'REPORTE ESPECIAL DE OFICIOS'
         pdf.add_page()
@@ -88,17 +90,45 @@ def reportespecial(request):
 
         if len(items) > 0:
             pdf.set_font('Arial', 'B', 8)
-            pdf.cell(50, 6, "OFICIO", 'LTB', 0)
-            pdf.cell(10, 6, "No.", 'LTB', 0)
-            pdf.cell(130, 6, "ASUNTO", 'LTBR', 1)
+            pdf.set_fill_color(128,128,128)
+            pdf.set_draw_color(0, 80, 180)
+            pdf.cell(20, 6, "CONSEC", 'LTB', 0, 'L', True)
+            pdf.cell(40, 6, "OFICIO", 'LTB', 0,  'L', True)
+            pdf.cell(30, 6, "FECHA OFICIO", 'LTB', 0,  'C', True)
+            pdf.cell(50, 6, "REMITENTE", 'LTB', 0,  'L', True)
+            pdf.cell(100, 6, "ASUNTO", 'LTB', 0,  'L', True)
+            pdf.cell(40, 6, "FIRMA", 'LTBR', 1,  'C', True)
+            pdf.ln(1)
+            # Subs = Subdirecciones
+            SubDirs = request.POST.get('SubDirs').split(',')
+            print(SubDirs)
+            for index, value in enumerate(SubDirs):
+                Id = SubDirs[index]
 
-            for item in items:
-                Id = int(item['pk'])
-                pdf.set_font('Arial', '', 8)
-                pdf.Oficio = get_object_or_404(Oficio, pk=Id)
-                pdf.cell(50, 6, "%s" % pdf.Oficio.oficio, 'LB', 0)
-                pdf.cell(10, 6, "%s" % pdf.Oficio.consecutivo, 'LB', 0)
-                pdf.cell(130, 6, pdf.Oficio.asunto, 'LBR', 1)
+                Sub = get_object_or_404(Subdireccione, pk=Id)
+                pdf.cell(280, 6, Sub.abreviatura, 'LTBR', 1, 'L', True)
+                for item in items:
+                    Id = int(item['pk'])
+                    pdf.Oficio = get_object_or_404(Oficio, pk=Id)
+                    subdis = pdf.Oficio.subdireccion.all()
+                    for dubdi in subdis:
+                        if dubdi==Sub:
+                            MaxLen = 55
+                            Asunto = pdf.Oficio.asunto[0:MaxLen]
+                            Asunto = Asunto if len(pdf.Oficio.asunto) <= MaxLen else "%s..." % Asunto
+                            pdf.set_font('Arial', '', 8)
+                            pdf.cell(20, 6, "%s" % pdf.Oficio.consecutivo, 'LTB', 0, 'L')
+                            pdf.cell(40, 6, "%s" % pdf.Oficio.oficio, 'LTB', 0,  'L')
+                            pdf.cell(30, 6, "%s" % pdf.Oficio.fecha_documento, 'LTB', 0,  'C')
+                            pdf.cell(50, 6, "%s" % pdf.Oficio.remitente, 'LTB', 0,  'L')
+                            pdf.cell(100, 6, "%s" % Asunto, 'LTB', 0,  'L')
+
+                            # pdf.multi_cell(100, 5,  "%s" % Asunto, 1, 0)
+
+                            pdf.cell(40, 6, "", 'LR', 1,  'C')
+
+            pdf.cell(280, 6, "", 'T', 1,  'C')
+
         else:
             pdf.set_font('Arial', 'B', 12)
             pdf.cell(190, 6, "NO SE ENCONTRARON REGISTRO", '', 1)

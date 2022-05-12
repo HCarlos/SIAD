@@ -223,30 +223,48 @@ def oficios_search_list(request):
     msg = ""
     if request.method == 'POST':
         Objs = Oficio.objects.all()
-        if request.POST.get("ciudadano"):
-            ciudadano = "Datos ciudadano => " + request.POST.get("ciudadano").strip()
-            msg += ciudadano
-            Objs = Objs.filter(
-                Q(dir_remitente__titular__ap_paterno__contains=ciudadano) |
-                Q(dir_remitente__titular__ap_materno__contains=ciudadano) |
-                Q(dir_remitente__titular__nombre__contains=ciudadano)
-            )
+
+        if request.POST.get("asunto"):
+            Asunto = request.POST.get("asunto").strip()
+            asunto = "ASUNTO => " + Asunto
+            msg += asunto
+            Objs = Objs.filter(asunto__contains=Asunto)
+            # Objs = Objs.filter(Q(dir_remitente__titular__ap_paterno__contains=asunto))
+
+        # if request.POST.get("ciudadano"):
+        #     ciudadano = "Datos ciudadano => " + request.POST.get("ciudadano").strip()
+        #     msg += ciudadano
+        #     Objs = Objs.filter(
+        #         Q(dir_remitente__titular__ap_paterno__contains=ciudadano) |
+        #         Q(dir_remitente__titular__ap_materno__contains=ciudadano) |
+        #         Q(dir_remitente__titular__nombre__contains=ciudadano)
+        #     )
+
         if request.POST.get("oficio"):
             no_oficio = request.POST.get("oficio").strip()
-            msg += (", no_oficio => " if msg != "" else "") + (" %s " % no_oficio)
+            # msg += ", no_oficio => " if msg != "" else ("no_oficio => %s " % no_oficio)
+            msg += (", " if msg != "" else "") + ("NÚMERO DE OFICIO => %s " % no_oficio)
             Objs = Objs.filter(oficio__contains=no_oficio)
 
-        if request.POST.get("tipo_documento"):
-            tipo_documento = request.POST.get("tipo_documento").strip()
-            if int(tipo_documento) == 0 or int(tipo_documento) == 1:
-                msg += (", tipo_documento => " if msg != "" else "") + (" %s " % tipo_documento)
-                Objs = Objs.filter(tipo_documento=tipo_documento)
-            # print(tipo_documento)
+        if request.POST.get("subdireccion"):
+            nSubDir = request.POST.get("subdireccion").strip()
+            if int(nSubDir) > 0:
+                vSubDir = Subdireccione.objects.get(pk=nSubDir)
+                # msg += ", subdireccion => " if msg != "" else " {0} ({1})".format(vSubDir.subdireccion, vSubDir.abreviatura)
+                msg += (", " if msg != "" else "") + "SUBDIRECCIÓN => {0} ({1})".format(vSubDir.subdireccion, vSubDir.abreviatura)
+                Objs = Objs.filter(subdireccion=nSubDir)
+
+        # if request.POST.get("tipo_documento"):
+        #     tipo_documento = request.POST.get("tipo_documento").strip()
+        #     if int(tipo_documento) == 0 or int(tipo_documento) == 1:
+        #         msg += (", tipo_documento => " if msg != "" else "") + (" %s " % tipo_documento)
+        #         Objs = Objs.filter(tipo_documento=tipo_documento)
 
         if request.POST.get("is_fecha"):
             fecha_inicial = request.POST.get("fecha_inicial").strip()
             fecha_final = request.POST.get("fecha_final").strip()
-            msg += (", Rango de Fecha => " if msg != "" else "") + "{0} - {1}".format(fecha_inicial, fecha_final)
+            # msg += (", Rango de Fecha => " if msg != "" else "") + "{0} - {1}".format(fecha_inicial, fecha_final)
+            msg += (", " if msg != "" else "") + "RANGO DE FECHA => {0} - {1}".format(fecha_inicial, fecha_final)
             Objs = Objs.filter(fecha_documento__range=(fecha_inicial,fecha_final))
 
         Grupo = Group.objects.filter(user=request.user, name__in=['Subdirector'])
@@ -261,6 +279,40 @@ def oficios_search_list(request):
     user = Usuario.objects.filter(id=request.user.id).get()
     roles = Group.objects.filter(user=request.user)
     fecha = datetime.date.today().isoformat()
+    Subdirecciones = Subdireccione.objects.filter(is_visible=True);
+
+    IdSubs = ""
+    TotSubss = ""
+    IdOficios = ""
+
+    subdirecciones_list = []
+
+    for item in Objs:
+        IdOficios += ("," if (IdOficios != "") else "") + str(item.pk)
+        Id = item.pk
+        Ofix= get_object_or_404(Oficio, pk=Id)
+        subdis = Ofix.subdireccion.all()
+        for Sub in subdis:
+            if len(subdirecciones_list) > 0:
+                Paso = True
+                for M in subdirecciones_list:
+                    if M == Sub.pk:
+                        Paso = False
+                if Paso:
+                    subdirecciones_list.append(Sub.pk)
+                    IdSubs += ("," if (IdSubs != "") else "") + str(Sub.pk)
+            else:
+                subdirecciones_list.append(Sub.pk)
+                IdSubs += ("," if (IdSubs != "") else "") + str(Sub.pk)
+
+    print(IdOficios)
+    print(IdSubs)
+    # print(TotSubss)
+
+    # print(subdirecciones_list)
+    # print(IdSubs)
+    # print(TotSubss)
+
     # print( encodings.utf_8.decode(msg) )
 
     return render(request, 'layouts/proyectos/oficios/oficios_search_list.html',
@@ -269,6 +321,8 @@ def oficios_search_list(request):
                       'Items': serializers.serialize("json", Objs),
                       'User': user,
                       'Roles': roles,
+                      'Subdirecciones': Subdirecciones,
+                      'SubDirs': IdSubs,
                       'Mensaje':  msg,
                       'Fecha': fecha,
 

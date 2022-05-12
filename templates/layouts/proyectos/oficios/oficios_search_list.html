@@ -27,9 +27,9 @@
 
                         <div class="p-3">
                             <div class="form-row mb-1">
-                                <label for = "ciudadano" class="col-md-4 col-form-label">Nombre Completo</label>
+                                <label for = "asunto" class="col-md-4 col-form-label">Asunto</label>
                                 <div class="col-md-8">
-                                    <input type="text" name="ciudadano" id="ciudadano"  class="form-control" />
+                                    <input type="text" name="asunto" id="asunto"  class="form-control" />
                                 </div>
                             </div>
                             <div class="form-row mb-1">
@@ -38,16 +38,29 @@
                                     <input type="text" name="oficio" id="oficio"  class="form-control" />
                                 </div>
                             </div>
+
                             <div class="form-row mb-1">
-                                <label for = "tipo_documento" class="col-md-4 col-form-label">Tipo Documento:</label>
+                                <label for = "subdireccion" class="col-md-4 col-form-label">Subdirección:</label>
                                 <div class="col-md-8">
-                                    <select name="tipo_documento" size="1" class="form-control">
-                                        <option value="2" selected>No me interesa</option>
-                                        <option value="0">Oficios Recibidos</option>
-                                        <option value="1">Oficios Firmados</option>
+                                    <select name="subdireccion" size="1" class="form-control">
+                                        <option value="0" selected>Todas</option>
+                                        {% for SubDir in Subdirecciones %}
+                                        <option value="{{ SubDir.id }}">{{ SubDir.id }} - {{ SubDir.subdireccion }} - ({{ SubDir.abreviatura }})</option>
+                                        {% endfor %}
                                     </select>
                                 </div>
                             </div>
+
+{#                            <div class="form-row mb-1">#}
+{#                                <label for = "tipo_documento" class="col-md-4 col-form-label">Tipo Documento:</label>#}
+{#                                <div class="col-md-8">#}
+{#                                    <select name="tipo_documento" size="1" class="form-control">#}
+{#                                        <option value="2" selected>No me interesa</option>#}
+{#                                        <option value="0">Oficios Recibidos</option>#}
+{#                                        <option value="1">Oficios Firmados</option>#}
+{#                                    </select>#}
+{#                                </div>#}
+{#                            </div>#}
                             <div class="form-row mb-1">
                                 <label for = "fecha_inicial" class="col-md-4 col-form-label">
                                     <input type="checkbox" class="mr-1" id="is_fecha" name="is_fecha">
@@ -110,6 +123,7 @@
                         {% csrf_token %}
                             <input type="hidden" name="Mensaje" value="{{ Mensaje }}">
                             <input type="hidden" name="Oficios" value="{{ Items }}">
+                            <input type="hidden" name="SubDirs" value="{{ SubDirs }}">
                             <button type="submit" class="btn card-toolbar-btn">
                             <i class="fa fa-print  text-white"></i>
                             </button>

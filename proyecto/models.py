@@ -51,6 +51,7 @@ class Subdireccione(models.Model):
     abreviatura = models.CharField(max_length=25)
     titular = models.ForeignKey(Usuario, on_delete=models.SET_NULL, blank=True, null=True, related_name='titular_subdirector')
     cargo = models.CharField(max_length=250)
+    is_visible = models.BooleanField(default=False)
     dependencia = models.ForeignKey(Dependencia, on_delete=models.SET_NULL, null=True, related_name='subdir_dependencia')
     modi_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, blank=True, null=True, related_name='subdir_modi_por')
     modi_el = models.DateField('died', null=True, blank=True)
