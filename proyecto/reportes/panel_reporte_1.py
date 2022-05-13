@@ -275,12 +275,8 @@ def reportespecial(request):
                     for dubdi in subdis:
                         if dubdi==Sub:
                             SizeCol = 30
-                            # MaxLen = 55
-                            # Asunto = pdf.Oficio.asunto[0:MaxLen]
-                            # Asunto = Asunto if len(pdf.Oficio.asunto) <= MaxLen else "%s..." % Asunto
                             pdf.set_font('Arial', '', 8)
                             pdf.cell(20, SizeCol, "%s" % pdf.Oficio.consecutivo, 'LTB', 0, 'C')
-                            # pdf.cell(40, 40, "%s" % pdf.Oficio.oficio, 'LTB', 0,  'L')
 
                             x = pdf.get_x()
                             y = pdf.get_y()
@@ -288,21 +284,17 @@ def reportespecial(request):
                             pdf.multi_cell(40, 5,  "%s" % pdf.Oficio.oficio, 0, 'L')
                             pdf.set_xy(x+40, y)
 
-
-                            pdf.cell(30, SizeCol, "%s" % pdf.Oficio.fecha_documento, 'LTB', 0,  'C')
+                            pdf.cell(30, SizeCol, "%s" % pdf.Oficio.fecha_documento.strftime("%d-%b-%y"), 'LTB', 0,  'C')
                             pdf.cell(50, SizeCol, "%s" % pdf.Oficio.remitente, 'LTB', 0,  'L')
                             x = pdf.get_x()
                             y = pdf.get_y()
                             pdf.rect(x, y, 100, SizeCol, 1)
                             pdf.multi_cell(100, 5,  "%s" % pdf.Oficio.asunto, 0, 'L')
                             pdf.set_xy(x+100, y)
-                            # pdf.set_x(150)
-                            # pdf.set_y(y)
 
                             pdf.cell(40, SizeCol, "", 'LTRB', 1,  'C', False)
 
                             if pdf.get_y() > 150:
-                                print("Nueva Pagina")
                                 pdf.add_page(orientation='L')
 
             pdf.cell(280, 6, "", 'T', 1,  'C')

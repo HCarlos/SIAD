@@ -45,9 +45,9 @@ def validate_file_extension(value):
     ext = os.path.splitext(value.name)[1]  # [0] returns path+filename
     valid_extensions = ['.jpg', '.jpeg', '.png', '.gif', '.pdf', '.xlsx', '.xls', '.doc', '.docx', '.ppt', '.pptx']
     if not ext.lower() in valid_extensions:
-        raise ValidationError('Déjame en paz!!! no soporto ese tipo de archivo!!!')
+        raise ValidationError('Ay problemas!!! no soporto ese tipo de archivo!!!')
 
 def file_size(value):
     limit = 10 * 1024 * 1024
     if value.size > limit:
-        raise ValidationError('Archivo demasiado pesado. Pónte las pilas, solo puedes subir archivos de 1mb.')
+        raise ValidationError('Archivo demasiado pesado. Solo puedes subir archivos de 1mb.')

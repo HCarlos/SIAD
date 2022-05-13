@@ -275,6 +275,13 @@ def oficios_search_list(request):
         #         msg += (", tipo_documento => " if msg != "" else "") + (" %s " % tipo_documento)
         #         Objs = Objs.filter(tipo_documento=tipo_documento)
 
+        if request.POST.get("is_rango_oficio"):
+            deel = request.POST.get("del").strip()
+            al = request.POST.get("al").strip()
+            # msg += (", Rango de Fecha => " if msg != "" else "") + "{0} - {1}".format(fecha_inicial, fecha_final)
+            msg += (", " if msg != "" else "") + "RANGO DE CONSECUTIVOS => {0} - {1}".format(deel, al)
+            Objs = Objs.filter(consecutivo__range=(deel, al))
+
         if request.POST.get("is_fecha"):
             fecha_inicial = request.POST.get("fecha_inicial").strip()
             fecha_final = request.POST.get("fecha_final").strip()
