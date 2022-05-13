@@ -29,7 +29,7 @@ def oficios_list(request, tipo_documento):
             # subd = Subdireccione.objects.filter(titular=request.user)
             # print(subd)
             Oficios = Oficio.objects.filter(tipo_documento=TipoDocto).order_by('-id').distinct()
-            print("DOS")
+            # print("DOS")
         else:
             Oficios = []
 
@@ -48,18 +48,25 @@ def oficios_list(request, tipo_documento):
 @login_required()
 def oficio_new(request, tipo_documento):
     TD = tipo_documento
-    # cant = Oficio.objects.filter(tipo_documento=TD).count()
-    Ofix = Oficio.objects.filter(tipo_documento=TD).latest('consecutivo')
-    cant = Ofix.consecutivo
+
+    # Verificamos que ya exista Oficios en esa Categoría
+    cant = Oficio.objects.filter(tipo_documento=TD).count()
+    if cant > 0:
+        Ofix = Oficio.objects.filter(tipo_documento=TD).latest('consecutivo')
+        cant = Ofix.consecutivo + 1
+    else:
+        cant = 1
+
     print(cant)
+
     if request.method == "POST":
         frmSet = OficioForm(request.POST)
-        if cant > 0:
-            # Obj = Oficio.objects.filter(tipo_documento=TD).latest('consecutivo').consecutivo + 1
-            Obj = cant + 1
-        else:
-            Obj = 1
-        frmSet.set_consecutivo(Obj)
+        # if cant > 0:
+        #     # Obj = Oficio.objects.filter(tipo_documento=TD).latest('consecutivo').consecutivo + 1
+        #     Obj = cant + 1
+        # else:
+        #     Obj = 1
+        frmSet.set_consecutivo(cant)
         frmSet.set_tipo_documento(TD)
         if frmSet.is_valid():
             Obj = frmSet.get_consecutivo(TD)
@@ -68,15 +75,17 @@ def oficio_new(request, tipo_documento):
             return redirect('/oficios_list/%s' % TD)
     else:
         frmSet = OficioForm()
-        if cant > 0:
-            Obj = Oficio.objects.filter(tipo_documento=TD).latest('consecutivo').consecutivo + 1
-        else:
-            Obj = 1
-        frmSet.set_consecutivo(Obj)
+        # if cant > 0:
+        #     Obj = Oficio.objects.filter(tipo_documento=TD).latest('consecutivo').consecutivo + 1
+        # else:
+        #     Obj = 1
+        frmSet.set_consecutivo(cant)
         frmSet.set_tipo_documento(TD)
+
     user = Usuario.objects.filter(id=request.user.id).get()
     roles = Group.objects.filter(user=request.user)
     leyenda_form = Oficio.TIPO_DOCUMENTO[0][1] if tipo_documento == 0 else Oficio.TIPO_DOCUMENTO[1][1]
+
     return render(request, 'layouts/proyectos/oficios/oficio_new.html', {'User': user, 'Roles': roles, 'frmSet': frmSet, 'tipo_documento': tipo_documento, 'leyenda_form': leyenda_form})
 
 
