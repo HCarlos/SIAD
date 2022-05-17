@@ -286,8 +286,11 @@ def oficios_search_list(request):
         if request.POST.get("is_fecha"):
             fecha_inicial = request.POST.get("fecha_inicial").strip()
             fecha_final = request.POST.get("fecha_final").strip()
-            # msg += (", Rango de Fecha => " if msg != "" else "") + "{0} - {1}".format(fecha_inicial, fecha_final)
-            msg += (", " if msg != "" else "") + "RANGO DE FECHA => {0} - {1}".format(fecha_inicial, fecha_final)
+            ff_inicial = fecha_inicial.split('-')
+            ff_final = fecha_inicial.split('-')
+            f_fecha_inicial = "{0}-{1}-{2}".format(ff_inicial[2], ff_inicial[1], ff_inicial[0])
+            f_fecha_final = "{0}-{1}-{2}".format(ff_final[2], ff_final[1], ff_final[0])
+            msg += (", " if msg != "" else "") + "RANGO DE FECHA => {0} - {1}".format(f_fecha_inicial, f_fecha_final)
             Objs = Objs.filter(fecha_captura__range=(fecha_inicial,fecha_final))
 
         Grupo = Group.objects.filter(user=request.user, name__in=['Subdirector'])
