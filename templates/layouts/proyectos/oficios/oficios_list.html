@@ -2,6 +2,7 @@
 {% block contenedor %}
 {% load static %}
 {% load bootstrap4 %}
+{#{% load bootstrap_pagination %}#}
 {% bootstrap_css %}
 {#{% bootstrap_javascript jquery='full' %}#}
 {% load widget_tweaks %}
@@ -14,8 +15,42 @@
                   <div class="card border-0 shadow-sm">
                     <div class="card-header bgc-green-d3">
                       <h5 class="card-title text-110 text-white">
-                       Lista de Oficios {{ TD }}
+                       Lista de Oficios {{ TD }} {{ page_obj.paginator.num_pages }}
                       </h5>
+
+                        {% if page_obj.paginator.num_pages > 1 %}
+                        <nav aria-label="navigation p-0 m-0">
+                            <ul class="pagination justify-content-center p-0 m-0">
+                                {% if page_obj.paginator.num_pages != 1 %}
+                                    <li class="page-item"><a class="page-link" href="?page=1">Primero</a></li>
+                                {% else %}
+                                    <li class="page-item disabled"><a class="page-link" href="#">Primero</a></li>
+                                {% endif %}
+                                {% if page_obj.has_previous %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+                                {% else %}
+                                    <li class="page-item disabled"><a class="page-link" href="#">&laquo;</a></li>
+                                {% endif %}
+                                {% for i in page_obj.paginator.page_range %}
+                                    {% if page_obj.number == i %}
+                                        <li class="page-item active"><a class="page-link" href="#">{{ i }} <span class="sr-only">(current)</span></a></li>
+                                    {% elif page_obj.number > i|add:"-5" and page_obj.number < i|add:"+5"%}
+                                        <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+                                    {% endif %}
+                                {% endfor %}
+                                {% if page_obj.has_next %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+                                {% else %}
+                                    <li class="page-item disabled"><a class="page-link" href="#">&raquo;</a></li>
+                                {% endif %}
+                                {% if page_obj.paginator.num_pages != page_obj.number %}
+                                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Último</a></li>
+                                {% else %}
+                                    <li class="page-item disabled"><a class="page-link" href="#">Último</a></li>
+                                {% endif %}
+                            </ul>
+                        </nav>
+                        {% endif %}
 
                     </div><!-- /.card-header -->
 
@@ -72,7 +107,7 @@
                                 </tr>
                             </thead>
                           <tbody>
-                            {% for oficio in Oficios %}
+                            {% for oficio in page_obj %}
                                 <tr>
                                     <td>{{ oficio.consecutivo }}</td>
                                     <td>{{ oficio.oficio }}</td>

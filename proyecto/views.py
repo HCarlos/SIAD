@@ -5,6 +5,7 @@ from urllib.parse import urlencode
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.core import serializers
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -36,6 +37,11 @@ def oficios_list(request, tipo_documento):
     if request.user.is_authenticated:
         user = Usuario.objects.filter(id=request.user.id).get()
         roles = Group.objects.filter(user=request.user)
+
+        paginator = Paginator(Oficios, 5)  # Show 25 contacts per page.
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
         return render(request,'layouts/proyectos/oficios/oficios_list.html',
                       {
                           'User': user,
@@ -43,7 +49,8 @@ def oficios_list(request, tipo_documento):
                           'Oficios': Oficios,
                           'New': '/oficio_new/%s' % tipo_documento,
                           'TD': TD,
-                          'tipo_documento': tipo_documento
+                          'tipo_documento': tipo_documento,
+                          'page_obj': page_obj
                       })
 @login_required()
 def oficio_new(request, tipo_documento):
