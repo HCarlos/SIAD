@@ -15,6 +15,8 @@ from django.views.decorators.csrf import csrf_exempt
 from home.models import Usuario
 from proyecto.modelform.model_forms import OficioForm, RespuestaForm
 from proyecto.models import Oficio, Subdireccione, Respuestas
+from siad.settings import ITEMS_FOR_PAGE
+
 
 @login_required()
 def oficios_list(request, tipo_documento):
@@ -38,7 +40,7 @@ def oficios_list(request, tipo_documento):
         user = Usuario.objects.filter(id=request.user.id).get()
         roles = Group.objects.filter(user=request.user)
 
-        paginator = Paginator(Oficios, 5)  # Show 25 contacts per page.
+        paginator = Paginator(Oficios, ITEMS_FOR_PAGE)  # Show 25 contacts per page.
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
