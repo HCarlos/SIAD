@@ -84,15 +84,19 @@ def reportespecial(request):
             for index, value in enumerate(SubDirs):
                 Id = SubDirs[index]
 
+                pdf.set_font('Arial', 'B', 14)
+                pdf.set_text_color(255,255,255)
                 Sub = get_object_or_404(Subdireccione, pk=Id)
                 pdf.cell(280, 6, Sub.abreviatura, 'LTBR', 1, 'L', True)
+                pdf.set_font('Arial', '', 11)
+                pdf.set_text_color(32,32,32)
                 for item in items:
                     Id = int(item['pk'])
                     pdf.Oficio = get_object_or_404(Oficio, pk=Id)
                     subdis = pdf.Oficio.subdireccion.all()
                     for dubdi in subdis:
                         if dubdi==Sub:
-                            SizeCol = 35
+                            SizeCol = 40
                             pdf.set_font('Arial', '', 11)
                             pdf.cell(20, SizeCol, "%s" % pdf.Oficio.consecutivo, 'LTB', 0, 'C')
 

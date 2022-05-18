@@ -20,6 +20,7 @@ django-smart-selects==1.5.9
 django-widget-tweaks==1.4.12
 dnspython==2.2.0
 eventlet==0.33.0
+extras==1.0.0
 falcon==3.0.1
 fonttools==4.31.2
 fpdf==1.7.2
