@@ -199,6 +199,7 @@ class Oficio(models.Model):
     dir_remitente = models.ForeignKey(Dependencia, on_delete=models.SET_NULL, null=True, related_name='oficio_dir_remitente_dep')
 
     remitente = models.CharField(max_length=250, default="", blank=True, null=True)
+    del_remitente = models.CharField(max_length=250, default="", blank=False, null=False)
     recibe = models.ForeignKey(Subdireccione, on_delete=models.SET_NULL, null=True, related_name='oficio_recibe_dep')
     # recibe = models.CharField(max_length=250, default="", blank=True, null=True)
     asunto = models.CharField(max_length=500, default="", blank=True, null=True)
@@ -250,10 +251,16 @@ class Oficio(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-
-        return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}'.format(
-            self.id, self.anno, self.tipo_documento, self.consecutivo, self.oficio, self.fecha_documento, self.dir_remitente, self.remitente, self.recibe, self.asunto, self.instrucciones, self.fecha_respuesta, self.archivo, self.archivo_datetime, self.creado_por, self.creado_el, self.modi_por, self.modi_el)
+        return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17}'.format(
+            self.id, self.anno, self.tipo_documento, self.consecutivo, self.oficio, self.fecha_documento, self.dir_remitente, self.remitente, self.del_remitente, self.recibe, self.asunto, self.instrucciones, self.fecha_respuesta, self.archivo, self.archivo_datetime, self.creado_por, self.creado_el, self.modi_por, self.modi_el)
         # return self
+
+    @property
+    def get_del_remitente(self):
+        Remitentex = self.dir_remitente
+        Remitente = self.remitente if self.dir_remitente.titular.password != "vacio" else self.del_remitente
+        # return "{0}".format(settings.MEDIA_URL, self.archivo) if self.archivo else "#"
+        return "{0}".format(Remitente)
 
     def get_oficio_edit(self):
         return '/oficio_edit/{0}/{1}'.format(self.id, self.tipo_documento)
