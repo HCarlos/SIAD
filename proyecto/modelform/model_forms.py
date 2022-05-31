@@ -42,6 +42,7 @@ class OficioForm(ModelForm):
         exclude = ['respuestas', 'archivo_datetime', 'creado_por', 'creado_el', 'modi_por', 'modi_el']
         widgets = {
             'remitente': TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
+            'del_remitente': TextInput(attrs={'class': 'form-control'}),
             'recibe': TextInput(attrs={'class': 'form-control'}),
             'instrucciones': Textarea(attrs={'class': 'form-control', 'rows': 45, 'cols': 80}),
             'asunto': Textarea(attrs={'class': 'form-control', 'rows': 45, 'cols': 80}),
@@ -51,6 +52,7 @@ class OficioForm(ModelForm):
             "anno": "Año",
             "tipo_documento": "Tipo de Oficio",
             "dir_remitente": "dir_remitente(*)",
+            "del_remitente": "Escriba el Remitente:",
         }
 
 
