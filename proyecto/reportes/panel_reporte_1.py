@@ -111,7 +111,7 @@ def reportespecial(request):
                             x = pdf.get_x()
                             y = pdf.get_y()
                             pdf.rect(x, y, 50, SizeCol, 1)
-                            pdf.multi_cell(50, 5,  "%s" % pdf.Oficio.remitente, 0, 'L')
+                            pdf.multi_cell(50, 5,  "%s" % pdf.Oficio.get_del_remitente, 0, 'L')
                             pdf.set_xy(x+50, y)
 
                             x = pdf.get_x()
