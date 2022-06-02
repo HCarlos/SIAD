@@ -259,7 +259,6 @@ class Oficio(models.Model):
     def get_del_remitente(self):
         Remitentex = self.dir_remitente
         Remitente = self.remitente if self.dir_remitente.titular.password != "vacio" else self.del_remitente
-        # return "{0}".format(settings.MEDIA_URL, self.archivo) if self.archivo else "#"
         return "{0}".format(Remitente)
 
     def get_oficio_edit(self):
