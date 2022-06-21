@@ -135,8 +135,8 @@ def oficios_remove(request, id, tipo_documento):
 @login_required()
 def oficios_search_data_list(request):
     Search = ""
+    Objs = Oficio.objects.all()
     if request.method == 'GET':
-        Objs = Oficio.objects.all()
 
         if request.GET.get("search"):
             Search = request.GET.get("search").strip()
@@ -152,11 +152,6 @@ def oficios_search_data_list(request):
                 Q(dir_remitente__titular__ap_materno__contains=Search) |
                 Q(dir_remitente__titular__nombre__contains=Search)
             )
-        else:
-            Objs = []
-
-    else:
-        Objs = []
 
     if request.user.is_authenticated:
         user = Usuario.objects.filter(id=request.user.id).get()
