@@ -3,7 +3,7 @@ from django.template.defaulttags import url
 
 import proyecto.reportes.panel_reporte_1
 from proyecto.views import oficios_list, oficio_new, oficios_edit, oficios_remove, respuesta_new, \
-    oficio_respuestas_list, respuesta_edit, respuesta_remove, oficios_search_list
+    oficio_respuestas_list, respuesta_edit, respuesta_remove, oficios_search_list, oficios_search_data_list
 from siad import settings
 from django.urls import path
 from .ajax.dependencias import getDependencias
@@ -15,6 +15,7 @@ urlpatterns = [
     path('oficio_edit/<int:id>/<int:tipo_documento>', oficios_edit, name='oficios_edit'),
     path('oficio_remove/<int:id>/<int:tipo_documento>', oficios_remove, name='oficio_remove'),
     path('oficios_search_list/', oficios_search_list, name='oficios_search_list'),
+    path('oficios_search_data_list/', oficios_search_data_list, name='oficios_search_data_list'),
 
     path('oficio_respuestas_list/<int:oficio>/<int:tipo_documento>', oficio_respuestas_list, name='oficio_respuestas_list'),
     path('respuesta_new/<int:oficio>', respuesta_new, name='respuesta_new'),

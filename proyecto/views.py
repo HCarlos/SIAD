@@ -1,13 +1,11 @@
 import datetime
-import encodings.utf_8
-from urllib.parse import urlencode
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.core import serializers
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Q
-from django.http import JsonResponse, HttpResponseRedirect
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect, render
 from django.views.decorators.csrf import csrf_exempt
@@ -16,7 +14,6 @@ from home.models import Usuario
 from proyecto.modelform.model_forms import OficioForm, RespuestaForm
 from proyecto.models import Oficio, Subdireccione, Respuestas
 from siad.settings import ITEMS_FOR_PAGE
-
 
 @login_required()
 def oficios_list(request, tipo_documento):
@@ -54,6 +51,7 @@ def oficios_list(request, tipo_documento):
                           'tipo_documento': tipo_documento,
                           'page_obj': page_obj
                       })
+
 @login_required()
 def oficio_new(request, tipo_documento):
     TD = tipo_documento
@@ -66,7 +64,7 @@ def oficio_new(request, tipo_documento):
     else:
         cant = 1
 
-    print(cant)
+    # print(cant)
 
     if request.method == "POST":
         frmSet = OficioForm(request.POST)
@@ -134,8 +132,54 @@ def oficios_remove(request, id, tipo_documento):
     return JsonResponse({'status': 'Error', 'message': 'El proceso ha fallado'}, status=200)
 
 
+@login_required()
+def oficios_search_data_list(request):
+    Search = ""
+    if request.method == 'GET':
+        Objs = Oficio.objects.all()
 
+        if request.GET.get("search"):
+            Search = request.GET.get("search").strip()
 
+            # print(search)
+
+            Objs = Objs.filter(
+                Q(asunto__contains=Search) |
+                Q(oficio__contains=Search) |
+                Q(dir_remitente__dependencia__contains=Search) |
+                Q(dir_remitente__abreviatura__contains=Search) |
+                Q(dir_remitente__titular__ap_paterno__contains=Search) |
+                Q(dir_remitente__titular__ap_materno__contains=Search) |
+                Q(dir_remitente__titular__nombre__contains=Search)
+            )
+        else:
+            Objs = []
+
+    else:
+        Objs = []
+
+    if request.user.is_authenticated:
+        user = Usuario.objects.filter(id=request.user.id).get()
+        roles = Group.objects.filter(user=request.user)
+
+        Objs = Objs.order_by('-pk')
+
+        paginator = Paginator(Objs, ITEMS_FOR_PAGE)  # Show 25 contacts per page.
+        page_number = request.GET.get('page')
+        page_obj = paginator.get_page(page_number)
+
+        TD = Oficio.TIPO_DOCUMENTO[0][1]
+
+        return render(request, 'layouts/proyectos/oficios/oficios_list.html',
+                      {
+                          'User': user,
+                          'Roles': roles,
+                          'Oficios': Objs,
+                          'New': '/oficio_new/%s' % 0,
+                          'TD': TD,
+                          'tipo_documento': 0,
+                          'page_obj': page_obj
+                      })
 
 
 # ****************************************************************************************************************

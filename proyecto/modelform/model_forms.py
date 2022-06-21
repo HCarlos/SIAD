@@ -53,6 +53,7 @@ class OficioForm(ModelForm):
             "tipo_documento": "Tipo de Oficio",
             "dir_remitente": "dir_remitente(*)",
             "del_remitente": "Escriba el Remitente:",
+            "recibe": "Recibe ó Emite:",
         }
 
 
