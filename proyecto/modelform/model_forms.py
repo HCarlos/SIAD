@@ -66,9 +66,9 @@ class OficioForm(ModelForm):
         if oficio_id <= 0:
             self.fields['creado_por'].queryset = Usuario.objects.filter(pk=user_id)
             self.fields['modi_por'].queryset = Usuario.objects.filter(pk=user_id)
-        else:
-            self.fields['creado_por'].widget = forms.HiddenInput()
-            self.fields['modi_por'].widget = forms.HiddenInput()
+        # else:
+        #     self.fields['creado_por'].widget = forms.HiddenInput()
+        #     self.fields['modi_por'].widget = forms.HiddenInput()
 
         self.fields['modi_el'].widget = forms.HiddenInput()
         self.fields['creado_el'].widget = forms.HiddenInput()
