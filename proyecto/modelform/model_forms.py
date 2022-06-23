@@ -62,6 +62,7 @@ class OficioForm(ModelForm):
         self.fields['tipo_documento'].widget = forms.HiddenInput()
         self.fields['creado_por'].empty_label = None
         self.fields['modi_por'].empty_label = None
+        self.initial['creado_por'] = user_id
         self.initial['modi_por'] = user_id
         self.initial['modi_el'] = datetime.datetime.now()
 
@@ -76,9 +77,9 @@ class OficioForm(ModelForm):
         #     self.fields['modi_por'].widget = forms.HiddenInput()
 
 
-        # if oficio_id > 0:
-        #     self.fields['creado_por'].widget = forms.HiddenInput()
-        #     self.fields['modi_por'].widget = forms.HiddenInput()
+        if oficio_id > 0:
+            self.fields['creado_por'].widget = forms.HiddenInput()
+            self.fields['modi_por'].widget = forms.HiddenInput()
 
         self.fields['modi_el'].widget = forms.HiddenInput()
         self.fields['creado_el'].widget = forms.HiddenInput()
