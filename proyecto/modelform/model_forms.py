@@ -23,8 +23,8 @@ class OficioForm(ModelForm):
     fecha_respuesta = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
     fecha_recibido = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
 
-    creado_por = ModelChoiceField(label='Creado Por', empty_label=None, queryset=Usuario.objects.filter(id=1))
-    modi_por = ModelChoiceField(label='Modificado Por', empty_label=None, queryset=Usuario.objects.filter(id=1))
+    # creado_por = ModelChoiceField(label='Creado Por', empty_label=None, queryset=Usuario.objects.filter(id=1))
+    # modi_por = ModelChoiceField(label='Modificado Por', empty_label=None, queryset=Usuario.objects.filter(id=1))
 
     instrucciones = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 8, 'cols': 5}))
 
@@ -60,15 +60,25 @@ class OficioForm(ModelForm):
         self.fields['dir_remitente'].queryset = Dependencia.objects.all()
         self.fields['recibe'].queryset = Subdireccione.objects.all()
         self.fields['tipo_documento'].widget = forms.HiddenInput()
-        self.initial['modi_por'] = int(user_id) ## user_id if None == user_id else 1
+        self.fields['creado_por'].empty_label = None
+        self.fields['modi_por'].empty_label = None
+        self.initial['modi_por'] = user_id
         self.initial['modi_el'] = datetime.datetime.now()
 
-        if oficio_id <= 0:
-            self.fields['creado_por'].queryset = Usuario.objects.filter(pk=user_id)
-            self.fields['modi_por'].queryset = Usuario.objects.filter(pk=user_id)
+        self.fields['creado_por'].queryset = Usuario.objects.filter(pk=user_id)
+        self.fields['modi_por'].queryset = Usuario.objects.filter(pk=user_id)
+
+        # if oficio_id <= 0:
+        #     self.fields['creado_por'].queryset = Usuario.objects.filter(pk=user_id)
+        #     self.fields['modi_por'].queryset = Usuario.objects.filter(pk=user_id)
         # else:
         #     self.fields['creado_por'].widget = forms.HiddenInput()
         #     self.fields['modi_por'].widget = forms.HiddenInput()
+
+
+        if oficio_id > 0:
+            self.fields['creado_por'].widget = forms.HiddenInput()
+            self.fields['modi_por'].widget = forms.HiddenInput()
 
         self.fields['modi_el'].widget = forms.HiddenInput()
         self.fields['creado_el'].widget = forms.HiddenInput()
