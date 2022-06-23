@@ -60,7 +60,7 @@ class OficioForm(ModelForm):
         self.fields['dir_remitente'].queryset = Dependencia.objects.all()
         self.fields['recibe'].queryset = Subdireccione.objects.all()
         self.fields['tipo_documento'].widget = forms.HiddenInput()
-        self.initial['modi_por'] = user_id if None == user_id else 1
+        self.initial['modi_por'] = int(user_id) ## user_id if None == user_id else 1
         self.initial['modi_el'] = datetime.datetime.now()
 
         if oficio_id <= 0:
