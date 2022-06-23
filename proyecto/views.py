@@ -67,7 +67,7 @@ def oficio_new(request, tipo_documento):
     # print(cant)
 
     if request.method == "POST":
-        frmSet = OficioForm(request.POST)
+        frmSet = OficioForm(request.POST, user_id=request.user.id, oficio_id=0)
         # if cant > 0:
         #     # Obj = Oficio.objects.filter(tipo_documento=TD).latest('consecutivo').consecutivo + 1
         #     Obj = cant + 1
@@ -81,7 +81,7 @@ def oficio_new(request, tipo_documento):
             frmSet.save()
             return redirect('/oficios_list/%s' % TD)
     else:
-        frmSet = OficioForm()
+        frmSet = OficioForm(user_id=request.user.id, oficio_id=0)
         # if cant > 0:
         #     Obj = Oficio.objects.filter(tipo_documento=TD).latest('consecutivo').consecutivo + 1
         # else:
@@ -102,12 +102,12 @@ def oficios_edit(request, id, tipo_documento):
     Id = id
     Doc = get_object_or_404(Oficio, pk=Id)
     if request.method == 'POST':
-        frmSet = OficioForm(request.POST or None, request.FILES or None, instance=Doc)
+        frmSet = OficioForm(request.POST or None, request.FILES or None, instance=Doc, user_id=request.user.id, oficio_id=Doc.id)
         if frmSet.is_valid():
             frmSet.save()
             return redirect('/oficios_list/%s' % tipo_documento)
     else:
-        frmSet = OficioForm(instance=Doc)
+        frmSet = OficioForm(instance=Doc, user_id=request.user.id, oficio_id=Doc.id)
         frmSet.set_consecutivo(Doc.consecutivo)
         frmSet.set_tipo_documento(tipo_documento)
 
@@ -141,17 +141,19 @@ def oficios_search_data_list(request):
         if request.GET.get("search"):
             Search = request.GET.get("search").strip()
 
-            # print(search)
-
-            Objs = Objs.filter(
-                Q(asunto__contains=Search) |
-                Q(oficio__contains=Search) |
-                Q(dir_remitente__dependencia__contains=Search) |
-                Q(dir_remitente__abreviatura__contains=Search) |
-                Q(dir_remitente__titular__ap_paterno__contains=Search) |
-                Q(dir_remitente__titular__ap_materno__contains=Search) |
-                Q(dir_remitente__titular__nombre__contains=Search)
-            )
+            if Search.isnumeric():
+                Sec = int(Search)
+                Objs = Objs.filter(consecutivo=Sec)
+            else:
+                Objs = Objs.filter(
+                    Q(asunto__contains=Search) |
+                    Q(oficio__contains=Search) |
+                    Q(dir_remitente__dependencia__contains=Search) |
+                    Q(dir_remitente__abreviatura__contains=Search) |
+                    Q(dir_remitente__titular__ap_paterno__contains=Search) |
+                    Q(dir_remitente__titular__ap_materno__contains=Search) |
+                    Q(dir_remitente__titular__nombre__contains=Search)
+                )
 
     if request.user.is_authenticated:
         user = Usuario.objects.filter(id=request.user.id).get()

@@ -1,13 +1,13 @@
-from datetime import datetime, timezone, timedelta
-
-from bootstrap_datepicker_plus.widgets import DatePickerInput
-from django.forms import ModelForm, TextInput, DateInput, ModelChoiceField, Textarea, widgets, Select
+import datetime
+from bootstrap_datepicker_plus.widgets import DatePickerInput, DateTimePickerInput
+from django.forms import ModelForm, TextInput, ModelChoiceField, Textarea
 from django import forms
+from django.utils import timezone
 
+from home.models import Usuario
 from proyecto.models import Oficio, Dependencia, Subdireccione, Respuestas
 from siad import settings
-from django.contrib.admin.widgets import AdminDateWidget
-from django.forms.fields import DateField
+from django.forms.fields import DateField, DateTimeField
 ## -------------------------------------------------------------------------------
 ## MODEL FORM OFICIOS
 ## -------------------------------------------------------------------------------
@@ -16,20 +16,13 @@ class OficioForm(ModelForm):
     dir_remitente = ModelChoiceField(label='Dependencia', queryset=Dependencia.objects.all())
     recibe = ModelChoiceField(label='Recibe', queryset=Subdireccione.objects.all())
 
-
-    # fecha_documento = DateField(widget=forms.widgets.DateInput(format='%d/%m/%Y', attrs={'type': 'date'}),
-    #                        input_formats=settings.DATE_INPUT_FORMATS)
-    # fecha_captura = DateField(widget=forms.widgets.DateInput(format='%d/%m/%Y', attrs={'type': 'date'}),
-    #                        input_formats=settings.DATE_INPUT_FORMATS )
-    # fecha_respuesta = DateField(widget=forms.widgets.DateInput(format='%d/%m/%Y', attrs={'type': 'date'}),
-    #                        input_formats=settings.DATE_INPUT_FORMATS)
-    # fecha_recibido = DateField(widget=forms.widgets.DateInput(format='%d/%m/%Y', attrs={'type': 'date'}),
-    #                        input_formats=settings.DATE_INPUT_FORMATS)
-
     fecha_documento = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
     fecha_captura   = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
     fecha_respuesta = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
     fecha_recibido  = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
+
+    creado_por = ModelChoiceField(label='Creado Por', empty_label=None, queryset=Usuario.objects.filter(id=1))
+    modi_por = ModelChoiceField(label='Modificado Por', empty_label=None, queryset=Usuario.objects.filter(id=1))
 
     instrucciones = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 8, 'cols': 5}))
 
@@ -39,15 +32,17 @@ class OficioForm(ModelForm):
     class Meta:
         model = Oficio
         fields = '__all__'
-        exclude = ['respuestas', 'archivo_datetime', 'creado_por', 'creado_el', 'modi_por', 'modi_el']
+        exclude = ['respuestas', 'archivo_datetime']
         widgets = {
             'remitente': TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
             'del_remitente': TextInput(attrs={'class': 'form-control'}),
             'recibe': TextInput(attrs={'class': 'form-control'}),
             'instrucciones': Textarea(attrs={'class': 'form-control', 'rows': 45, 'cols': 80}),
             'asunto': Textarea(attrs={'class': 'form-control', 'rows': 45, 'cols': 80}),
-          },
-        # 'consecutivo': TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
+            'creado_por': TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
+            'modi_por': TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
+            },
+
         labels = {
             "anno": "Año",
             "tipo_documento": "Tipo de Oficio",
@@ -58,37 +53,36 @@ class OficioForm(ModelForm):
 
 
     def __init__(self, *args, **kwargs):
+        user_id = kwargs.pop('user_id', None)
+        oficio_id = kwargs.pop('oficio_id', None)
         super(OficioForm, self).__init__(*args, **kwargs)
-
-        # self.initial['fecha_documento'] = self.instance.fecha_documento.isoformat()
-        # self.initial['fecha_captura'] = self.instance.fecha_captura.isoformat()
-        # self.initial['fecha_respuesta'] = self.instance.fecha_respuesta.isoformat()
-        # self.initial['fecha_recibido'] = self.instance.fecha_recibido.isoformat()
-        # self.fecha_captura = DateField(initial=datetime.today().strftime('%d-%m-%Y') )
-
         self.fields['dir_remitente'].queryset = Dependencia.objects.all()
         self.fields['recibe'].queryset = Subdireccione.objects.all()
         self.fields['tipo_documento'].widget = forms.HiddenInput()
+        self.initial['modi_por'] = user_id
+        self.initial['modi_el'] = datetime.datetime.now()
+
+        if oficio_id <= 0:
+            self.fields['creado_por'].queryset = Usuario.objects.filter(pk=user_id)
+            self.fields['modi_por'].queryset = Usuario.objects.filter(pk=user_id)
+        else:
+            self.fields['creado_por'].widget = forms.HiddenInput()
+            self.fields['modi_por'].widget = forms.HiddenInput()
+
+        # self.fields['modi_por'].queryset = Usuario.objects.filter(id=user_id)
+        self.fields['modi_el'].widget = forms.HiddenInput()
+        self.fields['creado_el'].widget = forms.HiddenInput()
+
 
         self.fields['remitente'].widget.attrs['readonly'] = True
 
     def set_consecutivo(self, consec):
-        # self.fields['consecutivo'].widget.attrs['readonly'] = False
-        # self.initial['consecutivo'] = consec
-        # self.fields['consecutivo'].widget.attrs['readonly'] = True
-
         self.fields['consecutivo'].widget.attrs['readonly'] = False
-
         self.initial['consecutivo'] = consec
-        # self.fields['consecutivo'] = "%s" % consec
-
-        # self.fields['consecutivo'].widget.attrs['readonly'] = True
         self.fields['consecutivo'].widget.attrs['readonly'] = False
 
     def get_consecutivo(self, TD):
         return Oficio.objects.filter(tipo_documento=TD).latest('consecutivo').consecutivo + 1
-        # self.consecutivo
-        # return self.fields['consecutivo']
 
     def set_tipo_documento(self, td):
         self.initial['tipo_documento'] = td
@@ -104,7 +98,11 @@ class OficioForm(ModelForm):
     def get_remitente(self):
         return self.remitente
 
+    def set_modi_por(self, modi_por):
+        self.initial['modi_por'] = modi_por
 
+    def set_modi_el(self, modi_el):
+        self.initial['modi_por'] = modi_el
 
 
 

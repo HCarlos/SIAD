@@ -86,8 +86,10 @@ class Usuario(AbstractUser):
         # return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}'.format(self.id, self.ap_paterno, self.ap_materno, self.nombre, self.curp, self.email, self.fecha_nacimiento, self.genero, self.emails, self.telefonos, self.celulares, self.avatar, self.username)
         return '{0} {1} {2} - ({4}) ({5})'.format(self.ap_paterno, self.ap_materno, self.nombre, self.curp, self.username, self.id)
         # return self
-
+    @property
     def get_nombre_completo(self):
         return '{0} {1} {2}'.format(self.ap_paterno, self.ap_materno, self.nombre)
 
 
+    def get_id(self):
+        return self.id

@@ -1,4 +1,4 @@
-from datetime import datetime
+import datetime
 from datetime import timedelta
 import django.utils.timezone
 import self
@@ -111,7 +111,7 @@ class Respuestas(models.Model):
         (5, 'RESUELTO NO FAVORABLE'),
     ]
 
-    Fecha = datetime.now()
+    Fecha = datetime.date.today()
     respuesta = models.CharField(max_length=2000, default="", blank=False, null=False)
     fecha_respuesta = models.DateField(default=django.utils.timezone.now, blank=True, null=True)
     estatus = models.SmallIntegerField(choices=ESTATUS, default=0, blank=False, null=False)
@@ -174,7 +174,7 @@ class Oficio(models.Model):
         (0, 'RECIBIDOS'),
         (1, 'FIRMADOS POR EL(LA) DIRECTOR(A)'),
     ]
-    Fecha = datetime.now()
+    Fecha = datetime.date.today()
 
     # Consecut =
 
@@ -187,7 +187,7 @@ class Oficio(models.Model):
             return 1
 
     def get_fecha_respuesta():
-        Fecha = datetime.now()
+        Fecha = datetime.date.today()
         return Fecha + timedelta(days=3)
 
     anno = models.IntegerField(default=Fecha.year, blank=True, null=True)
@@ -211,10 +211,10 @@ class Oficio(models.Model):
     respuestas = models.ManyToManyField(Respuestas)
     archivo = models.FileField(upload_to="oficios/{0}/{1}/{2}/".format(Fecha.year, Fecha.month, Fecha.day), blank=True, null=True, validators=[validate_file_extension, file_size])
     archivo_datetime = models.DateTimeField(auto_now=True, blank=True, null=True)
-    creado_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, blank=True, null=True, related_name='ofi_creado_por')
-    creado_el = models.DateField(default=django.utils.timezone.now, null=True, blank=True)
-    modi_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, blank=True, null=True, related_name='ofi_modi_por')
-    modi_el = models.DateField(default=django.utils.timezone.now, null=True, blank=True)
+    creado_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, related_name='ofi_creado_por')
+    creado_el = models.DateTimeField(default=datetime.datetime.now, editable=True, blank=True)
+    modi_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, related_name='ofi_modi_por')
+    modi_el = models.DateTimeField(default=datetime.datetime.now, editable=True, blank=True)
 
     class Meta:
         verbose_name = 'Oficio'
@@ -275,7 +275,7 @@ class Oficio(models.Model):
 ## MODEL OFICIOS CONSULTA
 ## -------------------------------------------------------------------------------
 class Evento(models.Model):
-    Fecha = datetime.now()
+    Fecha = datetime.date.today()
     anno = models.IntegerField(default=Fecha.year, blank=True, null=True)
     fecha_evento = models.DateField(default=django.utils.timezone.now,  blank=True, null=True)
     hora_evento = models.TimeField(default=django.utils.timezone.now,  blank=True, null=True)
