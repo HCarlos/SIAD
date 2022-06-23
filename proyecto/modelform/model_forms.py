@@ -1,6 +1,6 @@
 import datetime
 from bootstrap_datepicker_plus.widgets import DatePickerInput, DateTimePickerInput
-from django.forms import ModelForm, TextInput, ModelChoiceField, Textarea
+from django.forms import ModelForm, TextInput, ModelChoiceField, Textarea, Select
 from django import forms
 from django.utils import timezone
 
@@ -8,6 +8,8 @@ from home.models import Usuario
 from proyecto.models import Oficio, Dependencia, Subdireccione, Respuestas
 from siad import settings
 from django.forms.fields import DateField, DateTimeField
+
+
 ## -------------------------------------------------------------------------------
 ## MODEL FORM OFICIOS
 ## -------------------------------------------------------------------------------
@@ -17,9 +19,9 @@ class OficioForm(ModelForm):
     recibe = ModelChoiceField(label='Recibe', queryset=Subdireccione.objects.all())
 
     fecha_documento = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
-    fecha_captura   = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
+    fecha_captura = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
     fecha_respuesta = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
-    fecha_recibido  = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
+    fecha_recibido = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
 
     creado_por = ModelChoiceField(label='Creado Por', empty_label=None, queryset=Usuario.objects.filter(id=1))
     modi_por = ModelChoiceField(label='Modificado Por', empty_label=None, queryset=Usuario.objects.filter(id=1))
@@ -34,14 +36,14 @@ class OficioForm(ModelForm):
         fields = '__all__'
         exclude = ['respuestas', 'archivo_datetime']
         widgets = {
-            'remitente': TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
-            'del_remitente': TextInput(attrs={'class': 'form-control'}),
-            'recibe': TextInput(attrs={'class': 'form-control'}),
-            'instrucciones': Textarea(attrs={'class': 'form-control', 'rows': 45, 'cols': 80}),
-            'asunto': Textarea(attrs={'class': 'form-control', 'rows': 45, 'cols': 80}),
-            'creado_por': TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
-            'modi_por': TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
-            },
+                      'remitente': TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
+                      'del_remitente': TextInput(attrs={'class': 'form-control'}),
+                      'recibe': TextInput(attrs={'class': 'form-control'}),
+                      'instrucciones': Textarea(attrs={'class': 'form-control', 'rows': 45, 'cols': 80}),
+                      'asunto': Textarea(attrs={'class': 'form-control', 'rows': 45, 'cols': 80}),
+                      'creado_por': Select(attrs={'readonly': 'readonly', 'class': 'form-control'}),
+                      'modi_por': Select(attrs={'readonly': 'readonly', 'class': 'form-control'}),
+                  },
 
         labels = {
             "anno": "Año",
@@ -51,7 +53,6 @@ class OficioForm(ModelForm):
             "recibe": "Recibe ó Emite:",
         }
 
-
     def __init__(self, *args, **kwargs):
         user_id = kwargs.pop('user_id', None)
         oficio_id = kwargs.pop('oficio_id', None)
@@ -59,7 +60,7 @@ class OficioForm(ModelForm):
         self.fields['dir_remitente'].queryset = Dependencia.objects.all()
         self.fields['recibe'].queryset = Subdireccione.objects.all()
         self.fields['tipo_documento'].widget = forms.HiddenInput()
-        self.initial['modi_por'] = user_id
+        self.initial['modi_por'] = user_id if None == user_id else 1
         self.initial['modi_el'] = datetime.datetime.now()
 
         if oficio_id <= 0:
@@ -71,7 +72,6 @@ class OficioForm(ModelForm):
 
         self.fields['modi_el'].widget = forms.HiddenInput()
         self.fields['creado_el'].widget = forms.HiddenInput()
-
 
         self.fields['remitente'].widget.attrs['readonly'] = True
 
@@ -104,9 +104,6 @@ class OficioForm(ModelForm):
         self.initial['modi_por'] = modi_el
 
 
-
-
-
 ## -------------------------------------------------------------------------------
 ## MODEL FORM RESPUESTAS
 ## -------------------------------------------------------------------------------
@@ -128,13 +125,12 @@ class RespuestaForm(ModelForm):
         fields = '__all__'
         exclude = ['archivo_datetime', 'creado_por', 'creado_el', 'modi_por', 'modi_el']
         widgets = {
-            'respuesta': Textarea(attrs={'class': 'form-control', 'rows': 5, 'cols': 5}),
-        },
+                      'respuesta': Textarea(attrs={'class': 'form-control', 'rows': 5, 'cols': 5}),
+                  },
         labels = {
             "fecha_respuesta": "Fecha de Respuesta",
             "respuesta": "Respuesta",
         }
-
 
     def __init__(self, *args, **kwargs):
         super(RespuestaForm, self).__init__(*args, **kwargs)
