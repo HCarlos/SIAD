@@ -41,6 +41,8 @@ def oficios_list(request, tipo_documento):
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
+        Is_Subdirector = Group.objects.filter(user=request.user, name__in=['Subdirector'])
+
         return render(request,'layouts/proyectos/oficios/oficios_list.html',
                       {
                           'User': user,
@@ -49,7 +51,8 @@ def oficios_list(request, tipo_documento):
                           'New': '/oficio_new/%s' % tipo_documento,
                           'TD': TD,
                           'tipo_documento': tipo_documento,
-                          'page_obj': page_obj
+                          'page_obj': page_obj,
+                          'is_subdirector': Is_Subdirector.count()
                       })
 
 @login_required()
@@ -166,6 +169,7 @@ def oficios_search_data_list(request):
         page_obj = paginator.get_page(page_number)
 
         TD = Oficio.TIPO_DOCUMENTO[0][1]
+        Is_Subdirector = Group.objects.filter(user=request.user, name__in=['Subdirector'])
 
         return render(request, 'layouts/proyectos/oficios/oficios_list.html',
                       {
@@ -175,7 +179,8 @@ def oficios_search_data_list(request):
                           'New': '/oficio_new/%s' % 0,
                           'TD': TD,
                           'tipo_documento': 0,
-                          'page_obj': page_obj
+                          'page_obj': page_obj,
+                          'is_subdirector': Is_Subdirector.count()
                       })
 
 

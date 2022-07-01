@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime
 from datetime import timedelta
 import django.utils.timezone
 import self
@@ -16,11 +16,44 @@ from siad import settings
 from siad.functions import validate_file_extension, file_size
 from siad.settings import MEDIA_URL
 
+class UnidadAdministrativa(models.Model):
+
+
+    """Model representing an unidadadministrativa."""
+    unidad = models.CharField(max_length=250)
+    abreviatura = models.CharField(max_length=25)
+    titular = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, related_name='ua_titular')
+    modi_por = models.ForeignKey(
+        Usuario,
+        on_delete=models.SET_NULL,
+        blank=True,
+        null=True,
+        related_name='ua_modi_por')
+    modi_el = models.DateTimeField(default=django.utils.timezone.now, blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'UnidadAdministrativa'
+        verbose_name_plural = 'UnidadesAdministrativas'
+        ordering = ['unidad']
+
+    def get_absolute_url(self):
+        """Returns the url to access a particular author instance."""
+        return reverse('unidad', args=[str(self.id)])
+
+    def __str__(self):
+        """String for representing the Model object."""
+        return '{0} - {1}.'.format(self.unidad, self.abreviatura)
+
+
+
+
+
 class Dependencia(models.Model):
     """Model representing an dependencia."""
     dependencia = models.CharField(max_length=250)
     abreviatura = models.CharField(max_length=25)
     titular = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, related_name='dep_titular')
+    unidad_administrativa = models.ForeignKey(UnidadAdministrativa, on_delete=models.SET_NULL, null=True, related_name='ua_dep_unidad_administrativa')
     modi_por = models.ForeignKey(
         Usuario,
         on_delete=models.SET_NULL,
@@ -53,6 +86,7 @@ class Subdireccione(models.Model):
     cargo = models.CharField(max_length=250)
     is_visible = models.BooleanField(default=False)
     dependencia = models.ForeignKey(Dependencia, on_delete=models.SET_NULL, null=True, related_name='subdir_dependencia')
+    unidad_administrativa = models.ForeignKey(UnidadAdministrativa, on_delete=models.SET_NULL, null=True, related_name='ua_subdir_unidad_administrativa')
     modi_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, blank=True, null=True, related_name='subdir_modi_por')
     modi_el = models.DateField('died', null=True, blank=True)
 
@@ -111,7 +145,7 @@ class Respuestas(models.Model):
         (5, 'RESUELTO NO FAVORABLE'),
     ]
 
-    Fecha = datetime.date.today()
+    Fecha = datetime.now()
     respuesta = models.CharField(max_length=2000, default="", blank=False, null=False)
     fecha_respuesta = models.DateField(default=django.utils.timezone.now, blank=True, null=True)
     estatus = models.SmallIntegerField(choices=ESTATUS, default=0, blank=False, null=False)
@@ -174,7 +208,7 @@ class Oficio(models.Model):
         (0, 'RECIBIDOS'),
         (1, 'FIRMADOS POR EL(LA) DIRECTOR(A)'),
     ]
-    Fecha = datetime.date.today()
+    Fecha = datetime.now()
 
     # Consecut =
 
@@ -187,7 +221,7 @@ class Oficio(models.Model):
             return 1
 
     def get_fecha_respuesta():
-        Fecha = datetime.date.today()
+        Fecha = datetime.now()
         return Fecha + timedelta(days=3)
 
     anno = models.IntegerField(default=Fecha.year, blank=True, null=True)
@@ -209,12 +243,13 @@ class Oficio(models.Model):
     fecha_respuesta = models.DateField(default=get_fecha_respuesta(), blank=True, null=True)
     subdireccion = models.ManyToManyField(Subdireccione)
     respuestas = models.ManyToManyField(Respuestas)
+    unidad_administrativa = models.ForeignKey(UnidadAdministrativa, on_delete=models.SET_NULL, null=True, related_name='ua_ofi_unidad_administrativa')
     archivo = models.FileField(upload_to="oficios/{0}/{1}/{2}/".format(Fecha.year, Fecha.month, Fecha.day), blank=True, null=True, validators=[validate_file_extension, file_size])
     archivo_datetime = models.DateTimeField(auto_now=True, blank=True, null=True)
-    creado_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, related_name='ofi_creado_por')
-    creado_el = models.DateTimeField(default=datetime.datetime.now, editable=True, blank=True)
-    modi_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, null=True, related_name='ofi_modi_por')
-    modi_el = models.DateTimeField(default=datetime.datetime.now, editable=True, blank=True)
+    creado_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, blank=True, null=True, related_name='ofi_creado_por')
+    creado_el = models.DateField(default=django.utils.timezone.now, null=True, blank=True)
+    modi_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, blank=True, null=True, related_name='ofi_modi_por')
+    modi_el = models.DateField(default=django.utils.timezone.now, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Oficio'
@@ -275,13 +310,14 @@ class Oficio(models.Model):
 ## MODEL OFICIOS CONSULTA
 ## -------------------------------------------------------------------------------
 class Evento(models.Model):
-    Fecha = datetime.date.today()
+    Fecha = datetime.now()
     anno = models.IntegerField(default=Fecha.year, blank=True, null=True)
     fecha_evento = models.DateField(default=django.utils.timezone.now,  blank=True, null=True)
     hora_evento = models.TimeField(default=django.utils.timezone.now,  blank=True, null=True)
     asunto = models.CharField(max_length=500, default="", blank=True, null=True)
     lugar = models.CharField(max_length=500, default="", blank=True, null=True)
     dependencia_solicita = models.ForeignKey(Dependencia, on_delete=models.SET_NULL, null=True, related_name='evento_solicita_dep')
+    unidad_administrativa = models.ForeignKey(UnidadAdministrativa, on_delete=models.SET_NULL, null=True, related_name='ua_evento_unidad_administrativa')
     seguimiento = models.TextField(max_length=4000, default="", blank=True, null=True)
     respuesta = models.TextField(max_length=4000, default="", blank=True, null=True)
     fecha_respuesta = models.DateField(default=django.utils.timezone.now, blank=True, null=True)
@@ -307,7 +343,6 @@ class Evento(models.Model):
         return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}'.format(
             self.id, self.anno, self.fecha_evento, self.hora_evento, self.asunto, self.lugar, self.dependencia_solicita, self.seguimiento, self.respuesta, self.fecha_respuesta, self.archivo, self.archivo_datetime, self.creado_por, self.creado_el, self.modi_por, self.modi_el)
         # return self
-
 
 
 
