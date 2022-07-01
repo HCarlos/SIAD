@@ -5,7 +5,7 @@ from django import forms
 from django.utils import timezone
 
 from home.models import Usuario
-from proyecto.models import Oficio, Dependencia, Subdireccione, Respuestas
+from proyecto.models import Oficio, Dependencia, Subdireccione, Respuestas, UnidadAdministrativa
 from siad import settings
 from django.forms.fields import DateField, DateTimeField
 
@@ -16,6 +16,7 @@ from django.forms.fields import DateField, DateTimeField
 
 class OficioForm(ModelForm):
     dir_remitente = ModelChoiceField(label='Dependencia', queryset=Dependencia.objects.all())
+    unidad_administrativa = ModelChoiceField(label='Unidad Administrativa', queryset=UnidadAdministrativa.objects.all())
     recibe = ModelChoiceField(label='Recibe', queryset=Subdireccione.objects.all())
 
     fecha_documento = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
@@ -58,6 +59,7 @@ class OficioForm(ModelForm):
         oficio_id = kwargs.pop('oficio_id', None)
         super(OficioForm, self).__init__(*args, **kwargs)
         self.fields['dir_remitente'].queryset = Dependencia.objects.all()
+        self.fields['unidad_administrativa'].queryset = UnidadAdministrativa.objects.all()
         self.fields['recibe'].queryset = Subdireccione.objects.all()
         self.fields['tipo_documento'].widget = forms.HiddenInput()
         self.fields['creado_por'].empty_label = None
@@ -81,8 +83,8 @@ class OficioForm(ModelForm):
             self.fields['creado_por'].widget = forms.HiddenInput()
             self.fields['modi_por'].widget = forms.HiddenInput()
 
-        self.fields['modi_el'].widget = forms.HiddenInput()
-        self.fields['creado_el'].widget = forms.HiddenInput()
+        # self.fields['modi_el'].widget = forms.HiddenInput()
+        # self.fields['creado_el'].widget = forms.HiddenInput()
 
         self.fields['remitente'].widget.attrs['readonly'] = True
 

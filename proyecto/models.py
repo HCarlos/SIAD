@@ -286,8 +286,8 @@ class Oficio(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17}'.format(
-            self.id, self.anno, self.tipo_documento, self.consecutivo, self.oficio, self.fecha_documento, self.dir_remitente, self.remitente, self.del_remitente, self.recibe, self.asunto, self.instrucciones, self.fecha_respuesta, self.archivo, self.archivo_datetime, self.creado_por, self.creado_el, self.modi_por, self.modi_el)
+        return '{0}, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8}, {9}, {10}, {11}, {12}, {13}, {14}, {15}, {16}, {17}, {18}'.format(
+            self.id, self.anno, self.tipo_documento, self.consecutivo, self.oficio, self.fecha_documento, self.dir_remitente, self.remitente, self.del_remitente, self.recibe, self.asunto, self.instrucciones, self.fecha_respuesta, self.archivo, self.archivo_datetime, self.creado_por, self.creado_el, self.modi_por, self.modi_el, self.unidad_administrativa)
         # return self
 
     @property
