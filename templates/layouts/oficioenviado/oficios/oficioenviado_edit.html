@@ -12,7 +12,7 @@
                   <div class="card border-0 shadow-sm">
                     <div class="card-header bgc-green-d3">
                       <h5 class="card-title text-110 text-white">
-                       Editando el Oficio: {{ Oficio.consecutivo }} {{ leyenda_form }}
+                       Editando el Oficio: {{ OficioEnviado.consecutivo }}
                       </h5>
 
                     </div><!-- /.card-header -->
@@ -21,14 +21,14 @@
 
                       <div class="p-3">
                         <p class="mb-0 text-dark-m2">
-                          <form method="post" enctype="multipart/form-data" action="/oficio_edit/{{ Oficio.id }}/{{ tipo_documento }}" id="FormData0" class="">
+                          <form method="post" enctype="multipart/form-data" action="/oficioenviado_edit/{{ OficioEnviado.id }}" id="FormData0" class="">
                           {% csrf_token %}
                             <fieldset class="form-group">
                                 {% bootstrap_form frmSet %}
                             </fieldset>
                             <fieldset class="form-group">
                                <input type="submit" class="btn btn-primary float-left" value="Guardar">
-                              <a href="{% url 'oficios_list' tipo_documento=tipo_documento %}" class="btn btn-secondary float-right">Regresar</a>
+                              <a href="{% url 'oficiosenviados_list' %}" class="btn btn-secondary float-right">Regresar</a>
                             </fieldset>
                           </form>
                         </p>

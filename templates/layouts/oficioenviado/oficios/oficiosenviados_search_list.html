@@ -1,0 +1,193 @@
+{% extends 'home.html' %}
+{% block contenedor %}
+{% load static %}
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{#{% bootstrap_javascript jquery='full' %}#}
+{% load widget_tweaks %}
+{% load crispy_forms_tags %}
+{{ frmSet.media }}
+
+
+<div class="row mt-1">
+    <div class="col-sm-12 ">
+    <div class="row ">
+
+        <div class="col-sm-6 ">
+
+            <div class="card border-0 shadow-sm m-4">
+                <div class="card-header bgc-orange-d3">
+                    <h5 class="card-title text-110 text-white">
+                    Opciones de Consulta
+                    </h5>
+                </div>
+                <div class="card-body p-0 border-1 border-t-0 brc-orange-m2">
+                    <form method="post" enctype="multipart/form-data" action="{% url 'oficios_search_list' %}" id="FormData0">
+                        {% csrf_token %}
+
+                        <div class="p-3">
+                            <div class="form-row mb-1">
+                                <label for = "asunto" class="col-md-4 col-form-label">Asunto</label>
+                                <div class="col-md-8">
+                                    <input type="text" name="asunto" id="asunto"  class="form-control" />
+                                </div>
+                            </div>
+                            <div class="form-row mb-1">
+                                <label for = "oficio" class="col-md-4 col-form-label">Número de Oficio:</label>
+                                <div class="col-md-8">
+                                    <input type="text" name="oficio" id="oficio"  class="form-control" />
+                                </div>
+                            </div>
+
+                            <div class="form-row mb-1">
+                                <label for = "subdireccion" class="col-md-4 col-form-label">Subdirección:</label>
+                                <div class="col-md-8">
+                                    <select name="subdireccion" size="1" class="form-control">
+                                        <option value="0" selected>Todas</option>
+                                        {% for SubDir in Subdirecciones %}
+                                        <option value="{{ SubDir.id }}">{{ SubDir.id }} - {{ SubDir.subdireccion }} - ({{ SubDir.abreviatura }})</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+
+{#                            <div class="form-row mb-1">#}
+{#                                <label for = "tipo_documento" class="col-md-4 col-form-label">Tipo Documento:</label>#}
+{#                                <div class="col-md-8">#}
+{#                                    <select name="tipo_documento" size="1" class="form-control">#}
+{#                                        <option value="2" selected>No me interesa</option>#}
+{#                                        <option value="0">Oficios Recibidos</option>#}
+{#                                        <option value="1">Oficios Firmados</option>#}
+{#                                    </select>#}
+{#                                </div>#}
+{#                            </div>#}
+
+                            <div class="form-row mb-1">
+                                <label for = "is_rango_oficio" class="col-md-4 col-form-label">
+                                    <input type="checkbox" class="mr-1" id="is_rango_oficio" name="is_rango_oficio">
+                                    Del => Al:
+                                </label>
+                                <div class="col-md-4">
+                                    <input type="number" name="del" id="del"  class="form-control" value="1" min="1" />
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="number" name="al" id="al"  class="form-control" value="1" min="1" />
+                                </div>
+                            </div>
+
+                            <div class="form-row mb-1">
+                                <label for = "is_fecha" class="col-md-4 col-form-label">
+                                    <input type="checkbox" class="mr-1" id="is_fecha" name="is_fecha">
+                                    Desde => Hasta:
+                                </label>
+                                <div class="col-md-4">
+                                    <input type="date" name="fecha_inicial" id="fecha_inicial"  class="form-control" value="{{ Fecha }}" />
+                                </div>
+                                <div class="col-md-4">
+                                    <input type="date" name="fecha_final" id="fecha_final"  class="form-control" value="{{ Fecha }}" />
+                                </div>
+                            </div>
+
+                        </div>
+                        <button type="submit" class="btn btn-primary float-right mr-3 mb-3">
+                            <i class="fa fa-search"></i>
+                            Consultar
+                        </button>
+                    </form>
+
+                </div>
+            </div><!-- /.card-body -->
+
+        </div>
+
+        <div class="col-sm-6">
+
+            <div class="card border-0 shadow-sm m-4 ">
+                <div class="card-header bgc-purple-d3">
+                    <h5 class="card-title text-110 text-white">
+                    Parámetros de Búsqueda
+                    </h5>
+                </div>
+                <div class="card-body p-0 border-1 border-t-0 brc-purple-m2">
+                    <div class="p-3">
+                        QuerySet: <code>{{ Mensaje }}</code>
+                    </div>
+                </div>
+            </div><!-- /.card-body -->
+
+        </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row mt-1">
+
+    <div class="col-12">
+
+
+
+                  <div class="card border-0 shadow-sm m-4">
+                    <div class="card-header bgc-green-d3">
+                      <h5 class="card-title text-110 text-white">
+                       Lista de Oficios
+                      </h5>
+
+                    <div class="card-toolbar">
+                        <form method="post" enctype="multipart/form-data" action="{% url 'reportespecial' %}" target="_blank" id="FormData0">
+                        {% csrf_token %}
+                            <input type="hidden" name="Mensaje" value="{{ Mensaje }}">
+                            <input type="hidden" name="Oficios" value="{{ Items }}">
+                            <input type="hidden" name="SubDirs" value="{{ SubDirs }}">
+                            <button type="submit" class="btn card-toolbar-btn">
+                            <i class="fa fa-print  text-white"></i>
+                            </button>
+                        </form>
+{#                        <a href="{% url 'reportespecial' mensaje=Mensaje %}" target="_blank" class="card-toolbar-btn text-white">#}
+{#                        </a>#}
+                    </div>
+
+                    </div><!-- /.card-header -->
+
+                    <div class="card-body p-0 border-1 border-t-0 brc-green-m2">
+                      <div class="p-3">
+                        <table id="simple-table" class="mb-0 table table-borderless table-bordered-x brc-secondary-l3 text-dark-m2 radius-1 overflow-hidden">
+                            <thead class="text-dark-tp3 bgc-grey-l4 text-90 border-b-1 brc-transparent">
+                                <tr>
+                                    <th>Consec.</th>
+                                    <th>OFICIO</th>
+                                    <th>REMITENTE</th>
+                                    <th>ASUNTO</th>
+                                    <th>FECHA DOCTO</th>
+                                    <th>FECHA CAPTURA</th>
+                                    <th>ARCHIVO</th>
+                                </tr>
+                            </thead>
+                          <tbody>
+                            {% for oficio in Oficios %}
+                                <tr>
+                                    <td>{{ oficio.consecutivo }}</td>
+                                    <td>{{ oficio.oficio }}</td>
+                                    <td>{{ oficio.get_del_remitente }}</td>
+                                    <td>{{ oficio.asunto }}</td>
+                                    <td>{{ oficio.fecha_documento }}</td>
+                                    <td>{{ oficio.fecha_captura }}</td>
+                                    <td><a href="{{ oficio.get_absolute_archivo_url }}" target="_blank">{{ oficio.get_oficio }}</a></td>
+                                </tr>
+                          {% endfor %}
+                          </tbody>
+                        </table>
+                      </div>
+
+                      </div>
+                    </div>
+
+
+
+    </div>
+</div>
+
+
+<div class="col-md-2"></div>
+
+{% endblock %}

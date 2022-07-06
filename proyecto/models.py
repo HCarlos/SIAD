@@ -101,7 +101,7 @@ class Subdireccione(models.Model):
 
     def __str__(self):
         """String for representing the Model object."""
-        return '{0} ({1}) => {2}'.format(self.subdireccion, self.abreviatura, self.titular)
+        return '{0}, {1} ({2}) => {3}'.format(self.subdireccion, self.is_visible, self.abreviatura, self.titular)
 
 
 ## -------------------------------------------------------------------------------
@@ -247,9 +247,9 @@ class Oficio(models.Model):
     archivo = models.FileField(upload_to="oficios/{0}/{1}/{2}/".format(Fecha.year, Fecha.month, Fecha.day), blank=True, null=True, validators=[validate_file_extension, file_size])
     archivo_datetime = models.DateTimeField(auto_now=True, blank=True, null=True)
     creado_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, blank=True, null=True, related_name='ofi_creado_por')
-    creado_el = models.DateField(default=django.utils.timezone.now, null=True, blank=True)
+    creado_el = models.DateTimeField(default=django.utils.timezone.now, null=True, blank=True)
     modi_por = models.ForeignKey(Usuario, on_delete=models.SET_NULL, blank=True, null=True, related_name='ofi_modi_por')
-    modi_el = models.DateField(default=django.utils.timezone.now, null=True, blank=True)
+    modi_el = models.DateTimeField(default=django.utils.timezone.now, null=True, blank=True)
 
     class Meta:
         verbose_name = 'Oficio'

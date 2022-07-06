@@ -36,6 +36,7 @@ path('logout/', views.LogoutView.as_view(
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('proyecto.urls')),
+    path('', include('oficiosenviados.urls')),
     path('', welcome, name='welcome'),
     path('home/', home, name='home'),
     path('login/', myloginView.as_view(), name='login'),

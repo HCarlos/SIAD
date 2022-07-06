@@ -1,32 +1,30 @@
-import datetime
-from bootstrap_datepicker_plus.widgets import DatePickerInput, DateTimePickerInput
-from django.forms import ModelForm, TextInput, ModelChoiceField, Textarea, Select
-from django import forms
-from django.utils import timezone
-
-from home.models import Usuario
-from proyecto.models import Oficio, Dependencia, Subdireccione, Respuestas, UnidadAdministrativa
-from siad import settings
-from django.forms.fields import DateField, DateTimeField
-
-
 ## -------------------------------------------------------------------------------
 ## MODEL FORM OFICIOS
 ## -------------------------------------------------------------------------------
+import datetime
 
-class OficioForm(ModelForm):
-    dir_remitente = ModelChoiceField(label='Dependencia', queryset=Dependencia.objects.all())
+from bootstrap_datepicker_plus.widgets import DatePickerInput, DateTimePickerInput
+from django import forms
+from django.forms import ModelForm, ModelChoiceField, DateField, TextInput, Textarea, Select, DateTimeField
+
+from home.models import Usuario
+from oficiosenviados.models import OficioEnviado, OficioEnviadoRespuestas
+from proyecto.models import Dependencia, UnidadAdministrativa, Subdireccione
+from siad import settings
+
+
+class OficioEnviadoForm(ModelForm):
+    remitente = ModelChoiceField(label='Remitente', queryset=Subdireccione.objects.all())
     unidad_administrativa = ModelChoiceField(label='Unidad Administrativa', queryset=UnidadAdministrativa.objects.all())
-    recibe = ModelChoiceField(label='Recibe', queryset=Subdireccione.objects.all())
+    # recibe = ModelChoiceField(label='Recibe', queryset=Dependencia.objects.all())
 
     fecha_documento = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
     fecha_captura = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
-    fecha_respuesta = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
+    # fecha_respuesta = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
     fecha_recibido = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
 
     # creado_por = ModelChoiceField(label='Creado Por', empty_label=None, queryset=Usuario.objects.filter(id=1))
     # modi_por = ModelChoiceField(label='Modificado Por', empty_label=None, queryset=Usuario.objects.filter(id=1))
-
 
     instrucciones = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 8, 'cols': 5}))
 
@@ -34,13 +32,11 @@ class OficioForm(ModelForm):
         input_type = 'date'
 
     class Meta:
-        model = Oficio
+        model = OficioEnviado
         fields = '__all__'
         exclude = ['respuestas', 'archivo_datetime']
         widgets = {
                       'remitente': TextInput(attrs={'readonly': 'readonly', 'class': 'form-control'}),
-                      'del_remitente': TextInput(attrs={'class': 'form-control'}),
-                      'recibe': TextInput(attrs={'class': 'form-control'}),
                       'instrucciones': Textarea(attrs={'class': 'form-control', 'rows': 45, 'cols': 80}),
                       'asunto': Textarea(attrs={'class': 'form-control', 'rows': 45, 'cols': 80}),
                       'creado_por': Select(attrs={'readonly': 'readonly', 'class': 'form-control'}),
@@ -49,21 +45,19 @@ class OficioForm(ModelForm):
 
         labels = {
             "anno": "Año",
-            "tipo_documento": "Tipo de Oficio",
-            "dir_remitente": "dir_remitente(*)",
+            "remitente": "remitente",
             "del_remitente": "Escriba el Remitente:",
             "recibe": "Recibe ó Emite:",
         }
 
     def __init__(self, *args, **kwargs):
         user_id = kwargs.pop('user_id', None)
-        oficio_id = kwargs.pop('oficio_id', None)
-        super(OficioForm, self).__init__(*args, **kwargs)
-        self.fields['dir_remitente'].queryset = Dependencia.objects.all()
+        oficio_id = kwargs.pop('oficioenviado_id', None)
+        super(OficioEnviadoForm, self).__init__(*args, **kwargs)
+        self.fields['remitente'].queryset = Subdireccione.objects.all()
         self.fields['unidad_administrativa'].queryset = UnidadAdministrativa.objects.all()
         self.fields['unidad_administrativa'].empty_label = None
-        self.fields['recibe'].queryset = Subdireccione.objects.all()
-        self.fields['tipo_documento'].widget = forms.HiddenInput()
+        # self.fields['recibe'].queryset = Subdireccione.objects.all()
         self.fields['creado_por'].empty_label = None
         self.fields['modi_por'].empty_label = None
 
@@ -85,21 +79,19 @@ class OficioForm(ModelForm):
             self.fields['modi_el'].widget = forms.HiddenInput()
 
 
-        self.fields['remitente'].widget.attrs['readonly'] = True
+        # self.fields['remitente'].widget.attrs['readonly'] = True
 
     def set_consecutivo(self, consec):
         self.fields['consecutivo'].widget.attrs['readonly'] = False
         self.initial['consecutivo'] = consec
         self.fields['consecutivo'].widget.attrs['readonly'] = False
 
-    def get_consecutivo(self, TD):
-        return Oficio.objects.filter(tipo_documento=TD).latest('consecutivo').consecutivo + 1
-
-    def set_tipo_documento(self, td):
-        self.initial['tipo_documento'] = td
-
-    def get_tipo_documento(self):
-        return self.tipo_documento
+    def get_consecutivo(self):
+        TotalRegistros = OficioEnviado.objects.all()
+        if TotalRegistros.count() > 0:
+            return OficioEnviado.objects.filter().latest('consecutivo').consecutivo + 1
+        else:
+            return 1
 
     def set_remitente(self, remitente):
         self.fields['remitente'].widget.attrs['readonly'] = False
@@ -107,7 +99,7 @@ class OficioForm(ModelForm):
         self.fields['remitente'].widget.attrs['readonly'] = True
 
     def get_remitente(self):
-        return self.remitente
+        return self.dependencias
 
     def set_modi_por(self, modi_por):
         self.initial['modi_por'] = modi_por
@@ -116,11 +108,13 @@ class OficioForm(ModelForm):
         self.initial['modi_por'] = modi_el
 
 
+
+
 ## -------------------------------------------------------------------------------
 ## MODEL FORM RESPUESTAS
 ## -------------------------------------------------------------------------------
 
-class RespuestaForm(ModelForm):
+class OficioEnviadoRespuestaForm(ModelForm):
     fecha_respuesta = DateField(
         widget=forms.widgets.DateInput(format='%d/%m/%Y', attrs={'type': 'date', 'class': ' text-bold'}),
         input_formats=settings.DATE_INPUT_FORMATS,
@@ -133,7 +127,7 @@ class RespuestaForm(ModelForm):
     )
 
     class Meta:
-        model = Respuestas
+        model = OficioEnviadoRespuestas
         fields = '__all__'
         exclude = ['archivo_datetime', 'creado_por', 'creado_el', 'modi_por', 'modi_el']
         widgets = {
@@ -145,7 +139,7 @@ class RespuestaForm(ModelForm):
         }
 
     def __init__(self, *args, **kwargs):
-        super(RespuestaForm, self).__init__(*args, **kwargs)
+        super(OficioEnviadoRespuestaForm, self).__init__(*args, **kwargs)
         self.initial['fecha_respuesta'] = self.instance.fecha_respuesta.isoformat()
         print("HA INICIADO BIEN")
 
