@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 
@@ -11,16 +12,16 @@ from home.models import Usuario
 from oficiosenviados.modelforms.oficio_enviado_form import OficioEnviadoForm
 from oficiosenviados.models import OficioEnviado
 from proyecto.modelform.model_forms import RespuestaForm
-from proyecto.models import Subdireccione, Respuestas
-from siad.settings import ITEMS_FOR_PAGE
+from proyecto.models import Subdireccione, Respuestas, Dependencia
+from siad.settings import ITEMS_FOR_PAGE, URL_OFICIO_ENVIADO
 
 
 @login_required()
 def OficioEnviados_list(request):
     Grupo = Group.objects.filter(user=request.user, name__in=['ContraMun', 'Subdirector'])
     if Grupo.count() > 0:
-        subd = Subdireccione.objects.filter(titular=request.user)
-        OficioEnviados = OficioEnviado.objects.filter(subdireccion__in=subd).order_by('-id').distinct()
+        subd = Dependencia.objects.filter(titular=request.user)
+        OficioEnviados = OficioEnviado.objects.filter(destinatarios__in=subd).order_by('-id').distinct()
     else:
         Grupo = Group.objects.filter(user=request.user, name__in=['Administrador', 'SysOp', 'Capturista'])
         if Grupo.count() > 0:
@@ -45,7 +46,8 @@ def OficioEnviados_list(request):
                           'oficiosenviados': OficioEnviados,
                           'New': '/oficioenviado_new',
                           'page_obj': page_obj,
-                          'is_subdirector': Is_Subdirector.count()
+                          'is_subdirector': Is_Subdirector.count(),
+                          'mod_search': URL_OFICIO_ENVIADO
                       })
 
 @login_required()
@@ -76,7 +78,13 @@ def OficioEnviado_new(request):
     user = Usuario.objects.filter(id=request.user.id).get()
     roles = Group.objects.filter(user=request.user)
 
-    return render(request, 'layouts/oficioenviado/oficios/oficioenviado_new.html', {'User': user, 'Roles': roles, 'frmSet': frmSet})
+    return render(request, 'layouts/oficioenviado/oficios/oficioenviado_new.html',
+                  {
+                      'User': user,
+                      'Roles': roles,
+                      'frmSet': frmSet,
+                      'mod_search': URL_OFICIO_ENVIADO
+                  })
 
 
 
@@ -95,7 +103,14 @@ def OficioEnviados_edit(request, id):
 
     user = Usuario.objects.filter(id=request.user.id).get()
     roles = Group.objects.filter(user=request.user)
-    return render(request, 'layouts/oficioenviado/oficios/oficioenviado_edit.html', {'User': user, 'Roles': roles, 'OficioEnviado': Doc, 'frmSet': frmSet})
+    return render(request, 'layouts/oficioenviado/oficios/oficioenviado_edit.html',
+                  {
+                      'User': user,
+                      'Roles': roles,
+                      'OficioEnviado': Doc,
+                      'frmSet': frmSet,
+                      'mod_search': URL_OFICIO_ENVIADO
+                  })
 
 # nomeselacontraseña
 
@@ -114,7 +129,7 @@ def OficioEnviados_remove(request, id, tipo_documento):
 
 
 @login_required()
-def OficioEnviados_search_data_list(request):
+def OficiosEnviados_search_data_list(request):
     Search = ""
     Objs = OficioEnviado.objects.all()
     if request.method == 'GET':
@@ -128,12 +143,7 @@ def OficioEnviados_search_data_list(request):
             else:
                 Objs = Objs.filter(
                     Q(asunto__contains=Search) |
-                    Q(OficioEnviado__contains=Search) |
-                    Q(dir_remitente__dependencia__contains=Search) |
-                    Q(dir_remitente__abreviatura__contains=Search) |
-                    Q(dir_remitente__titular__ap_paterno__contains=Search) |
-                    Q(dir_remitente__titular__ap_materno__contains=Search) |
-                    Q(dir_remitente__titular__nombre__contains=Search)
+                    Q(oficio__contains=Search)
                 )
 
     if request.user.is_authenticated:
@@ -146,10 +156,9 @@ def OficioEnviados_search_data_list(request):
         page_number = request.GET.get('page')
         page_obj = paginator.get_page(page_number)
 
-        TD = OficioEnviado.TIPO_DOCUMENTO[0][1]
         Is_Subdirector = Group.objects.filter(user=request.user, name__in=['Subdirector'])
 
-        return render(request, 'layouts/oficioenviado/oficios/oficioenviados_list.html',
+        return render(request, 'layouts/oficioenviado/oficios/oficiosenviados_list.html',
                       {
                           'User': user,
                           'Roles': roles,
@@ -157,7 +166,8 @@ def OficioEnviados_search_data_list(request):
                           'New': '/OficioEnviado_new/%s' % 0,
                           'tipo_documento': 0,
                           'page_obj': page_obj,
-                          'is_subdirector': Is_Subdirector.count()
+                          'is_subdirector': Is_Subdirector.count(),
+                          'mod_search': URL_OFICIO_ENVIADO
                       })
 
 
@@ -167,7 +177,6 @@ def OficioEnviados_search_data_list(request):
 
 @login_required()
 def OficioEnviado_respuestas_list(request, OficioEnviado, tipo_documento):
-    TD = OficioEnviado.TIPO_DOCUMENTO[0][1] if tipo_documento == 0 else OficioEnviado.TIPO_DOCUMENTO[1][1]
     Obj = get_object_or_404(OficioEnviado, pk=OficioEnviado)
 
     if request.user.is_authenticated:
@@ -180,8 +189,8 @@ def OficioEnviado_respuestas_list(request, OficioEnviado, tipo_documento):
                           'OficioEnviado': Obj,
                           'List': '/oficioenviado_respuestas_list/%s/%s'.format(OficioEnviado, tipo_documento),
                           'New': ('/respuesta_new/%s' % OficioEnviado),
-                          'TD': TD,
-                          'tipo_documento': tipo_documento
+                          'tipo_documento': tipo_documento,
+                          'mod_search': URL_OFICIO_ENVIADO
                       })
 
 
@@ -194,7 +203,6 @@ def OficioEnviado_respuestas_list(request, OficioEnviado, tipo_documento):
 def oficioenviado_respuesta_new(request, OficioEnviado):
     Obj = OficioEnviado.objects.get(pk=OficioEnviado)
     tipo_documento = Obj.get_tipo_documento()
-    TD = OficioEnviado.TIPO_DOCUMENTO[0][1] if tipo_documento == 0 else OficioEnviado.TIPO_DOCUMENTO[1][1]
     if request.method == "POST":
         frmSet = RespuestaForm(request.POST, request.FILES)
         if frmSet.is_valid():
@@ -211,8 +219,8 @@ def oficioenviado_respuesta_new(request, OficioEnviado):
                       'Roles': roles,
                       'frmSet': frmSet,
                       'OficioEnviado': Obj,
-                      'TD': TD,
                       'tipo_documento': tipo_documento,
+                      'mod_search': URL_OFICIO_ENVIADO
                   })
 
 
@@ -220,7 +228,6 @@ def oficioenviado_respuesta_new(request, OficioEnviado):
 @login_required()
 def oficioenviado_respuesta_edit(request, id):
     Ofi = OficioEnviado.objects.get(respuestas__id=id)
-    TD = Ofi.TIPO_DOCUMENTO[0][1] if Ofi.tipo_documento == 0 else Ofi.TIPO_DOCUMENTO[1][1]
     Resp = get_object_or_404(Respuestas, pk=id)
     if request.method == "POST":
         frmSet = RespuestaForm(request.POST or None, request.FILES or None, instance=Resp)
@@ -239,6 +246,7 @@ def oficioenviado_respuesta_edit(request, id):
                       'OficioEnviado': Ofi,
                       'Respuesta': Resp,
                       'tipo_documento': Ofi.tipo_documento,
+                      'mod_search': URL_OFICIO_ENVIADO
                   })
 
 

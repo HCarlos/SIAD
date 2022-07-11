@@ -11,6 +11,7 @@ from django.contrib.auth import logout as auth_logout
 
 from home.models import Usuario
 from siad.functions import UserFormBasic, UserFormFoto
+from siad.settings import URL_OFICIO
 
 
 def welcome(request):
@@ -22,7 +23,13 @@ def home(request):
         user = Usuario.objects.filter(id=request.user.id).get()
         roles = Group.objects.filter(user=request.user)
         fecha = datetime.now()
-        return render(request, 'home.html', {'User': user, 'Roles': roles, 'Fecha': fecha})
+        return render(request, 'home.html',
+                      {
+                          'User': user,
+                          'Roles': roles,
+                          'Fecha': fecha,
+                          'mod_search': URL_OFICIO
+                      })
 
 def logout(request):
     auth_logout(request)
@@ -45,7 +52,12 @@ def perfil_user(request):
     if request.user.is_authenticated:
         user = Usuario.objects.filter(id=request.user.id).get()
         roles = Group.objects.filter(user=request.user)
-        return render(request,'layouts/partials/otros/menu/perfil.html', {'User': user, 'Roles': roles})
+        return render(request,'layouts/partials/otros/menu/perfil.html',
+                      {
+                          'User': user,
+                          'Roles': roles,
+                          'mod_search': URL_OFICIO
+                      })
 
 @login_required
 def perfil_imagen(request):
@@ -55,7 +67,13 @@ def perfil_imagen(request):
         frmNewUser = UserFormFoto(instance=usuario)
         if usuario.id > 0:
             roles = Group.objects.filter(user=Id)
-            return render(request, 'layouts/partials/otros/menu/foto.html', {'User': usuario, 'Roles': roles, 'formUser': frmNewUser})
+            return render(request, 'layouts/partials/otros/menu/foto.html',
+                          {
+                              'User': usuario,
+                              'Roles': roles,
+                              'formUser': frmNewUser,
+                              'mod_search': URL_OFICIO
+                          })
 
 @login_required
 def perfil_save_imagen(request):
@@ -89,6 +107,7 @@ def user(request):
     Users = Usuario.objects.all()
     return render(request, "User/Users_list.html", context={
         "files": Users,
+        'mod_search': URL_OFICIO
     })
 
 
@@ -108,6 +127,7 @@ def nuevo_user(request):
 
     print(frmNewUser)
     return render(request, "User/User_new.html", context={
-        'formUser': frmNewUser
+        'formUser': frmNewUser,
+        'mod_search': URL_OFICIO
     })
 

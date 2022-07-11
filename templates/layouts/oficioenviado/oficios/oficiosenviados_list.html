@@ -46,10 +46,9 @@
                                     <th>Consec.</th>
                                     <th>OFICIO</th>
                                     <th>REMITENTE</th>
-                                    <th>DEPENDENCIA</th>
+                                    <th>DEPENDENCIA(S)</th>
                                     <th>ASUNTO</th>
-                                    <th>FECHA DOCTO</th>
-                                    <th>FECHA CAPTURA</th>
+                                    <th>FECHA</th>
                                     <th>ARCHIVO</th>
                                     <th></th>
                                 </tr>
@@ -61,9 +60,11 @@
                                     <td>{{ oficio.oficio }}</td>
                                     <td>{{ oficio.get_del_remitente }}</td>
                                     <td>
-                                        {% for dependencia in oficio.dependencias.all %}
-                                            {{ dependencia }}
+                                        <ul class="list-inline">
+                                        {% for dependencia in oficio.destinatarios.all %}
+                                            <li class="list-inline-item"><i class="fa fa-arrow-right mr-1"></i>{{ dependencia }}</li>
                                         {% endfor %}
+                                        </ul>
                                     </td>
                                     <td>{{ oficio.asunto }}</td>
                                     <td>{{ oficio.fecha_documento }}</td>

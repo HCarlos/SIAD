@@ -237,7 +237,7 @@ class Oficio(models.Model):
     recibe = models.ForeignKey(Subdireccione, on_delete=models.SET_NULL, null=True, related_name='oficio_recibe_dep')
     # recibe = models.CharField(max_length=250, default="", blank=True, null=True)
     asunto = models.CharField(max_length=500, default="", blank=True, null=True)
-    instrucciones = models.CharField(max_length=500, default="", blank=True, null=True)
+    instrucciones = models.TextField(default="", blank=True, null=True)
     fecha_captura = models.DateField(default=django.utils.timezone.now, blank=True, null=True)
     fecha_recibido = models.DateField(default=django.utils.timezone.now, blank=True, null=True)
     fecha_respuesta = models.DateField(default=get_fecha_respuesta(), blank=True, null=True)

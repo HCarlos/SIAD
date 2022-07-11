@@ -13,7 +13,8 @@ from django.views.decorators.csrf import csrf_exempt
 from home.models import Usuario
 from proyecto.modelform.model_forms import OficioForm, RespuestaForm
 from proyecto.models import Oficio, Subdireccione, Respuestas
-from siad.settings import ITEMS_FOR_PAGE
+from siad.settings import ITEMS_FOR_PAGE, URL_OFICIO
+
 
 @login_required()
 def oficios_list(request, tipo_documento):
@@ -52,7 +53,8 @@ def oficios_list(request, tipo_documento):
                           'TD': TD,
                           'tipo_documento': tipo_documento,
                           'page_obj': page_obj,
-                          'is_subdirector': Is_Subdirector.count()
+                          'is_subdirector': Is_Subdirector.count(),
+                          'mod_search': URL_OFICIO
                       })
 
 @login_required()
@@ -96,7 +98,15 @@ def oficio_new(request, tipo_documento):
     roles = Group.objects.filter(user=request.user)
     leyenda_form = Oficio.TIPO_DOCUMENTO[0][1] if tipo_documento == 0 else Oficio.TIPO_DOCUMENTO[1][1]
 
-    return render(request, 'layouts/proyectos/oficios/oficio_new.html', {'User': user, 'Roles': roles, 'frmSet': frmSet, 'tipo_documento': tipo_documento, 'leyenda_form': leyenda_form})
+    return render(request, 'layouts/proyectos/oficios/oficio_new.html',
+                  {
+                      'User': user,
+                      'Roles': roles,
+                      'frmSet': frmSet,
+                      'tipo_documento': tipo_documento,
+                      'leyenda_form': leyenda_form,
+                      'mod_search': URL_OFICIO
+                  })
 
 
 
@@ -117,7 +127,16 @@ def oficios_edit(request, id, tipo_documento):
     user = Usuario.objects.filter(id=request.user.id).get()
     roles = Group.objects.filter(user=request.user)
     leyenda_form = Oficio.TIPO_DOCUMENTO[0][1] if tipo_documento == 0 else Oficio.TIPO_DOCUMENTO[1][1]
-    return render(request, 'layouts/proyectos/oficios/oficio_edit.html', {'User': user, 'Roles': roles, 'Oficio': Doc, 'frmSet': frmSet, 'tipo_documento': tipo_documento, 'leyenda_form': leyenda_form})
+    return render(request, 'layouts/proyectos/oficios/oficio_edit.html',
+                  {
+                      'User': user,
+                      'Roles': roles,
+                      'Oficio': Doc,
+                      'frmSet': frmSet,
+                      'tipo_documento': tipo_documento,
+                      'leyenda_form': leyenda_form,
+                      'mod_search': URL_OFICIO
+                  })
 
 # nomeselacontraseña
 
@@ -180,7 +199,8 @@ def oficios_search_data_list(request):
                           'TD': TD,
                           'tipo_documento': 0,
                           'page_obj': page_obj,
-                          'is_subdirector': Is_Subdirector.count()
+                          'is_subdirector': Is_Subdirector.count(),
+                          'mod_search': URL_OFICIO
                       })
 
 
@@ -204,7 +224,8 @@ def oficio_respuestas_list(request, oficio, tipo_documento):
                           'List': '/oficio_respuestas_list/%s/%s'.format(oficio, tipo_documento),
                           'New': ('/respuesta_new/%s' % oficio),
                           'TD': TD,
-                          'tipo_documento': tipo_documento
+                          'tipo_documento': tipo_documento,
+                          'mod_search': URL_OFICIO
                       })
 
 
@@ -236,6 +257,7 @@ def respuesta_new(request, oficio):
                       'Oficio': Obj,
                       'TD': TD,
                       'tipo_documento': tipo_documento,
+                      'mod_search': URL_OFICIO
                   })
 
 
@@ -263,6 +285,7 @@ def respuesta_edit(request, id):
                       'Respuesta': Resp,
                       'TD': TD,
                       'tipo_documento': Ofi.tipo_documento,
+                      'mod_search': URL_OFICIO
                   })
 
 
@@ -299,16 +322,6 @@ def oficios_search_list(request):
             asunto = "ASUNTO => " + Asunto
             msg += asunto
             Objs = Objs.filter(asunto__contains=Asunto)
-            # Objs = Objs.filter(Q(dir_remitente__titular__ap_paterno__contains=asunto))
-
-        # if request.POST.get("ciudadano"):
-        #     ciudadano = "Datos ciudadano => " + request.POST.get("ciudadano").strip()
-        #     msg += ciudadano
-        #     Objs = Objs.filter(
-        #         Q(dir_remitente__titular__ap_paterno__contains=ciudadano) |
-        #         Q(dir_remitente__titular__ap_materno__contains=ciudadano) |
-        #         Q(dir_remitente__titular__nombre__contains=ciudadano)
-        #     )
 
         if request.POST.get("oficio"):
             no_oficio = request.POST.get("oficio").strip()
@@ -323,12 +336,6 @@ def oficios_search_list(request):
                 # msg += ", subdireccion => " if msg != "" else " {0} ({1})".format(vSubDir.subdireccion, vSubDir.abreviatura)
                 msg += (", " if msg != "" else "") + "SUBDIRECCIÓN => {0} ({1})".format(vSubDir.subdireccion, vSubDir.abreviatura)
                 Objs = Objs.filter(subdireccion=nSubDir)
-
-        # if request.POST.get("tipo_documento"):
-        #     tipo_documento = request.POST.get("tipo_documento").strip()
-        #     if int(tipo_documento) == 0 or int(tipo_documento) == 1:
-        #         msg += (", tipo_documento => " if msg != "" else "") + (" %s " % tipo_documento)
-        #         Objs = Objs.filter(tipo_documento=tipo_documento)
 
         if request.POST.get("is_rango_oficio"):
             deel = request.POST.get("del").strip()
@@ -352,8 +359,6 @@ def oficios_search_list(request):
         if Grupo.count() > 0:
             subd = Subdireccione.objects.filter(titular=request.user)
             Objs = Objs.filter(subdireccion__in=subd)
-            # Oficios = Oficio.objects.filter(subdireccion__in=subd).order_by('-id').distinct()
-
 
     else:
         msg = ''
@@ -388,13 +393,6 @@ def oficios_search_list(request):
 
     print(IdOficios)
     print(IdSubs)
-    # print(TotSubss)
-
-    # print(subdirecciones_list)
-    # print(IdSubs)
-    # print(TotSubss)
-
-    # print( encodings.utf_8.decode(msg) )
 
     return render(request, 'layouts/proyectos/oficios/oficios_search_list.html',
                   {
@@ -406,30 +404,6 @@ def oficios_search_list(request):
                       'SubDirs': IdSubs,
                       'Mensaje':  msg,
                       'Fecha': fecha,
-
+                       'mod_search': URL_OFICIO
                   })
-
-
-
-
-
-
-
-
-    # return HttpResponseRedirect(reverse('firstapp:create') + '?' + urlencode({'next': nextos }))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

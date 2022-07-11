@@ -14,7 +14,7 @@
                     {% endif %}
                     <a class="nav-link" href="{% url 'home' %}">
                       <i class="nav-icon fa fa-home"></i>
-                      <span class="nav-text fadeable">Inicio</span>
+                      <span class="nav-text fadeable">Inicio </span>
                     </a>
                   </li>
 
@@ -28,7 +28,7 @@
                       <span class="nav-text fadeable">Recibidos</span>
                     </a>
                   </li>
-
+                {% if is_subdirector > 0 or Roles.first == 'Administrator' %}
                 {% if request.path == '/oficiosenviados_list' %}
                     <li class="nav-item active">
                 {% else %}
@@ -39,7 +39,7 @@
                       <span class="nav-text fadeable">Enviados</span>
                     </a>
                   </li>
-
+                {% endif %}
                     {% if request.path == '/oficios_search_list/' %}
                           <li class="nav-item active">
                     {% else %}

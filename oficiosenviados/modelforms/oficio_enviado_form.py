@@ -6,6 +6,7 @@ import datetime
 from bootstrap_datepicker_plus.widgets import DatePickerInput, DateTimePickerInput
 from django import forms
 from django.forms import ModelForm, ModelChoiceField, DateField, TextInput, Textarea, Select, DateTimeField
+from django.shortcuts import get_object_or_404
 
 from home.models import Usuario
 from oficiosenviados.models import OficioEnviado, OficioEnviadoRespuestas
@@ -16,15 +17,8 @@ from siad import settings
 class OficioEnviadoForm(ModelForm):
     remitente = ModelChoiceField(label='Remitente', queryset=Subdireccione.objects.all())
     unidad_administrativa = ModelChoiceField(label='Unidad Administrativa', queryset=UnidadAdministrativa.objects.all())
-    # recibe = ModelChoiceField(label='Recibe', queryset=Dependencia.objects.all())
 
-    fecha_documento = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
-    fecha_captura = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
-    # fecha_respuesta = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
-    fecha_recibido = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
-
-    # creado_por = ModelChoiceField(label='Creado Por', empty_label=None, queryset=Usuario.objects.filter(id=1))
-    # modi_por = ModelChoiceField(label='Modificado Por', empty_label=None, queryset=Usuario.objects.filter(id=1))
+    fecha_oficio = DateField(widget=DatePickerInput(format=settings.DATE_FORMAT))
 
     instrucciones = forms.CharField(widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 8, 'cols': 5}))
 
@@ -46,18 +40,20 @@ class OficioEnviadoForm(ModelForm):
         labels = {
             "anno": "Año",
             "remitente": "remitente",
-            "del_remitente": "Escriba el Remitente:",
-            "recibe": "Recibe ó Emite:",
         }
 
     def __init__(self, *args, **kwargs):
         user_id = kwargs.pop('user_id', None)
         oficio_id = kwargs.pop('oficioenviado_id', None)
         super(OficioEnviadoForm, self).__init__(*args, **kwargs)
-        self.fields['remitente'].queryset = Subdireccione.objects.all()
-        self.fields['unidad_administrativa'].queryset = UnidadAdministrativa.objects.all()
+        if oficio_id > 0:
+            Ofi = get_object_or_404(OficioEnviado, pk=oficio_id)
+            ua = UnidadAdministrativa.objects.filter(id=Ofi.unidad_administrativa_id)
+        else:
+            ua = UnidadAdministrativa.objects.all()
+        self.fields['unidad_administrativa'].queryset = ua
         self.fields['unidad_administrativa'].empty_label = None
-        # self.fields['recibe'].queryset = Subdireccione.objects.all()
+        self.fields['remitente'].queryset = Subdireccione.objects.all()
         self.fields['creado_por'].empty_label = None
         self.fields['modi_por'].empty_label = None
 
@@ -67,21 +63,20 @@ class OficioEnviadoForm(ModelForm):
         self.fields['creado_el'] = DateTimeField(widget=DateTimePickerInput(format=settings.DATETIME_FORMAT))
 
         if oficio_id <= 0:
-            # print("La hora es: {0} y el oficio es: {1}".format( hora, oficio_id) )
             self.fields['creado_por'].queryset = Usuario.objects.filter(pk=user_id)
             self.initial['creado_el'] = hora
             self.fields['creado_el'] = DateTimeField(widget=DateTimePickerInput(format=settings.DATETIME_FORMAT))
             self.fields['modi_por'].queryset = Usuario.objects.filter(pk=user_id)
         else:
+            self.fields['unidad_administrativa'].widget = forms.HiddenInput()
             self.fields['creado_por'].widget = forms.HiddenInput()
             self.fields['creado_el'].widget = forms.HiddenInput()
             self.fields['modi_por'].widget = forms.HiddenInput()
             self.fields['modi_el'].widget = forms.HiddenInput()
 
-
-        # self.fields['remitente'].widget.attrs['readonly'] = True
-
     def set_consecutivo(self, consec):
+        if consec is None:
+            consec = self.get_consecutivo()
         self.fields['consecutivo'].widget.attrs['readonly'] = False
         self.initial['consecutivo'] = consec
         self.fields['consecutivo'].widget.attrs['readonly'] = False
