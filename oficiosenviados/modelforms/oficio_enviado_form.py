@@ -45,6 +45,7 @@ class OficioEnviadoForm(ModelForm):
     def __init__(self, *args, **kwargs):
         user_id = kwargs.pop('user_id', None)
         oficio_id = kwargs.pop('oficioenviado_id', None)
+        User = kwargs.pop('user', None)
         super(OficioEnviadoForm, self).__init__(*args, **kwargs)
         if oficio_id > 0:
             Ofi = get_object_or_404(OficioEnviado, pk=oficio_id)
@@ -53,7 +54,9 @@ class OficioEnviadoForm(ModelForm):
             ua = UnidadAdministrativa.objects.all()
         self.fields['unidad_administrativa'].queryset = ua
         self.fields['unidad_administrativa'].empty_label = None
-        self.fields['remitente'].queryset = Subdireccione.objects.all()
+        print("USUARIO: %s" % User.id)
+        self.fields['remitente'].queryset = Subdireccione.objects.filter(titular_id=User.id)
+        self.fields['remitente'].empty_label = None
         self.fields['creado_por'].empty_label = None
         self.fields['modi_por'].empty_label = None
 

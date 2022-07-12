@@ -20,8 +20,7 @@ from siad.settings import ITEMS_FOR_PAGE, URL_OFICIO_ENVIADO
 def OficioEnviados_list(request):
     Grupo = Group.objects.filter(user=request.user, name__in=['ContraMun', 'Subdirector'])
     if Grupo.count() > 0:
-        subd = Dependencia.objects.filter(titular=request.user)
-        OficioEnviados = OficioEnviado.objects.filter(destinatarios__in=subd).order_by('-id').distinct()
+        OficioEnviados = OficioEnviado.objects.filter(remitente__titular_id=request.user.id).order_by('-id').distinct()
     else:
         Grupo = Group.objects.filter(user=request.user, name__in=['Administrador', 'SysOp', 'Capturista'])
         if Grupo.count() > 0:
@@ -64,7 +63,7 @@ def OficioEnviado_new(request):
     # print(cant)
 
     if request.method == "POST":
-        frmSet = OficioEnviadoForm(request.POST, user_id=request.user.id, oficioenviado_id=0)
+        frmSet = OficioEnviadoForm(request.POST, user_id=request.user.id, oficioenviado_id=0, user=request.user)
         frmSet.set_consecutivo(cant)
         if frmSet.is_valid():
             Obj = frmSet.get_consecutivo()
@@ -72,7 +71,7 @@ def OficioEnviado_new(request):
             frmSet.save()
             return redirect('/oficiosenviados_list')
     else:
-        frmSet = OficioEnviadoForm(user_id=request.user.id, oficioenviado_id=0)
+        frmSet = OficioEnviadoForm(user_id=request.user.id, oficioenviado_id=0, user=request.user)
         frmSet.set_consecutivo(cant)
 
     user = Usuario.objects.filter(id=request.user.id).get()
@@ -93,12 +92,12 @@ def OficioEnviados_edit(request, id):
     Id = id
     Doc = get_object_or_404(OficioEnviado, pk=Id)
     if request.method == 'POST':
-        frmSet = OficioEnviadoForm(request.POST or None, request.FILES or None, instance=Doc, user_id=request.user.id, oficioenviado_id=Doc.id)
+        frmSet = OficioEnviadoForm(request.POST or None, request.FILES or None, instance=Doc, user_id=request.user.id, oficioenviado_id=Doc.id, user=request.user)
         if frmSet.is_valid():
             frmSet.save()
             return redirect('/oficiosenviados_list')
     else:
-        frmSet = OficioEnviadoForm(instance=Doc, user_id=request.user.id, oficioenviado_id=Doc.id)
+        frmSet = OficioEnviadoForm(instance=Doc, user_id=request.user.id, oficioenviado_id=Doc.id, user=request.user)
         frmSet.set_consecutivo(Doc.consecutivo)
 
     user = Usuario.objects.filter(id=request.user.id).get()
@@ -117,12 +116,12 @@ def OficioEnviados_edit(request, id):
 
 @login_required()
 @csrf_exempt
-def OficioEnviados_remove(request, id, tipo_documento):
+def OficioEnviados_remove(request, id):
     Id = id
+    # print("ID %s" % Id)
     Doc = get_object_or_404(OficioEnviado, pk=Id)
     if Doc:
         Doc.delete()
-        # return redirect('/OficioEnviados_list/%s' % tipo_documento)
         return JsonResponse({'status': 'OK', 'message': 'Item eliminado con éxito'}, status=200)
 
     return JsonResponse({'status': 'Error', 'message': 'El proceso ha fallado'}, status=200)

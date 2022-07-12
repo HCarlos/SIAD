@@ -25,7 +25,7 @@
                     <div class="card-body p-0 border-1 border-t-0 brc-green-m2">
                       <div class="bgc-secondary-l4 px-25 py-15 border-b-1 brc-secondary-l2">
                         <div class="btn-group mr-2">
-                            {% if is_subdirector <= 0 %}
+                            {% if is_subdirector > 0 or Roles.first.name == 'Administrador' %}
                             {% include "layouts/proyectos/components/new_button.html" with NewItem=New %}
                             {% endif %}
 
@@ -67,14 +67,13 @@
                                         </ul>
                                     </td>
                                     <td>{{ oficio.asunto }}</td>
-                                    <td>{{ oficio.fecha_documento }}</td>
-                                    <td>{{ oficio.fecha_captura }}</td>
+                                    <td>{{ oficio.fecha_oficio }}</td>
                                     <td><a href="{{ oficio.get_absolute_archivo_url }}" target="_blank">{{ oficio.get_oficio }}</a>   </td>
                                     <td>
-                                      <div class="d-none d-lg-flex">
+                                      <div >
 {#                                        {% include "layouts/proyectos/components/respuesta_button.html" with RespuestaItem=oficio.get_respuesta_new %}#}
-                                        {% include "layouts/proyectos/components/edit_button.html" with EditItem=oficio.get_oficio_edit %}
-                                        {% include "layouts/proyectos/components/remove_button.html" with RemoveItem=oficio.get_oficio_remove %}
+                                        {% include "layouts/proyectos/components/edit_button_subdirector.html" with EditItem=oficio.get_oficio_edit %}
+                                        {% include "layouts/proyectos/components/remove_button_subdirector.html" with RemoveItem=oficio.get_oficio_remove %}
                                       </div>
                                     </td>
                                 </tr>

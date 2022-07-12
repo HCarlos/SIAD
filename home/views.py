@@ -23,11 +23,13 @@ def home(request):
         user = Usuario.objects.filter(id=request.user.id).get()
         roles = Group.objects.filter(user=request.user)
         fecha = datetime.now()
+        Is_Subdirector = Group.objects.filter(user=request.user, name__in=['Subdirector'])
         return render(request, 'home.html',
                       {
                           'User': user,
                           'Roles': roles,
                           'Fecha': fecha,
+                          'is_subdirector': Is_Subdirector.count(),
                           'mod_search': URL_OFICIO
                       })
 
