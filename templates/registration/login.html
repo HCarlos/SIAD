@@ -28,7 +28,6 @@
 
                       <div class="carousel-inner minw-100 h-100">
                         <div class="carousel-item active minw-100 h-100">
-                          <!-- default carousel section that you see when you open login page -->
                           <div style="background-image: url(/static/assets/image/login-bg-1.svg);" class="px-3 bgc-blue-l4 d-flex flex-column align-items-center justify-content-center">
                             <a class="mt-5 mb-2" href="{% url 'welcome' %}">
                               <i class="fa fa-book-reader text-orange-m2 fa-3x"></i>
@@ -51,7 +50,7 @@
                             </div>
 
                             <div class="mt-auto mb-4 text-dark-tp2">
-                              H Ayuntamiento Constitucional del Centro {{ Fecha.year }}
+                              H Ayuntamiento Constitucional de Centro {{ Fecha.year }}
                             </div>
                           </div>
                         </div>
@@ -78,7 +77,6 @@
                       </li>
                     </ul>
 
-
                     <div class="tab-content tab-sliding border-0 p-0" data-swipe="right">
 
                       <div class="tab-pane active show mh-100 px-3 px-lg-0 pb-3" id="id-tab-login">
@@ -93,11 +91,11 @@
                         <!-- show this in mobile device -->
                         <div class="d-lg-none text-secondary-m1 my-4 text-center">
                           <a href="#">
-                            <i class="fa fa-leaf text-success-m2 text-200 mb-4"></i>
+                            <i class="fa fa-book-reader text-orange-m2 text-200 mb-4"></i>
                           </a>
                           <h1 class="text-170">
                             <span class="text-blue-d1">
-                                Ace <span class="text-80 text-dark-tp3">Application</span>
+                                SIAD
                             </span>
                           </h1>
                           Bienvenido
@@ -128,13 +126,6 @@
                           </div>
 
 
-{#                          <div class="col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3 text-right text-md-right mt-n2 mb-2">#}
-{#                            <a href="#" class="text-primary-m1 text-95" data-toggle="tab" data-target="#id-tab-forgot">#}
-{#                              Forgot Password?#}
-{#                            </a>#}
-{#                          </div>#}
-
-
                           <div class="form-group col-sm-10 offset-sm-1 col-md-8 offset-md-2 col-lg-6 offset-lg-3">
                             <label class="d-inline-block mt-3 mb-0 text-dark-l1">
                               <input type="checkbox" class="mr-1" id="id-remember-me" />
@@ -157,7 +148,7 @@
             </div><!-- /.row -->
 
             <div class="d-lg-none my-3 text-white-tp1 text-center">
-              <i class="fa fa-leaf text-success-l3 mr-1 text-110"></i> Ace Company &copy; 2021
+              H Ayuntamiento Constitucional de Centro {{ Fecha.year }}
             </div>
           </div>
         </div>
