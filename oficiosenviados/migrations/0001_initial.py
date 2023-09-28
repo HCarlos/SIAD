@@ -11,8 +11,8 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        ('proyecto', '0012_alter_evento_archivo_alter_oficio_archivo_and_more'),
         ('home', '0009_alter_usuario_options'),
-        # ('proyecto', '0012_alter_evento_archivo_alter_oficio_archivo_and_more'),
     ]
 
     operations = [

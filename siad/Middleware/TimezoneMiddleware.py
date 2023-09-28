@@ -1,5 +1,4 @@
-import zoneinfo
-
+from backports import zoneinfo
 from django.utils import timezone
 
 class TimezoneMiddleware:
